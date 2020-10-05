@@ -1,0 +1,912 @@
+﻿@page
+@model Lingkail.VMS.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*--------------------------------------
+    Summary:
+    .segment1 [TOP]
+        div.messages-container [LHS]
+            VMS canvas messages
+        div.editor-container [RHS]
+            Editor type selection
+    .segment2 [MIDDLE]
+        'Hidden' templates (using iframe)
+    .segment3 [BOTTOM]
+        Buttons, misc.
+    --------------------------------------*@
+
+<!--CSS Segment1-->
+<style>
+    .wrap {
+        position: relative;
+        /*  display: inline-block;*/
+        width: 100%;
+    }
+
+
+    .pull-tab {
+        height: 0px;
+        width: 0px;
+        border-top: 20px solid #ffc107;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        -webkit-transform: rotate(-45deg);
+        position: absolute;
+        bottom: 0px;
+        right: -15px;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .pull-tab2 {
+        height: 0px;
+        width: 0px;
+        border-top: 20px solid #ffc107;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        -webkit-transform: rotate(-45deg);
+        position: absolute;
+        bottom: 7px;
+        right: -15px;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+
+    .segment1 {
+        display: flex;
+        height: 88vh;
+        overflow-x: auto;
+        overflow-y: auto;
+        resize: vertical;
+    }
+        /*LHS*/
+        .segment1 .messages-container {
+            text-align: center;
+            /*box-sizing: border-box;*/
+            border: solid 1px greenyellow;
+            width: 50%;
+            height: auto;
+            overflow-y: auto;
+            overflow-x: auto;
+            margin: 2px;
+        }
+
+            .segment1 .messages-container > h1 {
+                /*background-color: #c4c5fb;*/
+                border: solid 1px greenyellow;
+                box-shadow: 0px 0px 60px -10px greenyellow, 0px 0px 60px white;
+                padding: 5px;
+            }
+
+            .segment1 .messages-container > p {
+                margin: 1px;
+                font-style: italic;
+                color: white;
+                display: none; /*Remove line to see instruction*/
+            }
+
+            .segment1 .messages-container .oneMessage {
+                /*background-color: #c4c5fb;*/
+                /*background-color: #e0e0f3;*/
+                border: solid;
+                display: block;
+                text-align: center;
+                margin: 15px;
+            }
+
+                .segment1 .messages-container .oneMessage label {
+                    font-size: 150%;
+                    font-weight: bold;
+                }
+
+                .segment1 .messages-container .oneMessage .check-text {
+                    display: block;
+                    margin: 10px;
+                    text-align: center;
+                }
+
+                .segment1 .messages-container .oneMessage input[type="radio"] {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                .segment1 .messages-container .oneMessage canvas {
+                    width: 768px;
+                    height: 128px;
+                    background-color: #4d4d4d;
+                    border: solid 1px;
+                }
+
+                .segment1 .messages-container .oneMessage img {
+                    width: 768px;
+                    height: 128px;
+                    background-color: #4d4d4d;
+                    border: solid 1px;
+                    display: none;
+                }
+
+                .segment1 .messages-container .oneMessage .typeCode {
+                    display: none;
+                }
+        /*RHS*/
+        .segment1 .editor-container {
+            text-align: center;
+            border: solid 1px greenyellow;
+            width: 50%;
+            height: auto;
+            overflow-y: auto;
+            overflow-x: auto;
+            margin: 2px;
+        }
+
+            .segment1 .editor-container ol {
+                padding: 0;
+            }
+
+                .segment1 .editor-container ol li {
+                    list-style: none;
+                }
+
+            .segment1 .editor-container > h1 {
+                /*background-color: #c4c5fb;*/
+                border: solid 1px greenyellow;
+                box-shadow: 0px 0px 60px -10px greenyellow, 0px 0px 60px white;
+                padding: 5px;
+            }
+
+            .segment1 .editor-container > p {
+                margin: 1px;
+                font-style: italic;
+                color: white;
+                display: none; /*Remove line to see instruction*/
+            }
+
+            .segment1 .editor-container .wrapper {
+                position: relative;
+                text-align: center;
+                font-size: 150%;
+                font-weight: bold;
+            }
+
+                .segment1 .editor-container .wrapper img {
+                    width: 70%;
+                    padding: 5px;
+                }
+
+                .segment1 .editor-container .wrapper:hover img {
+                    /*filter: blur(2px);
+                    opacity: 0.9;*/
+                    cursor: pointer;
+                    border: 1px solid yellow;
+                }
+
+                .segment1 .editor-container .wrapper p {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    margin: 0px;
+                    visibility: hidden;
+                    border: solid;
+                    padding: 10px;
+                    color: yellow;
+                }
+
+                .segment1 .editor-container .wrapper:hover p {
+                    visibility: hidden; /*Change this to visible to see yellow text when hovered*/
+                    /*visibility: visible;*/
+                    cursor: pointer;
+                }
+</style>
+<!--CSS Segment2-->
+<style>
+    .segment2 {
+        /*border: dashed maroon 5px;*/ /*TEMP*/
+        text-align: center;
+        background-color: black;
+    }
+
+        .segment2 h1 {
+            display: inline-block;
+            margin: 0;
+        }
+
+        .segment2 iframe {
+            width: 100%;
+            height: 41vh;
+            overflow-x: auto;
+            overflow-y: auto;
+            resize: vertical;
+        }
+
+        .segment2 .hidden1, .hidden2, .hidden3, .hidden4, .hidden5 {
+            height: auto; /*TEMP*/
+            margin: 2px;
+            border: solid;
+            display: none;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        .segment2 .hidden4SpecialClass {
+            display: block;
+            position: absolute;
+            width: 70%;
+            z-index: 1;
+            top: 0;
+            right: 0;
+            background-color: red;
+        }
+
+        .segment2 [id*="closehidden"] {
+            float: right;
+            font-size: 130%;
+            font-weight: bold;
+            background-color: gray;
+            color: white;
+            border: solid black;
+        }
+
+            .segment2 [id*="closehidden"]:hover {
+                cursor: pointer;
+                background-color: red;
+            }
+</style>
+<!--CSS Segment3-->
+<style>
+    .segment3 {
+        /* padding-top:10px;*/
+        margin: 3px;
+    }
+
+        .segment3 button {
+            font-size: 130%;
+            border-radius: 5px;
+            color: black;
+        }
+
+            .segment3 button a {
+                text-decoration: none;
+                color: black;
+            }
+
+        .segment3 #notifywait {
+            font-size: 20px;
+            color: white;
+            left: 27%;
+            font-weight: bold;
+            margin-top: -33px;
+            margin-left: 300px;
+        }
+
+        .segment3 .realtimeStatus {
+            display: none;
+        }
+
+        .segment3 .displayRealtimeStatus {
+            display: block;
+            padding: 10px;
+            background-color: cyan;
+            margin: auto;
+            font-size: 35px;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%,-50%);
+            z-index: 1;
+        }
+</style>
+
+<!--HTML-->
+<p style="margin: 0; color: white;">Selected Board(s): @Model.SelectedBoardNames</p>
+<p style="margin: 0; color: white;">Selected Preset(s): @Model.SelectedGroupPreset</p>
+
+<form method="post">
+    <div class="wrap">
+        <div class="pull-tab"></div>
+
+        <div id="segment1" class="segment1">
+            <div class="messages-container">
+                <input type="hidden" asp-for="Board.ID" />           <!--SINGLE ID (int)-->
+                <input type="hidden" asp-for="SelectedBoardIds" />  <!--MULTIPLE IDs (string)-->
+                <input type="hidden" asp-for="SelectedBoardNames" />
+                <input type="hidden" asp-for="ImageArray[0]" />
+                <input type="hidden" asp-for="ImageArray[1]" />
+                <input type="hidden" asp-for="ImageArray[2]" />
+                <input type="hidden" asp-for="ImageArray[3]" />
+                <input type="hidden" asp-for="ImageArray[4]" />
+                <h1>Variable Message Sign</h1>
+                <p><b>Step4:</b> Click on the 'Final' button to save and return to Table Page. @*<button type="submit" onclick="saveImage()" asp-page-handler="update">Final</button>*@</p>
+                <p><b>Note:</b> Click on the 'Clear' button for messages NOT to be displayed.</p>
+
+                <button style="margin-left:80%;" type="button" id="" onclick="clearAllMessage()" class="btn btn-danger">Clear All</button>
+
+                <!-- Message 1 -->
+                <div class=oneMessage>
+                    <div class="check-text">
+                        <input type="radio"
+                               id="checkmess1"
+                               name="selectedMessage">
+                        <label for="checkmess1">Message 1</label>
+                        <button type="button" id="clear1" onclick="clearMessage(this.id)" class="btn btn-danger">Clear</button>
+                    </div>
+                    <p>
+                        Date: <input asp-for="dateArray[0]"
+                                     id="date_1" type="date">  <!--Ideally, 'asp-for' tag helper fixes the HTML id and name tag!-->
+                    </p>
+                    <p>
+                        Timer(s): <input asp-for="timerArray[0]"
+                                         id="timer_1" type="number">
+                    </p>
+                    <div class="typeCode">
+                        <p>
+                            Type Code: <input asp-for="codeArray[0]" id="code_1" type="number" readonly>
+                            with<input asp-for="codePlusArray[0]" id=codePlus_1 readonly>
+                        </p>
+                    </div>
+                    <canvas id="c1"></canvas>
+                    @if (Model.ImageArray[0] != null)
+                    {
+                        <img id="img1" src="~/uploads/@(Model.Board.ID)/@(Model.ImageArray[0] + Model.fileExtension)" />
+                    }
+                    else
+                    {
+                        <img id="img1" />//Empty
+                    }
+                </div>
+                <!--Message 1 -->
+                <!-- Message 2 -->
+                <div class=oneMessage>
+                    <div class="check-text">
+                        <input type="radio"
+                               id="checkmess2"
+                               name="selectedMessage">
+                        <label for="checkmess2">Message 2</label>
+                        <button type="button" id="clear2" onclick="clearMessage(this.id)" class="btn btn-danger">Clear</button>
+                    </div>
+                    <p>
+                        Date: <input asp-for="dateArray[1]"
+                                     id="date_2" type="date">
+                    </p>
+                    <p>
+                        Timer(s): <input asp-for="timerArray[1]"
+                                         id="timer_2" type="number">
+                    </p>
+                    <div class="typeCode">
+                        <p>
+                            Type Code: <input asp-for="codeArray[1]" id="code_2" type="number" readonly>
+                            with<input asp-for="codePlusArray[1]" id=codePlus_2 readonly>
+                        </p>
+                    </div>
+                    <canvas id="c2"></canvas>
+                    @if (Model.ImageArray[1] != null)
+                    {
+                        <img id="img2" src="~/uploads/@(Model.Board.ID)/@(Model.ImageArray[1] + Model.fileExtension)" />
+                    }
+                    else
+                    {
+                        <img id="img2" />//Empty
+                    }
+                </div>
+                <!--Message 2 -->
+                <!-- Message 3 -->
+                <div class=oneMessage>
+                    <div class="check-text">
+                        <input type="radio"
+                               id="checkmess3"
+                               name="selectedMessage">
+                        <label for="checkmess3">Message 3</label>
+                        <button type="button" id="clear3" onclick="clearMessage(this.id)" class="btn btn-danger">Clear</button>
+                    </div>
+                    <p>
+                        Date: <input asp-for="dateArray[2]"
+                                     id="date_3" type="date">
+                    </p>
+                    <p>
+                        Timer(s): <input asp-for="timerArray[2]"
+                                         id="timer_3" type="number">
+                    </p>
+                    <div class="typeCode">
+                        <p>
+                            Type Code: <input asp-for="codeArray[2]" id="code_3" type="number" readonly>
+                            with<input asp-for="codePlusArray[2]" id=codePlus_3 readonly>
+                        </p>
+                    </div>
+                    <canvas id="c3"></canvas>
+                    @if (Model.ImageArray[2] != null)
+                    {
+                        <img id="img3" src="~/uploads/@(Model.Board.ID)/@(Model.ImageArray[2] + Model.fileExtension)" />
+                    }
+                    else
+                    {
+                        <img id="img3" />//Empty
+                    }
+                </div>
+                <!--Message 3 -->
+                <!-- Message 4 -->
+                <div class=oneMessage>
+                    <div class="check-text">
+                        <input type="radio"
+                               id="checkmess4"
+                               name="selectedMessage">
+                        <label for="checkmess4">Message 4</label>
+                        <button type="button" id="clear4" onclick="clearMessage(this.id)" class="btn btn-danger">Clear</button>
+                    </div>
+                    <p>
+                        Date: <input asp-for="dateArray[3]"
+                                     id="date_4" type="date">
+                    </p>
+                    <p>
+                        Timer(s): <input asp-for="timerArray[3]"
+                                         id="timer_4" type="number">
+                    </p>
+                    <div class="typeCode">
+                        <p>
+                            Type Code: <input asp-for="codeArray[3]" id="code_4" type="number" readonly>
+                            with<input asp-for="codePlusArray[3]" id=codePlus_4 readonly>
+                        </p>
+                    </div>
+                    <canvas id="c4"></canvas>
+                    @if (Model.ImageArray[3] != null)
+                    {
+                        <img id="img4" src="~/uploads/@(Model.Board.ID)/@(Model.ImageArray[3] + Model.fileExtension)" />
+                    }
+                    else
+                    {
+                        <img id="img4" />//Empty
+                    }
+                </div>
+                <!--Message 4 -->
+                <!-- Message 5 -->
+                <div class=oneMessage>
+                    <div class="check-text">
+                        <input type="radio"
+                               id="checkmess5"
+                               name="selectedMessage">
+                        <label for="checkmess5">Message 5</label>
+                        <button type="button" id="clear5" onclick="clearMessage(this.id)" class="btn btn-danger">Clear</button>
+                    </div>
+                    <p>
+                        Date: <input asp-for="dateArray[4]"
+                                     id="date_5" type="date">
+                    </p>
+                    <p>
+                        Timer(s): <input asp-for="timerArray[4]"
+                                         id="timer_5" type="number">
+                    </p>
+                    <div class="typeCode">
+                        <p>
+                            Type Code: <input asp-for="codeArray[4]" id="code_5" type="number" readonly>
+                            with<input asp-for="codePlusArray[4]" id=codePlus_5 readonly>
+                        </p>
+                    </div>
+                    <canvas id="c5"></canvas>
+                    @if (Model.ImageArray[4] != null)
+                    {
+                        <img id="img5" src="~/uploads/@(Model.Board.ID)/@(Model.ImageArray[4] + Model.fileExtension)" />
+                    }
+                    else
+                    {
+                        <img id="img5" />//Empty
+                    }
+                </div>
+                <!--Message 5 -->
+            </div>
+            <div class="editor-container">
+                <h1>Editor</h1>
+                <p><b>Step1:</b> On the left, select a message to be edited.</p>
+                <p><b>Step2:</b> From the following, select an editor type.</p>
+                <p><b>Step3:</b> From the extended editor, click on the 'Submit' button once done,<br />or click on the 'Clear Canvas' button to redo.</p>
+
+                <ol>
+                    <li class="wrapper">
+                        <img id="selectparkingimg" src="~/SingleEditor/p.png">
+                        <p id="selectparkingtxt">PARKING</p>
+                    </li>
+
+                    <li class="wrapper">
+                        <img id="selectuploadimg" src="~/SingleEditor/u.png">
+                        <p id="selectuploadtxt">UPLOAD</p>
+                    </li>
+
+                    <li class="wrapper">
+                        <img id="selectTTimg" src="~/SingleEditor/t.png">
+                        <p id="selectTTtxt">TRAVEL TIME</p>
+                    </li>
+
+                    <li class="wrapper">
+                        <img id="selectcustomimg" src="~/SingleEditor/c.png">
+                        <p id="selectcustomtxt">CUSTOM</p>
+                    </li>
+
+                    <li class="wrapper">
+                        <img id="selectweatherimg" src="~/SingleEditor/w.jpeg">
+                        <p id="selectweathertxt">WEATHER</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="pull-tab2"></div>
+
+        <div id="segment2" class="segment2">
+            <div id="hidden1" class="hidden1">
+                <div>
+                    @*<h1>Parking Template</h1>*@
+                    <h1>Template 1</h1>
+                    <button type="button"
+                            id="closehidden1" class="closehidden1" onclick="closediv(this.id)">
+                        CLOSE
+                    </button>
+                    <iframe src=/EditorV2/IFrameElement/Parking></iframe>
+                </div>
+            </div>
+
+            <div id="hidden2" class="hidden2">
+                <div>
+                    @*<h1>Upload Template</h1>*@
+                    <h1>Template 2</h1>
+                    <button type="button"
+                            id="closehidden2" class="closehidden2" onclick="closediv(this.id)">
+                        CLOSE
+                    </button>
+                    <iframe src="/EditorV2/IFrameElement/Upload?id=@Model.Board.ID"></iframe>
+                </div>
+            </div>
+
+            <div id="hidden3" class="hidden3">
+                <div>
+                    @*<h1>Travel Time Template</h1>*@
+                    <h1>Template 3</h1>
+                    <button type="button"
+                            id="closehidden3" class="closehidden3" onclick="closediv(this.id)">
+                        CLOSE
+                    </button>
+                    <iframe src="/EditorV2/IFrameElement/Traveltime?id=@Model.Board.ID"></iframe>
+                </div>
+            </div>
+
+            <div id="hidden4" class="hidden4 @Model.specialClass">
+                <div>
+                    @*<h1>Custom Template</h1>*@
+                    <h1>Template 4</h1>
+                    <button type="button"
+                            id="closehidden4" class="closehidden4" onclick="closediv(this.id)">
+                        CLOSE
+                    </button>
+                    <iframe src="/EditorV2/IFrameElement/Custom?id=@Model.Board.ID"></iframe>
+                </div>
+            </div>
+
+            <div id="hidden5" class="hidden5">
+                <div>
+                    @*<h1>Weather Template</h1>*@
+                    <h1>Template 5</h1>
+                    <button type="button"
+                            id="closehidden5" class="closehidden5" onclick="closediv(this.id)">
+                        CLOSE
+                    </button>
+                    <iframe src="/EditorV2/IFrameElement/WeatherForecast?id=@Model.Board.ID"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="segment3" class="segment3">
+
+        <button type="submit">
+            <a href="CCTV:@Model.rtsplink">CCTV</a>
+        </button>
+
+        <button><a asp-page="/VMS/Table">CANCEL</a></button>
+
+        <button type="submit" onclick="saveImage()" asp-page-handler="update">CONFIRM</button>
+
+        @*<button id="datalogButton2" class="datalogButton" onclick="window.open('../EditorV2/Realtime', '_blank', 'toolbar=0,location=0,menubar=0,width=500,height=500' ); return false;">STATUS</button>*@
+
+        <div id="notifywait">@Model.FailMessage</div>
+        <div id="realtimeStatus" class="realtimeStatus">
+            <iframe src=/EditorV2/IFrameElement/Realtime></iframe>
+        </div>
+    </div>
+
+</form>
+
+
+<!--JavaScript-->
+<script>
+    document.getElementById("selectparkingimg").addEventListener("click", expandEditor);
+    document.getElementById("selectparkingtxt").addEventListener("click", expandEditor);
+    document.getElementById("selectuploadimg").addEventListener("click", expandEditor);
+    document.getElementById("selectuploadtxt").addEventListener("click", expandEditor);
+    document.getElementById("selectTTimg").addEventListener("click", expandEditor);
+    document.getElementById("selectTTtxt").addEventListener("click", expandEditor);
+    document.getElementById("selectcustomimg").addEventListener("click", expandEditor);
+    document.getElementById("selectcustomtxt").addEventListener("click", expandEditor);
+    document.getElementById("selectweatherimg").addEventListener("click", expandEditor);
+    document.getElementById("selectweathertxt").addEventListener("click", expandEditor);
+
+    //Function to Show/Expand hidden division(s)
+    function expandEditor() {
+        if (document.querySelector('input[name="selectedMessage"]:checked') == null) {
+            window.alert("You need to choose a message!");
+        } //Alert: Message selection required
+        else {
+            if (this.id == "selectparkingimg" || this.id == "selectparkingtxt") { //Selected editor type - parking
+                var thisint = 1; //hidden1
+                var otherint = [2, 3, 4, 5]; //other hidden
+                show(thisint);
+                otherint.forEach(hide);
+                collapseSeg1();
+            }
+
+            if (this.id == "selectuploadimg" || this.id == "selectuploadtxt") { //Selected editor type - upload
+                var thisint = 2; //hidden2
+                var otherint = [1, 3, 4, 5]; //other hidden
+                show(thisint);
+                otherint.forEach(hide);
+                collapseSeg1();
+            }
+
+            if (this.id == "selectTTimg" || this.id == "selectTTtxt") { //Selected editor type - travel time
+                var thisint = 3; //hidden3
+                var otherint = [1, 2, 4, 5]; //other hidden
+                show(thisint);
+                otherint.forEach(hide);
+                collapseSeg1();
+            }
+
+            if (this.id == "selectcustomimg" || this.id == "selectcustomtxt") { //Selected editor type - custom
+                var thisint = 4; //hidden4
+                var otherint = [1, 2, 3, 5]; //other hidden
+
+                show(thisint);
+                otherint.forEach(hide);
+
+                var hasSpecialClass = document.getElementById("hidden4").classList.contains("hidden4SpecialClass"); //Incoming Incident Alert
+                if (hasSpecialClass) { document.getElementById("segment1").style.height = "88vh"; }
+                else { collapseSeg1(); }
+            }
+
+            if (this.id == "selectweatherimg" || this.id == "selectweathertxt") { //Selected editor type - travel time
+                var thisint = 5; //hidden3
+                var otherint = [1, 2, 3, 4]; //other hidden
+                show(thisint);
+                otherint.forEach(hide);
+                collapseSeg1();
+            }
+
+            function hide(element) {
+                var div = document.getElementById("hidden" + element);
+                div.style.display = "none";
+            }
+            function show(element) {
+                var div = document.getElementById("hidden" + element);
+                div.style.display = "block";
+            }
+            //Adjust the display - 50% for segment 1 (collapse)
+            function collapseSeg1() {
+                var seg1 = document.getElementById("segment1");
+                seg1.style.height = "41vh";
+            }
+        }
+    }
+
+    //Function to Close/Hide division(s)
+    function closediv(id) {
+        var closebuttonid = id; //closehidden1, closehidden2, closehidden3, closehidden4 ...
+        var intid = Number(closebuttonid.charAt(closebuttonid.length - 1)); //1,2,3...
+
+        var div = document.getElementById("hidden" + intid); //hidden(div)1, hidden2, hidden3, hidden4...
+        div.style.display = "none";
+
+        //Adjust the display - 100% for segment 1 (expand)
+        var seg1 = document.getElementById("segment1");
+        seg1.style.height = "88vh";
+    }
+
+    //Function to open new window (detached)
+    function newWindow() {
+        window.open("", '_blank', 'toolbar=0,location=0,menubar=0');
+    }
+
+    //Function to clear a message - null all parameters
+    function clearMessage(clearid) {
+        var intid = Number(clearid.charAt(clearid.length - 1)); //1,2,3...
+
+        document.getElementById("date_" + intid).value = null;
+        document.getElementById("timer_" + intid).value = 1; //keep it as default 1s
+        document.getElementById("code_" + intid).value = null;
+        document.getElementById("codePlus_" + intid).value = null;
+
+        //Function to clear canvas
+        var canvas = document.getElementById("c" + intid),
+            ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+
+    function clearAllMessage() {
+
+        for (var i = 1; i <= 5; i++) {
+            document.getElementById("date_" + i).value = null;
+            document.getElementById("timer_" + i).value = 1; //keep it as default 1
+            document.getElementById("code_" + i).value = null;
+            document.getElementById("codePlus_" + i).value = null;
+
+            var canvas = document.getElementById("c" + i),
+                ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+
+        }
+        i++;
+
+    }
+
+
+
+    //Function to save canvas messages as image in server
+    function saveImage() {
+
+        var src1 = c1.toDataURL();  //get string dataURL of the canvas
+        var mirror1 = document.createElement('img'); // create a Image Element
+        mirror1.src = src1;   //image source
+        imageData1 = $(mirror1).attr("src").split(",")[1]; /*remove image data header information,
+                                                             just want the raw image data - base64*/
+        var src2 = c2.toDataURL();
+        var mirror2 = document.createElement('img');
+        mirror2.src = src2;
+        imageData2 = $(mirror2).attr("src").split(",")[1];
+
+        var src3 = c3.toDataURL();
+        var mirror3 = document.createElement('img');
+        mirror3.src = src3;
+        imageData3 = $(mirror3).attr("src").split(",")[1];
+
+        var src4 = c4.toDataURL();
+        var mirror4 = document.createElement('img');
+        mirror4.src = src4;
+        imageData4 = $(mirror4).attr("src").split(",")[1];
+
+        var src5 = c5.toDataURL();
+        var mirror5 = document.createElement('img');
+        mirror5.src = src5;
+        imageData5 = $(mirror5).attr("src").split(",")[1];
+
+        $.ajax({
+            url: "/clientBase64/convertBase64",
+            type: "POST",
+            data: JSON.stringify({
+                Message1: imageData1,
+                Message2: imageData2,
+                Message3: imageData3,
+                Message4: imageData4,
+                Message5: imageData5,
+                BoardId: @Model.Board.ID
+            }),
+            contentType: 'application/json',
+        });
+
+        //Set please wait status
+        document.getElementById("notifywait").innerHTML = "Please Wait. Uploading...";
+
+        //Self-invoking function to change classname - show real time status div
+        (function () {
+            document.getElementById("realtimeStatus").className = "displayRealtimeStatus";
+        })();
+    }
+
+    var id_board = JSON.stringify(@Model.Board.ID);
+    function openCCTV() {
+        var Ip_final;
+        if (RTCPeerConnection) (function () {
+            var rtc = new RTCPeerConnection({ iceServers: [] });
+            if (1 || window.mozRTCPeerConnection) {
+                rtc.createDataChannel('', { reliable: false });
+            };
+
+            rtc.onicecandidate = function (evt) {
+                if (evt.candidate) grepSDP("a=" + evt.candidate.candidate);
+            };
+            rtc.createOffer(function (offerDesc) {
+                grepSDP(offerDesc.sdp);
+                rtc.setLocalDescription(offerDesc);
+            }, function (e) { console.warn("offer failed", e); });
+
+
+            var addrs = Object.create(null);
+            addrs["0.0.0.0"] = false;
+            function updateDisplay(newAddr) {
+                if (newAddr in addrs) return;
+                else addrs[newAddr] = true;
+                var displayAddrs = Object.keys(addrs).filter(function (k) { return addrs[k]; });
+                //document.getElementById('list').textContent = displayAddrs.join(" or perhaps ") || "n/a";
+                Ip_final = "https://" + displayAddrs + ":5001/api/upload/cctv"
+                console.log(Ip_final);
+                $.ajax({
+                    //url: "https://localhost:5001/api/upload/cctv",
+                    url: Ip_final,
+                    type: "POST",
+                    data: id_board,
+                    //contentType: "application/json",
+                    success: function (response) {
+                        alert("Image is saved");
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+
+            }
+
+            function grepSDP(sdp) {
+                var hosts = [];
+                sdp.split('\r\n').forEach(function (line) {
+                    if (~line.indexOf("a=candidate")) {
+                        var parts = line.split(' '),
+                            addr = parts[4],
+                            type = parts[7];
+                        if (type === 'host') updateDisplay(addr);
+                    } else if (~line.indexOf("c=")) {
+                        var parts = line.split(' '),
+                            addr = parts[2];
+                        updateDisplay(addr);
+                    }
+                });
+            }
+        })(); else {
+        }
+
+    }
+
+    //Function to copy image from wwwroot to canvas (for preview)
+    function copyImage2Canvas(totalcanvas) {
+
+        for (var i = 0; i < totalcanvas; i++) {
+            var intid = i + 1;
+            var c = document.getElementById("c" + intid); //canvas
+            var ctx = c.getContext("2d");
+            c.width = 768;
+            c.height = 128;
+
+            var img = document.getElementById("img"+ intid); //image
+            ctx.drawImage(img, 0, 0);
+        }
+    }
+
+    //Window Onload
+    window.onload = function () {
+        this.copyImage2Canvas(5);
+
+            (function () {
+                var hasSpecialClass = document.getElementById("hidden4").classList.contains("hidden4SpecialClass"); //Incoming Incident Alert
+                if (hasSpecialClass) { alert("Remember to select a message.") }
+            })();
+    }
+
+</script>
+
+
+@*To hide segment 3 when click template and show when close the template*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".wrapper").click(function () {
+            $(".segment3").hide();
+        });
+        $(".segment2").click(function () {
+            $(this).show();
+            $(".segment3").show();
+        });
+
+    });
+</script>
+

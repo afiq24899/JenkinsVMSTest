@@ -1,0 +1,332 @@
+﻿@page
+@model VirtualBoard2Model
+@{
+    ViewData["Title"] = "VirtualBoard2";
+}
+
+<div class="7Seg-Display">
+    <style>
+        body {
+            /*background-color: black;*/
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .display {
+            position: absolute;
+        }
+
+        .segment {
+            height: 125px;
+            width: 15px;
+            background-color: #990000;
+            border-radius: 9999px;
+            box-shadow: 0px 0px 25px #990000;
+        }
+
+        .A {
+            position: absolute;
+            top: -45px;
+            left: 90px;
+            transform: rotate(90deg);
+        }
+
+        .B {
+            position: absolute;
+            top: 20px;
+            left: 160px;
+        }
+
+        .C {
+            position: absolute;
+            top: 150px;
+            left: 160px;
+        }
+
+        .D {
+            position: absolute;
+            top: 215px;
+            left: 90px;
+            transform: rotate(90deg);
+        }
+
+        .E {
+            position: absolute;
+            top: 150px;
+            left: 20px;
+        }
+
+        .F {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .G {
+            position: absolute;
+            top: 85px;
+            left: 90px;
+            transform: rotate(90deg);
+        }
+
+        .A2 {
+            position: absolute;
+            top: -45px;
+            left: 90px;
+            transform: rotate(90deg);
+        }
+
+        .B2 {
+            position: absolute;
+            top: 20px;
+            left: 160px;
+        }
+
+        .C2 {
+            position: absolute;
+            top: 150px;
+            left: 160px;
+        }
+
+        .D2 {
+            position: absolute;
+            top: 215px;
+            left: 90px;
+            transform: rotate(90deg);
+        }
+
+        .E2 {
+            position: absolute;
+            top: 150px;
+            left: 20px;
+        }
+
+        .F2 {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .G2 {
+            position: absolute;
+            top: 85px;
+            left: 90px;
+            transform: rotate(90deg);
+        }
+    </style>
+    <script type="text/javascript">
+        var display = {
+            zero: function () {
+                this.lightsOut();
+                $('.A, .B, .C, .D, .E, .F').fadeIn();
+            },
+            one: function () {
+                this.lightsOut();
+                $('.B, .C').fadeIn();
+            },
+            two: function () {
+                this.lightsOut();
+                $('.A, .B, .D, .E, .G').fadeIn();
+            },
+            three: function () {
+                this.lightsOut();
+                $('.A, .B, .C, .D, .G').fadeIn();
+            },
+            four: function () {
+                this.lightsOut();
+                $('.B, .C, .F, .G').fadeIn();
+            },
+            five: function () {
+                this.lightsOut();
+                $('.A, .C, .D, .F, .G').fadeIn();
+            },
+            six: function () {
+                this.lightsOut();
+                $('.A, .C, .D, .E, .F, .G').fadeIn();
+            },
+            seven: function () {
+                this.lightsOut();
+                $('.A, .B, .C').fadeIn();
+            },
+            eight: function () {
+                this.lightsOut();
+                $('.A, .B, .C, .D, .E, .F, .G').fadeIn();
+            },
+            nine: function () {
+                this.lightsOut();
+                $('.A, .B, .C, .D, .F, .G').fadeIn();
+            },
+            dash: function () {
+                this.lightsOut();
+                $('.G').fadeIn();
+            },
+            lightsOut: function () {
+                $('.A, .B, .C, .D, .E, .G, .D, .F').hide();
+            }
+        };
+        var display2 = {
+            zero: function () {
+                this.lightsOut();
+                $('.A2, .B2, .C2, .D2, .E2, .F2').fadeIn();
+            },
+            one: function () {
+                this.lightsOut();
+                $('.B2, .C2').fadeIn();
+            },
+            two: function () {
+                this.lightsOut();
+                $('.A2, .B2, .D2, .E2, .G2').fadeIn();
+            },
+            three: function () {
+                this.lightsOut();
+                $('.A2, .B2, .C2, .D2, .G2').fadeIn();
+            },
+            four: function () {
+                this.lightsOut();
+                $('.B2, .C2, .F2, .G2').fadeIn();
+            },
+            five: function () {
+                this.lightsOut();
+                $('.A2, .C2, .D2, .F2, .G2').fadeIn();
+            },
+            six: function () {
+                this.lightsOut();
+                $('.A2, .C2, .D2, .E2, .F2, .G2').fadeIn();
+            },
+            seven: function () {
+                this.lightsOut();
+                $('.A2, .B2, .C2').fadeIn();
+            },
+            eight: function () {
+                this.lightsOut();
+                $('.A2, .B2, .C2, .D2, .E2, .F2, .G2').fadeIn();
+            },
+            nine: function () {
+                this.lightsOut();
+                $('.A2, .B2, .C2, .D2, .F2, .G2').fadeIn();
+            },
+            dash: function () {
+                this.lightsOut();
+                $('.G2').fadeIn();
+            },
+            lightsOut: function () {
+                $('.A2, .B2, .C2, .D2, .E2, .G2, .D2, .F2').hide();
+            }
+        };
+
+        var singleDigitRHS = 1 //Model.latestTimeTravel;
+        var doubleDigitLHS = 1 //Model.latestTimeTravel2[0];
+        var doubleDigitRHS = 1 //Model.latestTimeTravel2[1];
+
+        function callData() {
+            if (singleDigitRHS < 10) {
+                if (singleDigitRHS == 0) { display.lightsOut(); display2.zero(); }
+                if (singleDigitRHS == 1) { display.lightsOut(); display2.one(); }
+                if (singleDigitRHS == 2) { display.lightsOut(); display2.two(); }
+                if (singleDigitRHS == 3) { display.lightsOut(); display2.three(); }
+                if (singleDigitRHS == 4) { display.lightsOut(); display2.four(); }
+                if (singleDigitRHS == 5) { display.lightsOut(); display2.five(); }
+                if (singleDigitRHS == 6) { display.lightsOut(); display2.six(); }
+                if (singleDigitRHS == 7) { display.lightsOut(); display2.seven(); }
+                if (singleDigitRHS == 8) { display.lightsOut(); display2.eight(); }
+                if (singleDigitRHS == 9) { display.lightsOut(); display2.nine(); }
+            }
+            else {
+                if (doubleDigitLHS == 0) { display.zero(); }
+                if (doubleDigitLHS == 1) { display.one(); }
+                if (doubleDigitLHS == 2) { display.two(); }
+                if (doubleDigitLHS == 3) { display.three(); }
+                if (doubleDigitLHS == 4) { display.four(); }
+                if (doubleDigitLHS == 5) { display.five(); }
+                if (doubleDigitLHS == 6) { display.six(); }
+                if (doubleDigitLHS == 7) { display.seven(); }
+                if (doubleDigitLHS == 8) { display.eight(); }
+                if (doubleDigitLHS == 9) { display.nine(); }
+
+                if (doubleDigitRHS == 0) { display2.zero(); }
+                if (doubleDigitRHS == 1) { display2.one(); }
+                if (doubleDigitRHS == 2) { display2.two(); }
+                if (doubleDigitRHS == 3) { display2.three(); }
+                if (doubleDigitRHS == 4) { display2.four(); }
+                if (doubleDigitRHS == 5) { display2.five(); }
+                if (doubleDigitRHS == 6) { display2.six(); }
+                if (doubleDigitRHS == 7) { display2.seven(); }
+                if (doubleDigitRHS == 8) { display2.eight(); }
+                if (doubleDigitRHS == 9) { display2.nine(); }
+            }
+        }
+
+
+                //LoopFuntion() for Testing ONLY
+        /*function loopFunction() {
+            display.one();
+            setTimeout(function () {
+                display.two();
+            }, 1000);
+            setTimeout(function () {
+                display.three();
+            }, 2000);
+            setTimeout(function () {
+                display.four();
+            }, 3000);
+            setTimeout(function () {
+                display.five();
+            }, 4000);
+            setTimeout(function () {
+                display.six();
+            }, 5000);
+            setTimeout(function () {
+                display.seven();
+            }, 6000);
+            setTimeout(function () {
+                display.eight();
+            }, 7000);
+            setTimeout(function () {
+                display.nine();
+            }, 8000);
+            setTimeout(function () {
+                display.zero();
+            }, 9000);
+        }*/
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+    @*<h1>Seven Segment Display</h1>
+
+        <button onclick="callData();">Click me</button>
+        <a href="/Index">Return To Main Page</a>
+
+        <div>
+            <div id="display1" class="display">
+                <div class="segment A"></div>
+                <div class="segment B"></div>
+                <div class="segment C"></div>
+                <div class="segment D"></div>
+                <div class="segment E"></div>
+                <div class="segment F"></div>
+                <div class="segment G"></div>
+            </div>
+            <div id="display2" class="display" style="left:180px">
+                <div class="segment A2"></div>
+                <div class="segment B2"></div>
+                <div class="segment C2"></div>
+                <div class="segment D2"></div>
+                <div class="segment E2"></div>
+                <div class="segment F2"></div>
+                <div class="segment G2"></div>
+            </div>
+        </div>*@
+
+</div>
+
+@* Codes to test JsonFileLocationService - under Services Folder *@
+
+@foreach (var item in Model.MyLocations)
+{
+    <h5>@item.BoardID</h5>
+    <h5>@item.Address</h5>
+    <h5>@item.Longitude</h5>
+    <h5>@item.Latitude</h5>
+}

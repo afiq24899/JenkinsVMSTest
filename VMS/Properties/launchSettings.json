@@ -1,0 +1,35 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:44338",
+      "sslPort": 44321
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+       "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Lingkail.VMS": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+       "ASPNETCORE_ENVIRONMENT": "Development" //This will overwrite the env variables set in OS 
+      },
+     // "applicationUrl": "http://localhost:5000;http://0.0.0.0:5000;http://hostname:5000;",
+      "applicationUrl": "http://hostname:5000;"
+    }
+  }
+}
+
+// Note:  Set the env in (1) Project Settings > Debug ... or ...
+//        (2) Manually in this launchSettings.json ... or ... 
+//        (3) For Windows, Control Panel > System > Advanced Setting > Environment Variables 
+
+// Note:  If you don’t pass any ASPNETCORE_ENVIRONMENT environment variable (default production), 
+//        ASP.NET Core will use the default appsettings.json file as its settings source.

@@ -1,0 +1,32 @@
+﻿@page
+@model Lingkail.VMS.Pages.GroupManagement.DeleteModel
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<style>
+    h1 {
+        /*margin-left: 10px;*/
+        margin-bottom: 25px;
+        color: snow;
+    }
+
+    #main {
+        color: white;
+        font-size: 15px;    
+    }
+</style>
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div id="main">
+    <span>@Html.DisplayFor(modelItem => Model.GroupPreset.Name)</span>
+    <p></p>
+
+    <form method="post">
+        <input type="hidden" asp-for="GroupPreset.ID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

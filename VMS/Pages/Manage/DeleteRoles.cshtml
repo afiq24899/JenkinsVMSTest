@@ -1,0 +1,16 @@
+﻿@page
+@model Lingkail.VMS.Pages.Manage.DeleteRolesModel
+@{
+    ViewData["Title"] = "DeleteRoles";
+}
+
+<h1>Delete Confirmation</h1>
+<div class="alert alert-danger">
+    <h5>Are you sure you want to delete role: @Model.RoleName</h5>
+    <form method="post">
+        <button type="submit" class="btn btn-danger" asp-route-ID_del="@Model.Id">Yes</button>
+        <a class="btn btn-primary" asp-page="/Manage/Users">No</a>
+    </form>
+</div>
+
+

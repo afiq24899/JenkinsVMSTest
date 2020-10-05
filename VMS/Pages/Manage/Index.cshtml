@@ -1,0 +1,31 @@
+﻿@page
+@model Lingkail.VMS.Pages.Manage.IndexModel
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Lingkail.VMS.Auth.Web.Data.VmsUser> _signInManager;
+@inject UserManager<Lingkail.VMS.Auth.Web.Data.VmsUser> _userManager
+@{
+    ViewData["Title"] = "Manage";
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/NewRole">Create role</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/Users">List all users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/Roles">List all roles</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

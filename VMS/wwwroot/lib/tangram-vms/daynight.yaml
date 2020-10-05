@@ -1,0 +1,111 @@
+﻿sources:
+    nextzen:
+        type: TopoJSON
+        url:  https://tile.nextzen.org/tilezen/vector/v1/all/{z}/{x}/{y}.topojson
+        url_params:
+            api_key: tsINU1vsQnKLU1jjCimtVw
+        max_zoom: 16
+
+cameras:
+    camera1:
+        type: isometric
+        axis: [1, 1]
+
+lights:
+    sun:
+        type: directional
+        direction: [0, 1, -.5]
+        diffuse: [1, 1, 1]
+        ambient: .5
+    moon:
+        type: directional
+        direction: [0, 1, -.5]
+        diffuse: [0, 0, .5]
+        ambient: .2
+
+styles:
+    roads:
+        base: lines
+        material:
+            diffuse: 1
+            emission: 1
+    water:
+        base: polygons
+        material:
+            diffuse: 1
+            ambient: 1
+    buildings:
+        base: polygons
+        material:
+            diffuse: 1
+            ambient: 1
+
+layers:
+    earth:
+        data: { source: nextzen }
+        draw:
+            polygons:
+                order: function() { return feature.sort_rank; }
+                color: '#ddeeee'
+
+    landuse:
+        data: { source: nextzen }
+        draw:
+            polygons:
+                order: function() { return feature.sort_rank; }
+                color: '#aaddaa'
+
+    water:
+        data: { source: nextzen }
+        draw:
+            polygons:
+                style: water
+                order: function() { return feature.sort_rank; }
+                color: '#88bbee'
+
+    roads:
+        data: { source: nextzen }
+        filter:
+            not: { kind: [path, rail, ferry] }
+        draw:
+            lines:
+                order: function() { return feature.sort_rank; }
+                color: gray
+                width: 8
+                cap: round
+        highway:
+            filter:
+                kind: highway
+            draw:
+                lines:
+                    color: '#cc6666'
+                    width: 12
+                    outline:
+                        order: 352 # magic
+                        color: grey
+                        width: 1.5
+        minor_road:
+            filter:
+                kind: minor_road
+            draw:
+                lines:
+                    color: lightgrey
+                    width: 5
+
+    buildings:
+        data: { source: nextzen }
+        draw:
+            polygons:
+                order: function() { return feature.sort_rank; }
+                color: |
+                    function () {
+                        var h = feature.height || 20;
+                        h = Math.min((h + 50)/ 255, .8); // max brightness: .8
+                        h = Math.max(h, .4); // min brightness: .4
+                        return [h, h, h];
+                    }
+        3d-buildings:
+            filter: { $zoom: { min: 15 } }
+            draw:
+                polygons:
+                    extrude: function () { return feature.height > 20 || $zoom >= 16; }

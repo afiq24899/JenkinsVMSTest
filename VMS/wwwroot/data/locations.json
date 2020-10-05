@@ -1,0 +1,23 @@
+[
+  {
+    "BoardID": 1,
+    "Address": "EDITADDRESS",
+    "Longitude": 52,
+    "Latitude": 108,
+    "Board": null
+  },
+  {
+    "BoardID": 2,
+    "Address": "Json2",
+    "Longitude": 52.5,
+    "Latitude": 108.5,
+    "Board": null
+  },
+  {
+    "BoardID": 3,
+    "Address": "Json3",
+    "Longitude": 52.9,
+    "Latitude": 107.8,
+    "Board": null
+  }
+]

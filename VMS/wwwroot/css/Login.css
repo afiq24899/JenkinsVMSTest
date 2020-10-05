@@ -1,0 +1,27 @@
+﻿.box {
+    position: relative;
+    width: 550px;
+    background-color: aliceblue;
+    margin-left: 450px;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin: 50px auto; /*To make the box stay at the center*/
+    /*margin-top: 200px;*/
+}
+
+.form-control {
+    display: block;
+    width: 60%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+

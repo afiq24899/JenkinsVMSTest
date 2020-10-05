@@ -1,0 +1,245 @@
+﻿@page
+@model Lingkail.VMS.Pages.GroupManagement.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<style>
+    h1 {
+        margin-left: 10px;
+        margin-bottom: 25px;
+        color: snow;
+        font-size: 35px;
+    }
+
+    #mainTable {
+        border-collapse: collapse;
+        width: 99%;
+        float: left;
+        margin-left: 10px;
+        text-align: center;
+    }
+
+    tr {
+        height: 50%;
+    }
+
+    tr, td {
+        border: solid black 1px;
+    }
+
+    thead {
+        display: table-header-group;
+        vertical-align: middle;
+        background: #645f73;
+        color: black;
+        line-height: 65px;
+        font-size: 25px;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #5f7fb3;
+        height: 50px;
+        color: black;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: #80accf;
+        height: 50px;
+        color: black;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+
+    #createButton {
+        display: inline-flex;
+        position: relative;
+        bottom: 50px;
+        top: auto;
+        margin-top: 10px;
+    }
+
+    #createButton1 {
+        display: block;
+        position: relative;
+        bottom: 50px;
+        top: auto;
+    }
+
+    .btn {
+        margin-left: -110px;
+    }
+
+    #createButton1 {
+        display: block;
+        position: relative;
+        bottom: 50px;
+        top: auto;
+    }
+
+    .form-multipleDiv {
+        margin: 5px;
+        color: white;
+    }
+
+    #mainTable .largerCheckbox {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+
+    .selectZoneDiv {
+        margin: auto;
+        text-align: center;
+        background-color: #819ec4;
+        border: solid;
+        padding: 10px;
+    }
+
+    .searchBarDiv {
+        display: inline-flex;
+        max-height: 25px;
+    }
+
+        .searchBarDiv > img {
+            max-height: 25px;
+        }
+</style>
+
+
+<h1>Group Management</h1>
+
+
+<div class="selectZoneDiv">
+    <h7 style="text-align:Center; vertical-align:bottom; color:white; font-size:25px; font-weight:500;">VMS Presets</h7>
+
+    <div class="searchBarDiv">
+        <img src="~/vms-Icon/searchicon.png" /><input type="text" id="searchBar" onkeyup="searchName()" placeholder="Enter a preset name.">
+    </div>
+</div>
+
+<form method="post">
+    <div class="form-multipleDiv">
+        <label id="total">Total: 0</label>
+        <input type="button" value="SHOW CHECKED PRESET" onclick="GetSelected()" />
+        <button style="float:none" type="submit" class="btn-link" asp-page-handler="MultiplePreset" asp-page="/EditorV2/Index">MULTIPLE EDIT</button>
+    </div>
+
+    <div id="table1">
+        <table id="mainTable">
+            <thead>
+                <tr>
+                    <td>Check</td>
+                    <td>No.</td>
+                    <td>@Html.DisplayNameFor(model => model.GroupPresets[0].Name)</td>
+                    <td>@Html.DisplayNameFor(model => model.GroupPresets[0].DateTimeCreated)</td>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int cnt = 1;
+                    foreach (var group in Model.GroupPresets)
+                    {
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <input type="checkbox" class="largerCheckbox"
+                                           name="selectedPreset" value="@group.Name" id="@group.ID"
+                                           onclick="totalIt()" />
+                                </div>
+                            </td>
+                            <td>@cnt</td>
+                            <td>@Html.DisplayFor(modelItem => group.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => group.DateTimeCreated)</td>
+                            <td>
+                                <a style="font-weight: bold;  color: #ffc107" asp-page="./Details" asp-route-presetid="@group.ID">Details</a> |
+                                <a style="font-weight: bold; color: #ffc107" asp-page="./Edit" asp-route-presetid="@group.ID">Edit</a> |
+                                <a style="font-weight: bold; color: #ffc107" asp-page="./Delete" asp-route-presetid="@group.ID">Delete</a>
+                            </td>
+                        </tr>
+                        cnt++;
+                    }
+                }
+            </tbody>
+            <tr></tr>
+        </table>
+
+    </div>
+</form>
+
+<div id="createButton">
+    <a asp-page="Create" class="btn btn-light">Create New</a>
+</div>
+
+<!--JAVASCRIPT -->
+
+<script>
+
+    //Get the total number of checkbox selected
+    function totalIt() {
+        var input = document.getElementsByName("selectedPreset");
+        var total = 0;
+        var number = 0
+        for (var i = 0; i < input.length; i++) {
+            if (input[i].checked) {
+                total += parseInt(input[i].value);
+                number += 1;
+            }
+        }
+        document.getElementById("total").innerText = "Total: " + number;
+    }
+
+    //Get the value of the checkbox selected
+    function GetSelected() {
+
+        var selected = new Array(); //Create an Array.
+        var table = document.getElementById("mainTable"); //Reference the Table.
+        var chks = table.getElementsByTagName("INPUT"); //Reference all the CheckBoxes in Table.
+
+        // Loop and push the checked CheckBox value in Array.
+        for (var i = 0; i < chks.length; i++) {
+            if (chks[i].checked) {
+                selected.push(chks[i].value);
+            }
+        }
+
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            alert("Selected Presets: " + selected.join(","));
+        }
+    }
+
+
+    function searchName() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchBar");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("mainTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+
+
+</script>

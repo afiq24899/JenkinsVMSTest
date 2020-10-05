@@ -1,0 +1,527 @@
+﻿@page
+@model TableModel
+@{
+    ViewBag.Title = "Table";
+}
+
+<style>
+    .myTable, .myMain {
+        width: 100%;
+        margin: auto;
+        text-align: center;
+    }
+
+        .myTable tbody {
+            font-weight: bold;
+        }
+
+        .myTable thead {
+            margin-bottom: 1px;
+            border: 3px solid;
+        }
+
+            .myTable thead tr:first-child {
+                background: #5c6a88;
+            }
+
+        .myTable tr:nth-child(even) {
+            background: #5f7fb3;
+        }
+
+        .myTable tr:nth-child(odd) {
+            background: #80accf;
+        }
+
+        .myTable td {
+            border: 1.5px solid;
+        }
+
+        .myTable div.smallIcon {
+            margin: 0;
+            padding: 2px;
+        }
+
+            .myTable div.smallIcon img {
+                width: 24.5px;
+                height: 24.5px;
+                object-fit: contain;
+            }
+
+        .myMain > span {
+            font-weight: bold;
+            font-size: x-large;
+            color: white;
+        }
+
+    ::-webkit-input-placeholder {
+        text-align: center;
+    }
+
+    .searchBarDiv {
+        display: inline-flex;
+        max-height: 25px;
+    }
+
+        .searchBarDiv > img {
+            max-height: 25px;
+        }
+
+    .selectZoneDiv {
+        margin: auto;
+        text-align: center;
+        background-color: #819ec4;
+        border: solid;
+        padding: 10px;
+    }
+
+        .selectZoneDiv button {
+            position: relative;
+            display: inline-block;
+            padding: 10px;
+            color: white;
+            margin: 0px 5px 10px 5px;
+            text-align: center;
+            transition: top .01s linear;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+            background-color: #273c5a;
+            box-shadow: 0 0 0 1px #8ca7c9 inset, 0 0 0 2px rgba(255,255,255,0.15) inset, 0 2px 0 0 rgba(189, 142, 183, .7), 1px 4px 0 1px rgba(0,0,0,.4), 5px 7px 3px 1px rgba(0,0,0,0.5);
+        }
+
+            .selectZoneDiv button:hover {
+                background-color: greenyellow;
+                color: mediumpurple;
+            }
+
+    .form-multipleDiv {
+        margin: 5px;
+        color: white;
+    }
+
+        .form-multipleDiv > input[type=button] {
+            margin-left: 15px;
+        }
+
+    .myTable .largerCheckbox {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+        .myTable .largerCheckbox:hover {
+            cursor: pointer;
+            box-shadow: 0 0px 7px 7px greenyellow;
+        }
+
+    /*--------------------------*/
+    .popupContainer {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        .popupContainer [class^="popupElement"] {
+            display: none;
+            grid-row-gap: 5px;
+            border: solid 5px #8b8b8b;
+            padding: 10px;
+            background-color: #ebebeb;
+            color: dodgerblue;
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            right: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .popupContainer .show {
+            display: inline-grid;
+        }
+</style>
+
+<!--Pop Up Message after successful editing-->
+@if (Model.ShowMessage)
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <span data-dismiss="alert" class="close">x</span>
+        @Model.Message
+    </div>
+}
+@if (Model.ShowErrorMessage)
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <span data-dismiss="alert" class="close">x</span>
+        @Model.ErrorMessage
+    </div>}
+
+
+<div class="myMain">
+
+    <div id="loading">Loading..</div>
+    <span>VMS Table</span>
+
+    <div class="searchBarDiv">
+        <img src="~/vms-Icon/searchicon.png" /><input type="text" id="searchBar" onkeyup="searchName()" placeholder="Enter a board name.">
+    </div>
+
+
+    <p style="margin: 0; font-weight:700; font-size:larger; color: white;">Preset Board(s):<p style="color:lawngreen; font-weight:600; font-size:19px;">@Model.SelectedPresetBoard</p></p>
+
+    <div class="selectZoneDiv">
+        @*<button type="button" id="z0" onclick="zoneFilter(this.id)">ALL</button>
+            <button type="button" id="z1" onclick="zoneFilter(this.id)">ZONE1 (1-20)</button>
+            <button type="button" id="z2" onclick="zoneFilter(this.id)">ZONE2 (21-40)</button>
+            <button type="button" id="z3" onclick="zoneFilter(this.id)">ZONE3 (41-60)</button>
+            <button type="button" id="z4" onclick="zoneFilter(this.id)">ZONE4 (61-80)</button>
+            <button type="button" id="z5" onclick="zoneFilter(this.id)">ZONE5 (81-100)</button>
+            <button type="button" id="z6" onclick="zoneFilter(this.id)">ZONE6 (101-120)</button>
+            <button type="button" id="z7" onclick="zoneFilter(this.id)">ZONE7 (121-END)</button>*@
+
+
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Group Preset
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                @foreach (var item in Model.GroupPresets)
+                {
+                    <a class="dropdown-item" asp-page="/VMS/Table" asp-route-id="@item.ID" class="w3-bar-item w3-button">@item.Name</a>
+                }
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<form method="post">
+    <div class="form-multipleDiv">
+        <label id="total">Total: 0</label>
+        <input type="button" value="SHOW CHECKED BOARDS" onclick="GetSelected()" />
+        <button style="float:right" type="submit" class="btn-link" asp-page-handler="MultipleId" asp-page="/EditorV2/Index">MULTIPLE EDIT</button>
+    </div>
+
+    <table class="myTable" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    <span>Check</span>
+                </th>
+                <th>
+                    <span>VMS</span>
+                </th>
+                <th>
+                    <span>Address</span>
+                </th>
+                <th>
+                    <span>Real Time Screen Capture</span>
+                </th>
+                <th>
+                    <span onclick="sortAlertOff()">Alert</span>
+                </th>
+                <th>
+                    <span onclick="sortStatus()">Status</span>
+                </th>
+                <th>
+                    <span>View</span>
+                </th>
+                <th>
+                    <span>Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var board in Model.Boards)
+            {
+                <tr>
+                    <td>
+                        <div align="center">
+                            <input type="checkbox" class="largerCheckbox"
+                                   name="selectedBoards" value="@board.Name" id="@board.ID"
+                                   onclick="totalIt()" />
+                        </div>
+                    </td>
+                    <td>
+                        <div align="center">
+                            <label for="@board.ID">@Html.DisplayFor(modelItem => board.Name)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Location.Address)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="center">
+                            @if (board.Display.IsOnline)
+                            {
+                                <img src="@board.Display.Screenshot_URL"
+                                     alt="@board.Display.Screenshot_URL" width="360" height="60" />
+                            }
+                            else
+                            {
+                                <img src="" alt="@board.Display.Screenshot_URL" width="360" height="60" />
+                            }
+
+                        </div>
+                    </td>
+                    <td>
+                        <div class="smallIcon" align="center">
+                            @{
+                                if (board.Display.HasAlert)
+                                {
+                                    if (board.Display.HasUniqueDisplay)
+                                    {
+                                        <img id="alertOnU-@board.ID" src="~/vms-Icon/alertOnSpecial.png" alt="ALERTON*" />
+                                    }
+                                    else
+                                    {
+                                        <img id="alertOn-@board.ID" src="~/vms-Icon/alertOn.png" alt="ALERTON" />
+                                    }
+                                }
+                                else
+                                {
+                                    if (board.Display.HasUniqueDisplay)
+                                    {
+                                        <img id="alertOffU-@board.ID" src="~/vms-Icon/alertOffSpecial.png" alt="ALERTOFF*" />
+                                    }
+                                    else
+                                    {
+                                        <img id="alertOff-@board.ID" src="~/vms-Icon/alertOff.png" alt="ALERTOFF" />
+                                    }
+                                }
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <div class="smallIcon" align="center">
+                            @{
+                                if (board.Display.IsOnline)
+                                { <img id="powerOn-@board.ID" src="~/vms-Icon/powerOn.png" alt="ONLINE" /> }
+                                else
+                                { <img id="powerOff-@board.ID" src="~/vms-Icon/powerOff.png" alt="OFFLINE" /> }
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        <div class="popupContainer">
+                            <button id="popupButton-@board.ID" type="button" onclick="popup(this.id)">ALL</button>
+                            <div id="popupElement-@board.ID" class="popupElement-@board.ID">
+                                <b>VMS - @board.Name</b>
+                                @foreach (var message in board.Display.MessageAssignments)
+                                {
+                                    string imgid = board.ID + "-img" + message.EditorMessageID; //E.g. 1-img1, 1-img2, 3-img1
+                                    <img id="@imgid"
+                                         src="~/uploads/@board.ID/@(message.ImageFileName + Model.fileExtension)"
+                                         alt="@imgid" width="360" height="60" />
+                                }
+                            </div>
+                        </div>
+                    </td>
+                    <td><div align="center"><button><a asp-page="/EditorV2/Index" asp-route-id="@board.ID" asp-page-handler="SingleId">EDIT</a></button></div></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+<!--JAVASCRIPT-->
+<script>
+     //Sort by Zones
+    function zoneFilter(zoneid) {
+        var table = document.getElementById("myTable");
+        var row = table.getElementsByTagName("tr");
+        var totalrows = row.length;
+        var j;
+        var i = 0;
+
+        for (j = 0; j < totalrows; j++) { row[j].style.display = "none"; }
+        row[0].style.display = ""; //Header
+
+        if (zoneid == "z0") { //ALL
+            for (i = 0; i < totalrows; i++) { row[i].style.display = ""; }
+        }
+        if (zoneid == "z1") {
+            for (i = 1; i <= 20; i++) { row[i].style.display = ""; }
+        }
+        if (zoneid == "z2") {
+            for (i = 21; i <= 40; i++) { row[i].style.display = ""; }
+        }
+        if (zoneid == "z3") {
+            for (i = 41; i <= 60; i++) { row[i].style.display = ""; }
+        }
+        if (zoneid == "z4") {
+            for (i = 61; i <= 80; i++) { row[i].style.display = ""; }
+        }
+        if (zoneid == "z5") {
+            for (i = 81; i <= 100; i++) { row[i].style.display = ""; }
+        }
+        if (zoneid == "z6") {
+            for (i = 101; i <= 120; i++) { row[i].style.display = ""; }
+        }
+        if (zoneid == "z7") {
+            for (i = 121; i <= totalrows; i++) { row[i].style.display = ""; }
+        }
+    }
+
+    //Sort by seraching a name
+    function searchName() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchBar");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    //Get the total number of checkbox selected
+    function totalIt() {
+        var input = document.getElementsByName("selectedBoards");
+        var total = 0;
+        var number = 0
+        for (var i = 0; i < input.length; i++) {
+            if (input[i].checked) {
+                total += parseInt(input[i].value);
+                number += 1;
+            }
+        }
+        document.getElementById("total").innerText = "Total: " + number;
+    }
+
+    //Get the value of the checkbox selected
+    function GetSelected() {
+
+        var selected = new Array(); //Create an Array.
+        var table = document.getElementById("myTable"); //Reference the Table.
+        var chks = table.getElementsByTagName("INPUT"); //Reference all the CheckBoxes in Table.
+
+        // Loop and push the checked CheckBox value in Array.
+        for (var i = 0; i < chks.length; i++) {
+            if (chks[i].checked) {
+                selected.push(chks[i].value);
+            }
+        }
+
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            alert("Selected Boards: " + selected.join(","));
+        }
+    }
+
+    // When the user clicks on div, open the popup - display messages
+    function popup(id) {
+        var stringId = String(id);
+        var intid = Number(stringId.split("-")[1]);
+        var popup = document.getElementById("popupElement-" + intid);
+        popup.classList.toggle("show");
+    }
+
+    //Hide OFFLINE - Temporary
+    function sortStatus() {
+        //status('test');
+
+        var table = document.getElementById("myTable");
+        var row = table.getElementsByTagName("tr");
+        var totalrows = row.length;
+        var id = 1;
+
+        row[0].style.display = ""; //Header
+
+        for (id = 1; id <= totalrows; id++) {
+            row[id].style.display = "";
+            var indicator = document.getElementById("powerOff-" + String(id));
+            if (indicator) { row[id].style.display = "none"; } //if powerOff-xx exists, remove display
+        }
+    }
+
+    function sortAlertOff() {
+        //alert('test');
+
+        var table = document.getElementById("myTable");
+        var row = table.getElementsByTagName("tr");
+        var totalrows = row.length;
+        var id = 1;
+
+        row[0].style.display = ""; //Header
+
+        for (id = 1; id <= totalrows; id++) {
+            row[id].style.display = "";
+            var indicator = document.getElementById("alertOff-" + String(id));
+            var indicate = document.getElementById("alertOffU-" + String(id));
+            if (indicator || indicate) { row[id].style.display = "none"; } //if alertOff-xx exists, remove display
+        }
+    }
+</script>
+
+
+
+
+<!-- -- -- -- -- -- IN PROGRESS -- -- -- -- --  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        var $loading = $('#loading').hide();
+
+        $(document).ajaxStart(function () {
+            $loading.show();
+            console.log("Start AJAX Request");
+        });
+
+        @*$.ajax({
+            url: "/api/upload/powerstatus",
+            type: "GET",
+            data: JSON.stringify({
+                name: "null",
+            }),
+            contentType: 'application/json',
+        });*@
+
+
+        $(document).ajaxComplete(function () {
+            $loading.hide();
+            console.log("Complete AJAX Request");
+        });
+    });
+</script>
+
+<style>
+    #loading {
+        z-index: 1;
+        position: absolute;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        top: 20px;
+        right: 100px;
+    }
+
+        @*height: 100px;
+        width: 100px;
+
+        left: 50%;
+        margin-left: -50px;
+        top: 50%;
+        margin-top: -50px;*@
+    }
+</style>
+
+<!-- -- -- -- -- -- IN PROGRESS -- -- -- -- --  -->

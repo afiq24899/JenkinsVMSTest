@@ -1,0 +1,67 @@
+﻿@page
+@model Lingkail.VMS.Pages.ConfigurationPage.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+    .header {
+        color: white;
+    }
+
+    .formstyle {
+        color: white;
+    }
+</style>
+
+<body>
+    <div class="header">
+        <h1>Edit Board @Html.DisplayFor(modelItem => Model.Board.Name)</h1>
+    </div>
+
+    <hr />
+    <div class="formstyle">
+        <form method="Post">
+
+            <label asp-for="Board.Name">Board Name:</label><br>
+            <input type="text" asp-for="Board.Name" required><br><br>
+
+            <label asp-for="Board.ZoneID">Zone(int):</label><br>
+            <input type="text" asp-for="Board.ZoneID" required><br><br>
+
+            <label asp-for="Location.Address">Address:</label><br>
+            <input type="text" asp-for="Location.Address"><br><br>
+
+            <label asp-for="Location.Longitude">Longitude:</label><br>
+            <input type="text" asp-for="Location.Longitude"><br><br>
+
+            <label asp-for="Location.Latitude">Latitude:</label><br>
+            <input type="text" asp-for="Location.Latitude"><br><br>
+
+            <label asp-for="Display.C4_IP">IP Address:</label><br>
+            <input type="text" asp-for="Display.C4_IP"><br><br>
+
+            <label asp-for="Display.CCTV">CCTV RTSP Link:</label><br>
+            <input type="text" asp-for="Display.CCTV"><br><br>
+
+            <label asp-for="Display.PTZ">PTZ Link:</label><br>
+            <input type="text" asp-for="Display.PTZ"><br><br>
+
+            <label >Operational Status:</label><br>
+
+            <input type="radio" asp-for="Display.OperationalStatus" value="2" required>
+            <label asp-for="Display.OperationalStatus">Already Install</label><br>
+
+            <input type="radio" asp-for="Display.OperationalStatus" value="3" required>
+            <label asp-for="Display.OperationalStatus">Not Install</label><br><br>
+
+            <input type="hidden" asp-for="Board.ID" />
+            <input type="submit" value="Edit" class="btn btn-primary" />
+
+            <a asp-page="./Index">Back to Table</a>
+
+        </form>
+
+    </div>
+</body>
+

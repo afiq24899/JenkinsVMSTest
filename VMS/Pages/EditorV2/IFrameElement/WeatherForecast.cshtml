@@ -1,0 +1,161 @@
+﻿@page
+@model Lingkail.VMS.Pages.EditorV2.IFrameElement.WeatherForecastModel
+@{
+    ViewData["Title"] = "WeatherForecast";
+}
+
+<!--CSS-->
+<style>
+    .main {
+        text-align: center;
+        color: white;
+        font-size: 150%;
+    }
+
+        .main > img {
+            display: none;
+        }
+
+    form button, input {
+        font-size: 150%;
+        margin: 5px;
+    }
+
+    #canvas {
+        background-color: #4d4d4d;
+        border: solid 1px;
+        width: 768px;
+        height: 128px;
+        margin: auto;
+        display: block;
+        margin-top: 10px;
+    }
+</style>
+
+<!--HTML-->
+
+<div class="main">
+
+    <img id="canvasimg"> <!--Save canvas as an image to be transferred to parent canvas-->
+
+    <canvas id="canvas"></canvas>
+
+    <p>Select your location.</p>
+
+    <select id="location" onchange="getSelected()">
+        <option value="-">--</option>
+        <option value="-">Selayang</option>
+        <option value="-">Kepong</option>
+        <option value="-">Ampang</option>
+        <option value="-">Bukit Bintang</option>
+        <option value="-">Kuala Lumpur</option>
+        <option value="-">Cheras</option>
+        <option value="-">Jalan Duta</option>
+        <option value="-">Bangsar</option>
+        <option value="-">Sungai Besi</option>
+        <option value="-">Setapak</option>
+    </select>
+
+    <hr>
+    <form>
+        @*<input type="hidden" name="id" value="@Model.Board.ID" />*@
+        <button type="submit" onclick="clearcanvas()">Clear Canvas</button>
+        <input type="button" onclick="copycanvas();" value="Submit" />
+    </form>
+</div>
+
+<!--Javascript-->
+<script>
+
+    //Function to get the selected option (from dropdown list) and its value
+    function getSelected() {
+
+        var locationselected = document.getElementById("location");
+
+        var index = locationselected.options[locationselected.selectedIndex].innerHTML;
+        var weather = locationselected.options[locationselected.selectedIndex].value;
+
+        canvasid = document.getElementById("canvas").id;
+        displaySelected(index, weather, canvasid);
+
+    }
+
+    //Function to draw/display on the canvas
+    function displaySelected(index,weather,canvasid) {
+        var canvas = document.getElementById(canvasid);
+        canvas.width = 768;
+        canvas.height = 128;
+        var ctx = canvas.getContext("2d");
+
+        //Draw the text
+        ctx.fillStyle = "#00ff00";
+        ctx.font = "bold 30px Arial";
+
+        //row1
+        ctx.fillText("Morning", 315, 65);
+        ctx.fillText("Afternoon", 480, 65);
+        ctx.fillText("Night", 650, 65);
+
+        //row2
+        ctx.fillText(index, 10, 90);
+        ctx.fillText(weather, 370, 90);
+        ctx.fillText(weather, 550, 90);
+        ctx.fillText(weather, 680, 90);
+
+        //header
+        ctx.fillStyle = "#FFFF00";
+        ctx.font = "bold 25px Arial";
+        ctx.fillText("Today Weather Forecast", 10, 30);
+
+
+
+        var dataURL = canvas.toDataURL(); //get string dataURL of the canvas
+        document.getElementById("canvasimg").src = dataURL;  //set the src of the image
+    }
+
+    //Function to clear canvas
+    function clearcanvas() {
+        var canvas = document.getElementById('canvas');
+        ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    //Function to copy canvas - from child iframe to parent page
+    function copycanvas() {
+        var radios = parent.document.getElementsByName('selectedMessage'); //Check which message/radio is selected [from parent page]
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) { //if checked, draw image
+
+                var radioid = radios[i].id.toString();
+                var lastchar = radioid.charAt(radioid.length - 1); //get the number of the radio id only
+                parent.document.getElementById("code_" + lastchar).value = 5; //code = 5 => weather forecast template
+
+                var parentcanvas = parent.document.getElementById('c' + lastchar);
+                parentctx = parentcanvas.getContext("2d");
+                parentcanvas.width = 768;
+                parentcanvas.height = 128;
+                parentctx.clearRect(0, 0, parentcanvas.width, parentcanvas.height)
+                //Get the 'clean/empty' canvas respective to the selected message/radio [from parent page]
+                parentctx.fillRect(0, 0, parentcanvas.width, parentcanvas.height); //default black colour background
+
+                //------------------------------------------------------
+                var list1 = document.getElementById("location"); //dropdown town selected
+
+
+                var selectedText = list1.options[list1.selectedIndex].innerHTML;
+                var selectedValue = list1.options[list1.selectedIndex].value;
+
+                parent.document.getElementById("codePlus_" + lastchar).value = selectedText; //options from dropdown selected
+                //------------------------------------------------------
+
+                var canvasimg = document.getElementById("canvasimg");
+                parentctx.drawImage(canvasimg, 0, 0, parentcanvas.width, parentcanvas.height);
+
+                break; // only one radio can be logically checked, don't check the rest
+            }
+        }
+    }
+
+</script>
+
+

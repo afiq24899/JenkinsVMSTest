@@ -1,0 +1,35 @@
+﻿@page
+@model Lingkail.VMS.Pages.Manage.EditUserInRoleModel
+    @{
+        ViewData["Title"] = "Edit User In Role";
+    }
+
+
+    <form method="post">
+        <div class="card">
+            <div class="card-header">
+                <h2>Add or remove users from this role</h2>
+            </div>
+            <div class="card-body">
+                <input type="hidden" asp-for="@Model.ListOfUsers_InRole" />
+                @for (int i = 0; i < Model.UserList_new.Count; i++)
+                {
+                    <div class="form-check m-1">
+                        <input type="hidden" asp-for="@Model.UserList_new[i].UserId" />
+                        <input type="hidden" asp-for="@Model.UserList_new[i].UserName" />
+                        <input asp-for="@Model.UserList_new[i].IsSelected" class="form-check-input" />
+                        <label class="form-check-label" asp-for="@Model.UserList_new[i].IsSelected">
+                            @Model.UserList_new[i].UserName
+                        </label>
+
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-danger" >Update</button>
+                <a asp-page="EditRoles" asp-route-id="@Model.roleId_get" class="btn btn-primary" style="width:auto">Cancel</a>
+                @*<input type="submit" value="Update" class="btn btn-primary" style="width:auto" />
+                <a asp-page="EditRoles" asp-route-id="@Model.roleId_get" class="btn btn-primary" style="width:auto">Cancel</a>*@
+            </div>
+        </div>
+    </form>

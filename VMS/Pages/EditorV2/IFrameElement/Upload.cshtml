@@ -1,0 +1,194 @@
+﻿@page
+@model Lingkail.VMS.Pages.EditorV2.IFrameElement.UploadModel
+@{
+    ViewData["Title"] = "Upload";
+}
+
+<!--CSS-->
+<style>
+    .cluster, form button, input {
+        text-align: center;
+        font-size: 120%;
+        margin: 5px;
+    }
+
+    #canvas {
+        background-color: #4d4d4d;
+        border: solid 1px;
+        width: 768px;
+        height: 128px;
+        margin: auto;
+        display: block;
+        margin-top: 10px;
+    }
+
+    #video {
+        width: 768px;
+        height: 128px;
+        margin: auto;
+        display: none; /*Hidden; displyed on canvas instead*/
+        /*object-fit: fill;*/
+    }
+</style>
+
+<!--HTML-->
+
+<!--Pop Up Message after file successfully uploaded to wwwroot-->
+@if (Model.ShowMessage)
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <span data-dismiss="alert" class="close">x</span>
+        @Model.alertMessage
+    </div>
+}
+
+<div class="main">
+    <!--Start:Display Section-->
+    <canvas id="canvas"></canvas>
+    <video id="video" control autoplay oncanplay="this.muted=true">
+        <source id="mp4_src" src="" type="video/mp4">
+    </video>
+    <!--End:Display Section-->
+
+    <div class="cluster">
+        <!--Start:Upload/Input + Form Section-->
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Board.ID" />
+            <div>
+                <b>Image</b>
+                <input type="file" asp-for="imgFile" id="imgFile" accept="image/*">
+            </div>
+            <div>
+                <b>Video (mp4)</b>
+                <input type="file" asp-for="vidFile" id="vidFile" accept="video/*">
+            </div>
+            <hr>
+
+            <button onclick="clearcanvas()">Clear Canvas</button>
+            <input type="submit" onclick="copycanvas();" value="Submit" />
+        </form>
+        <!--End:Upload/Input Section-->
+    </div>
+</div>
+
+<!--JavaScript-->
+<script>
+    //Function to clear canvas
+    function clearcanvas() {
+        var canvas = document.getElementById('canvas'),
+            ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    //Function to copy canvas - from child iframe to parent page
+    function copycanvas() {
+        var radios = parent.document.getElementsByName('selectedMessage'); //Check which message/radio is selected [from parent page]
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) { //if checked, draw image
+
+                var radioid = radios[i].id.toString();
+                var lastchar = radioid.charAt(radioid.length - 1); //get the number of the radio id only
+
+                var parentcanvas = parent.document.getElementById('c' + lastchar);
+                parentctx = parentcanvas.getContext("2d");
+                parentcanvas.width = 768;
+                parentcanvas.height = 128;
+                parentctx.clearRect(0, 0, parentcanvas.width, parentcanvas.height)
+                //Get the 'clean/empty' canvas respective to the selected message/radio [from parent page]
+
+                var vidvalue = document.getElementById("vidFile").value;
+                var imgvalue = document.getElementById("imgFile").value;
+
+                if (imgvalue !== "") { //if image is selected
+                    var childcanvas = document.getElementById('canvas');
+                    parentctx.drawImage(childcanvas, 0, 0, parentcanvas.width, parentcanvas.height);
+
+                    var fileName = imgvalue.split("\\").pop(); //The pop() method removes the last element of an array, and returns that element.
+                    parent.document.getElementById("code_" + lastchar).value = 2; //code = 2 => upload template
+                    parent.document.getElementById("codePlus_" + lastchar).value = "IMAGE," + fileName;
+
+                }
+                if (vidvalue !== "") { //if video is selected
+                    //alert("Video cannot be displayed. Screenshot captured.");
+
+                    var childcanvas = document.getElementById('canvas');
+                    parentctx.drawImage(childcanvas, 0, 0, parentcanvas.width, parentcanvas.height);
+
+                    var fileName = vidvalue.split("\\").pop(); //The pop() method removes the last element of an array, and returns that element.
+                    parent.document.getElementById("code_" + lastchar).value = 2; //code = 2 => upload template
+                    parent.document.getElementById("codePlus_" + lastchar).value = "VIDEO," + fileName;
+                }
+
+                break; // only one radio can be logically checked, don't check the rest
+            }
+        }
+    }
+
+</script>
+
+<!--Javascript for Image-->
+<!--Get uploaded image and draw on the canvas
+    Clear video file when image file is loaded (allow one at a time)-->
+<script>
+    document.getElementById('imgFile').onchange = function (e) { //Trigger when changes are made to the existing/non-existing image file
+
+        document.getElementById("vidFile").value = ""; //Clear the path of video file
+
+        var img = new Image();
+        img.onload = draw;
+        img.onerror = failed;
+        img.src = URL.createObjectURL(this.files[0]);
+    };
+
+    function draw() {
+        var canvas = document.getElementById('canvas');
+        canvas.width = this.width;
+        canvas.height = this.height;
+        var ctx = canvas.getContext('2d');
+        var item = ctx.drawImage(this, 0, 0);
+    }
+    function failed() {
+        console.error("The provided file couldn't be loaded as an Image media");
+    }
+
+</script>
+
+<!--Javascript for Video-->
+<!--Get uploaded video and draw (video frame every x ms) on the canvas
+    Clear image file when video file is loaded (allow one at a time)
+    Clear capturing of video frame when new image file is uploaded -->
+<script>
+    document.getElementById('vidFile').onchange = function (e) { //Trigger when changes are made to the existing/non-existing video file
+
+        document.getElementById("imgFile").value = ""; //Clear the path of image file
+
+        var source = document.getElementById("mp4_src"); //Get the video source ID
+        source.src = URL.createObjectURL(this.files[0]); //Update the video source
+        var video = document.getElementById("video");
+        video.load(); //Re-load the video
+
+        //Copy video to the canvas
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        var i = window.setInterval(function () { ctx.drawImage(video, 0, 0, canvas.width, canvas.height) }, 20); //Capture(draw) video frame every 20ms
+
+        document.getElementById("imgFile").addEventListener("click", function () {
+            clearInterval(i);
+        }); //Clear interval
+
+
+        //Additional Reference....
+        /*var i;
+
+        video.addEventListener("play", function() {
+            i = window.setInterval(function() {ctx.drawImage(video,5,5,260,125)},20);}, false);
+
+        video.addEventListener("pause", function() {
+            window.clearInterval(i);}, false);
+
+        video.addEventListener("ended", function() {
+            clearInterval(i);}, false); */
+    };
+
+</script>

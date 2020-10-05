@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "microsoft-signalr@3.1.6",
+      "destination": "wwwroot/lib/microsoft-signalr/"
+    }
+  ,
+{
+  "library": "leaflet@1.6.0",
+  "destination": "wwwroot/lib/leaflet/",
+  "files": [
+    "dist/images/layers-2x.png",
+    "dist/images/layers.png",
+    "dist/images/marker-icon-2x.png",
+    "dist/images/marker-icon.png",
+    "dist/images/marker-shadow.png",
+    "dist/leaflet-src.esm.js",
+    "dist/leaflet-src.esm.js.map",
+    "dist/leaflet-src.js",
+    "dist/leaflet-src.js.map",
+    "dist/leaflet.css",
+    "dist/leaflet.js",
+    "dist/leaflet.js.map"
+  ]
+}
+,
+{
+  "library": "tangram@0.21.0",
+  "destination": "wwwroot/lib/tangram/",
+  "files": [
+    "dist/tangram.debug.js",
+    "dist/tangram.debug.js.map",
+    "dist/tangram.debug.mjs",
+    "dist/tangram.debug.mjs.map",
+    "dist/tangram.min.js",
+    "dist/tangram.min.mjs"
+  ]
+}
+]
+}

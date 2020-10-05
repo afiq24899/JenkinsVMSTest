@@ -1,0 +1,87 @@
+﻿/*This Style Sheet is solely for Editor Page*/
+
+.ui-draggable, .ui-droppable {
+    background-position: top;
+}
+
+.div-reposition {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: scroll;
+    width: 100%
+}
+
+
+/*For the division - container message*/
+.container-messages {
+    margin: 15px;
+    border: 3px solid black;
+    display: inline-block; /*custom of width and height*/
+    width: auto;
+    height: 800px;
+    overflow-y: auto;
+    white-space: nowrap;
+    font-weight: bold;
+}
+.single-message {
+    margin: 10px;
+    padding: 5px;
+    width: auto;
+    height: auto;
+    background-color: #b3e0ff;
+    border: 2px solid black;
+    display: block;
+}
+.largerCheckbox {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    margin-bottom: 0.5rem;
+}
+/*For the division - container message*/
+
+
+/*For the division - container editor*/
+.container-editor {
+    margin: 15px;
+    border: 3px solid black;
+    display: inline-block; /*custom width and height*/
+    width: auto;
+    height: 800px;
+    white-space: nowrap;
+    font-weight: bold;
+}
+.color-font-style {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+}
+.tsign-template {
+    margin: 10px;
+    width: 340px;
+    height: 400px;
+    overflow-y: scroll;
+    white-space: nowrap;
+    display: inline-block;
+}
+.button {
+    background-color: black;
+    color: white;
+    width: 230px;
+    padding: 10px;
+    border: 10px;
+}
+/*For the division - container editor*/
+
+
+/*For the division - CCTV*/
+.form-popup-cctv {
+    margin: 10px;
+    display: none;
+    width: fit-content;
+    border: 3px dotted red;
+}
+/*For the division - CCTV*/

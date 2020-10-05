@@ -1,0 +1,216 @@
+--------------------------------
+02-Oct-20 10:30:50 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 71
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 25
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 482
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 297
+--------------------------------
+02-Oct-20 10:29:45 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 71
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 25
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 482
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 297
+--------------------------------
+02-Oct-20 10:29:16 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 71
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 25
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 482
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 297
+--------------------------------
+02-Oct-20 10:25:58 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 71
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 25
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 482
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 297
+--------------------------------
+02-Oct-20 10:25:16 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 71
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 25
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 482
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 297
+--------------------------------
+02-Oct-20 10:21:08 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 71
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 25
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 482
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 297
+--------------------------------
+02-Oct-20 10:20:06 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 71
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Services\FileManagement.cs:line 25
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 482
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Alienguy\Source\Repos\vmstestCoconut\VMS\Pages\EditorV2\Index.cshtml.cs:line 297
+--------------------------------
+9/17/2020 10:15:02 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 10:09:37 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 10:06:14 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 9:59:25 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 9:54:27 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 9:49:17 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 9:47:56 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 9:46:42 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/17/2020 9:42:30 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/15/2020 11:02:03 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/15/2020 10:55:58 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/15/2020 10:51:55 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/14/2020 9:28:59 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/14/2020 9:01:01 AM
+System.IO.IOException: The process cannot access the file 'C:\Users\Lenovo\source\repos\KE\VMS\wwwroot\uploads\141\message1.jpg' because it is being used by another process.
+   at System.IO.FileSystem.CopyFile(String sourceFullPath, String destFullPath, Boolean overwrite)
+   at Lingkail.VMS.Services.FileManagement.CopyFiles(String sourcePath, String destPath) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 65
+   at Lingkail.VMS.Services.FileManagement.CopyFromTempFolderSingle(Nullable`1 boardId) in C:\Users\Lenovo\source\repos\KE\VMS\Services\FileManagement.cs:line 22
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 473
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\Lenovo\source\repos\KE\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/9/2020 11:47:16 AM
+System.ArgumentNullException: Value cannot be null. (Parameter 'user')
+   at Microsoft.AspNetCore.Identity.UserManager`1.GetUserNameAsync(TUser user)
+   at Lingkail.VMS.IndexModel.UpdateHistory(Int32 boardId) in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 508
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 487
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/9/2020 11:46:37 AM
+System.ArgumentNullException: Value cannot be null. (Parameter 'user')
+   at Microsoft.AspNetCore.Identity.UserManager`1.GetUserNameAsync(TUser user)
+   at Lingkail.VMS.IndexModel.UpdateHistory(Int32 boardId) in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 508
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 487
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+--------------------------------
+9/9/2020 11:45:10 AM
+System.ArgumentNullException: Value cannot be null. (Parameter 'user')
+   at Microsoft.AspNetCore.Identity.UserManager`1.GetUserNameAsync(TUser user)
+   at Lingkail.VMS.IndexModel.UpdateHistory(Int32 boardId) in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 507
+   at Lingkail.VMS.IndexModel.LongProcess(Int32 boardId, Boolean isMultiple, List`1 selectedMessages) in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 486
+   at Lingkail.VMS.IndexModel.OnPostUpdateAsync() in C:\Users\claud\source\repos\vmstest\VMS\Pages\EditorV2\Index.cshtml.cs:line 288
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

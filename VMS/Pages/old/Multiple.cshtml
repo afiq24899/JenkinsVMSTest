@@ -1,0 +1,616 @@
+﻿@page
+@model MultipleModel
+@{
+    ViewData["Title"] = "Multiple";
+}
+
+<link href="~/css/vms-Editor.css" rel="stylesheet" />
+<script src="~/js/canvas/fabric.min.js"></script>
+
+
+<div style="display: inline-flex; width:100%">
+    <!--LEFT SIDE: "MESSAGE CONTAINER" TO CREATE MULTIPLE MESSAGES-->
+    <div class="container-messages" style="text-align:center">
+        <div>
+            <label style="font-size: 30px">Variable Message Sign</label>
+        </div>
+        <!-- Config of message 1 -->
+        <div class="single-message">
+            <input type="checkbox" class="largerCheckbox" id="checkmess1">
+            <label for="checkmess1" style="font-size: 24px">Message 1</label>
+
+            <p>Date: <input id="date_1" type="date"></p>
+            <p>Time: <input id="time_1" type="number"></p>
+
+            <canvas id="c1" width=768 height=128></canvas>
+            <script type="text/javascript">
+                var cvas1 = new fabric.Canvas('c1');
+                cvas1.setBackgroundColor('#000000');
+                cvas1.renderAll();
+            </script>
+        </div>
+        <!-- Config of message 1 -->
+        <!-- Config of message 2 -->
+        <div class="single-message">
+            <input type="checkbox" class="largerCheckbox" id="checkmess2">
+            <label for="checkmess2" style="font-size: 24px">Message 2</label>
+
+            <p>Date: <input id="date_2" type="date"></p>
+            <p>Time: <input id="time_2" type="number"></p>
+
+            <canvas id="c2" width=768 height=128></canvas>
+            <script type="text/javascript">
+                var cvas1 = new fabric.Canvas('c2');
+                cvas1.setBackgroundColor('#000000');
+                cvas1.renderAll();
+            </script>
+        </div>
+        <!-- Config of message 2 -->
+        <!-- Config of message 3 -->
+        <div class="single-message">
+            <input type="checkbox" class="largerCheckbox" id="checkmess3">
+            <label for="checkmess3" style="font-size: 24px">Message 3</label>
+
+            <p>Date: <input id="date_3" type="date"></p>
+            <p>Time: <input id="time_3" type="number"></p>
+
+            <canvas id="c3" width=768 height=128></canvas>
+            <script type="text/javascript">
+                var cvas1 = new fabric.Canvas('c3');
+                cvas1.setBackgroundColor('#000000');
+                cvas1.renderAll();
+            </script>
+        </div>
+        <!-- Config of message 3 -->
+        <!-- Config of message 4 -->
+        <div class="single-message">
+            <input type="checkbox" class="largerCheckbox" id="checkmess4">
+            <label for="checkmess4" style="font-size: 24px">Message 4</label>
+
+            <p>Date: <input id="date_4" type="date"></p>
+            <p>Time: <input id="time_4" type="number"></p>
+
+            <canvas id="c4" width=768 height=128></canvas>
+            <script type="text/javascript">
+                var cvas1 = new fabric.Canvas('c4');
+                cvas1.setBackgroundColor('#000000');
+                cvas1.renderAll();
+            </script>
+        </div>
+        <!-- Config of message 4 -->
+        <!-- Config of message 5 -->
+        <div class="single-message">
+            <input type="checkbox" class="largerCheckbox" id="checkmess5">
+            <label for="checkmess5" style="font-size: 24px">Message 5</label>
+
+            <p>Date: <input id="date_5" type="date"></p>
+            <p>Time: <input id="time_5" type="number"></p>
+
+            <canvas id="c5" width=768 height=128></canvas>
+            <script type="text/javascript">
+                var cvas1 = new fabric.Canvas('c5');
+                cvas1.setBackgroundColor('#000000');
+                cvas1.renderAll();
+            </script>
+        </div>
+        <!-- Config of message 5 -->
+    </div>
+
+    <!--RIGHT SIDE: "EDITOR CONTAINER" TO CUSTOMIZE A SINGLE MESSAGE-->
+    <div class="container-editor" style="text-align:center">
+        <div>
+            <label style="font-size: 30px">Message Editor</label>
+        </div>
+
+        <!--The messsage editor-->
+        <div id="canvsedit" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <canvas id="cc" width="768" height="128" style="padding: 5px"></canvas>
+        </div>
+        <!--The messsage editor-->
+        <!--Color-Font-Style-->
+        <div style="font-size:140%">
+            <!--Color Panel-->
+            <div class="color-font-style">
+                <label for="color">Color:</label>
+                <input type="color" id="color" value="#ffffff" style="width: 100px" />
+            </div>
+            <!--Color Panel-->
+            <!--Font Family-->
+            <div class="color-font-style">
+                <label for="font_family">Font:</label>
+                <select id="font_family">
+                    <option value="Helvetica" selected="selected">Helvetica</option>
+                    <option value="sans-serif">Sans Serif</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="georgia">Georgia</option>
+                    <option value="courier">Courier</option>
+                    <option value="comic sans ms">Comic Sans MS</option>
+                    <option value="impact">Impact</option>
+                    <option value="monaco">Monaco</option>
+                    <option value="optima">Optima</option>
+                    <option value="hoefler text">Hoefler Text</option>
+                    <option value="plaster">Plaster</option>
+                </select>
+            </div>
+            <!--Font Family-->
+            <!--Font Style-->
+            <div class="color-font-style">
+                <label for="input_style">Font Style:</label>
+                <select id="input_style">
+                    <option value="normal" selected="selected">Normal</option>
+                    <option value="italic">Italic</option>
+                    <option value="bold">Bold</option>
+                </select>
+            </div>
+            <!--Font Style-->
+        </div>
+        <!--Color-Font-Style-->
+        <!--Traffic sign and templates-->
+        <div>
+            <!--Display traffic sign images for dragging and dropping to the message editor-->
+            <div class="tsign-template">
+                <img id="image1" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/1.jpg" style="border: 2px solid white;" />
+                <img id="image2" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/2.jpg" style="border: 2px solid white;" />
+                <img id="image3" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/3.jpg" style="border: 2px solid white;" />
+                <br />
+                <img id="image4" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/4.jpg" style="border: 2px solid white;" />
+                <img id="image5" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/5.jpg" style="border: 2px solid white;" />
+                <img id="image6" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/6.jpg" style="border: 2px solid white;" />
+                <br />
+                <img id="image7" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/7.jpg" style="border: 2px solid white;" />
+                <img id="image8" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/8.jpg" style="border: 2px solid white;" />
+                <img id="image9" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/9.jpg" style="border: 2px solid white;" />
+                <br />
+                <img id="image10" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/10.jpg" style="border: 2px solid white;" />
+                <img id="image11" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/11.jpg" style="border: 2px solid white;" />
+                <img id="image12" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/12.jpg" style="border: 2px solid white;" />
+                <br />
+                <img id="image13" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/13.jpg" style="border: 2px solid white;" />
+                <img id="image14" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/14.jpg" style="border: 2px solid white;" />
+                <img id="image15" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/15.jpg" style="border: 2px solid white;" />
+            </div>
+            <!--Display traffic sign images for dragging and dropping to the message editor-->
+
+            <div class="tsign-template">
+                <!--Display image in the template library-->
+                <img id="it1" width=320 height=53 src="~/library/template1.jpg" onclick="changetemplate()" style="border: 2px solid white;" />
+                <br />
+                <img id="it2" width=320 height=53 src="~/library/template2.jpg" onclick="changetemplate2()" style="border: 2px solid white;" />
+                <br />
+                <img id="it3" width=320 height=53 src="~/library/template3.jpg" onclick="changetemplate3()" style="border: 2px solid white;" />
+                <br />
+                <img id="it4" width=320 height=53 src="~/library/template4.jpg" onclick="changetemplate4()" style="border: 2px solid white;" />
+                <br />
+                <img id="it5" width=320 height=53 src="~/library/template5.jpg" onclick="changetemplate5()" style="border: 2px solid white;" />
+                <br />
+                <img id="it6" width=320 height=53 src="~/library/template6.jpg" onclick="changetemplate6()" style="border: 2px solid white;" />
+                <br />
+                <img id="it7" width=320 height=53 src="~/library/template7.jpg" onclick="changetemplate7()" style="border: 2px solid white;" />
+            </div>
+        </div>
+        <!--Traffic sign and templates-->
+
+        <div style="margin: 20px; font-size:140%">
+            <!--Change the selected message button-->
+            <input id="Button1" type="button" class="button" value="Change Message" onclick="copycanvas()" />
+
+            <!--Download selected message as image file-->
+            <button type="button" id="save_button" onclick="uploadimage()" class="button">Save Canvas</button>
+
+            <!--Add text to canvas editor-->
+            <button type="button" onclick="add_text()" class="button">Add Text</button>
+        </div>
+    </div>
+</div>
+
+<!--JAVASCRIPT FUNCTIONS-->
+<!--Copy content from editor to message canvas-->
+<script type="text/javascript">
+    function copycanvas() {
+        var canvasedit = document.getElementById('cc');
+        var canvas1 = document.getElementById('c1');
+        var canvas2 = document.getElementById('c2');
+        var canvas3 = document.getElementById('c3');
+        var canvas4 = document.getElementById('c4');
+        var canvas5 = document.getElementById('c5');
+        //var ctx1 = canvasedit.getContext('2d');
+        var src = canvasedit.toDataURL("image/jpeg"); // cache the image data source
+        var img = document.createElement('img'); // create a Image Element
+        img.src = src;   //image source
+        var image1, image2, image3, image4, image5 = "";
+        //Canvas 1
+        if (document.getElementById('checkmess1').checked) { //Check the checkbox
+            console.log("Message 1 is checked")
+            var ctx1 = canvas1.getContext('2d');
+            ctx1.drawImage(img, 0, 0, 768, 128);
+            image1 = img;
+        }
+        //Canvas 2
+        if (document.getElementById('checkmess2').checked) {//Check the checkbox
+            console.log("Message 2 is checked");
+            var ctx2 = canvas2.getContext('2d');
+            ctx2.drawImage(img, 0, 0, 768, 128);
+            image2 = img;
+        }
+        //Canvas 3
+        if (document.getElementById('checkmess3').checked) {//Check the checkbox
+            console.log("Message 3 is checked")
+            var ctx3 = canvas3.getContext('2d');
+            ctx3.drawImage(img, 0, 0, 768, 128);
+            image3 = img;
+        }
+        //Canvas 4
+        if (document.getElementById('checkmess4').checked) {//Check the checkbox
+            console.log("Message 4 is checked")
+            var ctx4 = canvas4.getContext('2d');
+            ctx4.drawImage(img, 0, 0, 768, 128);
+            image4 = img;
+        }
+        //Canvas 5
+        if (document.getElementById('checkmess5').checked) {//Check the checkbox
+            console.log("Message 5 is checked")
+            var ctx5 = canvas5.getContext('2d');
+            ctx5.drawImage(img, 0, 0, 768, 128);
+            image5 = img;
+        }
+    };
+
+    //Call API
+    function uploadimage() {
+        var canvas1 = document.getElementById('c1');
+        var canvas2 = document.getElementById('c2');
+        var canvas3 = document.getElementById('c3');
+        var canvas4 = document.getElementById('c4');
+        var canvas5 = document.getElementById('c5');
+
+        var boardId = "@Model.SelectedBoardIds"; //Current BoardID
+
+        //Canvas 1
+        if (document.getElementById('checkmess1').checked) { //Check the checkbox
+            //console.log("Message 1 is checked")
+            var src = canvas1.toDataURL("image/jpeg"); // cache the image data source
+            var image1 = document.createElement('img'); // create a Image Element
+
+            image1.src = src;   //image source
+            base64 = $(image1).attr("src").split(",")[1];
+            base64 = "1" + boardId.toString() + "-" + base64;
+            date_mess = document.getElementById("date_1").value; //set date
+            time_mess = document.getElementById("time_1").value; //set time
+            mess = "message 1";
+        }
+        //Canvas 2
+        if (document.getElementById('checkmess2').checked) {//Check the checkbox
+            //console.log("Message 2 is checked");
+            var src = canvas2.toDataURL("image/jpeg"); // cache the image data source
+            var image2 = document.createElement('img'); // create a Image Element
+
+            image2.src = src;   //image source
+            base64 = $(image2).attr("src").split(",")[1];
+            base64 = "2" + boardId.toString() + "-" + base64;
+            date_mess = document.getElementById("date_2").value; //set date
+            time_mess = document.getElementById("time_2").value; //set time
+            mess = "message 2";
+        }
+        //Canvas 3
+        if (document.getElementById('checkmess3').checked) {//Check the checkbox
+            //console.log("Message 3 is checked")
+            var src = canvas3.toDataURL("image/jpeg"); // cache the image data source
+            var image3 = document.createElement('img'); // create a Image Element
+
+            image3.src = src;   //image source
+            base64 = $(image3).attr("src").split(",")[1];
+            base64 = "3" + boardId.toString() + "-" + base64;
+            date_mess = document.getElementById("date_3").value; //set date
+            time_mess = document.getElementById("time_3").value; //set time
+            mess = "message 3";
+        }
+        //Canvas 4
+        if (document.getElementById('checkmess4').checked) {//Check the checkbox
+            //console.log("Message 4 is checked")
+            var src = canvas4.toDataURL("image/jpeg"); // cache the image data source
+            var image4 = document.createElement('img'); // create a Image Element
+
+            image4.src = src;   //image source
+            base64 = $(image4).attr("src").split(",")[1];
+            base64 = "4" + boardId.toString() + "-" + base64;
+            date_mess = document.getElementById("date_4").value; //set date
+            time_mess = document.getElementById("time_4").value; //set time
+            mess = "message 4";
+        }
+        //Canvas 5
+        if (document.getElementById('checkmess5').checked) {//Check the checkbox
+            //console.log("Message 5 is checked")
+            var src = canvas5.toDataURL("image/jpeg"); // cache the image data source
+            var image5 = document.createElement('img'); // create a Image Element
+
+            image5.src = src;   //image source
+            base64 = $(image5).attr("src").split(",")[1];
+            base64 = "5" + boardId.toString() + "-" + base64;
+            date_mess = document.getElementById("date_5").value; //set date
+            time_mess = document.getElementById("time_5").value; //set time
+            mess = "message 5";
+        }
+
+        $.ajax({
+            url: "/api/upload/base64",
+            type: "POST",
+            data: JSON.stringify({
+                value: base64
+            }),
+            contentType: 'application/json',
+            success: function (response) {
+                alert("Image is saved");
+            },
+            error: function (response) {
+                console.log(response);
+                try {
+                    toastr.error(
+                        response.responseJSON.message,
+                        'Error!',
+                    );
+                } catch (e) {
+                    toastr.error(
+                        response.status + ' - ' + response.statusText,
+                        'Error!',
+                    );
+                }
+            }
+        });
+    }
+</script>
+<!-- Copy content from editor to message canvas -->
+<!-- Add fabric text and allow drag and drop pictures -->
+<script type="text/javascript">
+    var canvas = new fabric.Canvas('cc');
+    var text = new fabric.IText('Key In Text Here', { left: 250, top: 40, fill: 'white' });
+    canvas.add(text).setActiveObject(text);
+    canvas.setBackgroundColor('#000000');
+
+    addHandler('font_family', function (obj) {
+        setStyle(obj, 'fontFamily', this.value);
+    }, 'onchange');
+
+    addHandler('input_style', function (obj) {
+        setStyle(obj, 'fontStyle', this.value);
+    }, 'onchange');
+
+    addHandler('color', function (obj) {
+        setStyle(obj, 'fill', this.value);
+    }, 'onchange');
+
+    function add_text() {
+        canvas.add(new fabric.IText('Key In Text Here', { left: 250, top: 40, fill: 'white' }))
+
+    }
+    function setStyle(object, styleName, value) {
+        if (object.setSelectionStyles && object.isEditing) {
+            var style = {};
+            style[styleName] = value;
+            object.setSelectionStyles(style).setCoords();
+        }
+        else {
+            object[styleName] = value;
+        }
+        canvas.renderAll();
+    };
+
+    function getStyle(object, styleName) {
+        return (object.getSelectionStyles && object.isEditing)
+            ? object.getSelectionStyles()[styleName]
+            : object[styleName];
+    }
+
+    function addHandler(id, fn, eventName) {
+        document.getElementById(id)[eventName || 'onclick'] = function () {
+            var el = this;
+            if (obj = canvas.getActiveObject()) {
+                fn.call(el, obj);
+                canvas.renderAll();
+            }
+        };
+    }
+
+
+    //var dragItem = document.getElementById('image1');
+    //var drogLoc = document.getElementById("canvsedit");
+    function addImage(image) {
+        //var canvas = new fabric.Canvas('cc');
+        fabric.Image.fromURL(image, function (myImg) {
+            var img1 = myImg.set({
+                left: 0,
+                top: 0,
+                scaleX: 100 / myImg.width,
+                scaleY: 100 / myImg.height
+            });
+            canvas.add(img1);
+            canvas.renderAll();
+        });
+
+    }
+    function drag(ev) {
+        ev.dataTransfer.setData("key", ev.target.id);
+        console.log("Start dragging");
+    }
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+        console.log("its dragover.....");
+    }
+
+
+
+    function drop(ev) {
+        var data = ev.dataTransfer.getData("key");
+        ev.preventDefault();
+        console.log("Its dropped");
+        var myElement = document.getElementById(data);
+        var src_image = myElement.src;
+        console.log(src_image);
+        addImage(src_image);
+        //ev.target.appendChild(document.getElementById(data));
+    }
+</script>
+<!-- Add fabric text and allow drag and drop pictures -->
+<!-- Change the editor from a template in the library -->
+<script type="text/javascript">
+    function changetemplate() {
+        var canvasc2 = document.getElementById('cc');
+        var img = document.getElementById("it1");
+        var ctxt2 = canvasc2.getContext('2d');
+        ctxt2.drawImage(img, 0, 0);
+
+    }
+    function changetemplate2() {
+        var canvasc2 = document.getElementById('cc');
+        var img = document.getElementById("it2");
+        var ctxt2 = canvasc2.getContext('2d');
+        ctxt2.drawImage(img, 0, 0);
+
+    }
+    function changetemplate3() {
+        var canvasc2 = document.getElementById('cc');
+        var img = document.getElementById("it3");
+        var ctxt2 = canvasc2.getContext('2d');
+        ctxt2.drawImage(img, 0, 0);
+
+    }
+
+    function changetemplate4() {
+        var canvasc2 = document.getElementById('cc');
+        var img = document.getElementById("it4");
+        var ctxt2 = canvasc2.getContext('2d');
+        ctxt2.drawImage(img, 0, 0);
+
+    }
+    function changetemplate5() {
+        var canvasc2 = document.getElementById('cc');
+        var img = document.getElementById("it5");
+        var ctxt2 = canvasc2.getContext('2d');
+        ctxt2.drawImage(img, 0, 0);
+
+    }
+    function changetemplate6() {
+        var canvasc2 = document.getElementById('cc');
+        var img = document.getElementById("it6");
+        var ctxt2 = canvasc2.getContext('2d');
+        ctxt2.drawImage(img, 0, 0);
+
+    }
+    function changetemplate7() {
+        var canvasc2 = document.getElementById('cc');
+        var img = document.getElementById("it7");
+        var ctxt2 = canvasc2.getContext('2d');
+        ctxt2.drawImage(img, 0, 0);
+
+    }
+</script>
+<!-- Change the editor from a template in the library -->
+<!-- Download function, download as a picture -->
+<script>
+    function downloadMessage() {
+        if (document.getElementById('checkmess1').checked) { //Check the checkbox
+            $("#c1").get(0).toBlob(function (blob) {
+                saveAs(blob, "message1.jpg");
+            });
+
+        }
+        if (document.getElementById('checkmess2').checked) { //Check the checkbox
+            $("#c2").get(0).toBlob(function (blob) {
+                saveAs(blob, "message2.jpg");
+            });
+
+        }
+        if (document.getElementById('checkmess3').checked) { //Check the checkbox
+            $("#c3").get(0).toBlob(function (blob) {
+                saveAs(blob, "message3.jpg");
+            });
+
+        }
+        if (document.getElementById('checkmess4').checked) { //Check the checkbox
+            $("#c4").get(0).toBlob(function (blob) {
+                saveAs(blob, "message4.jpg");
+            });
+
+        }
+        if (document.getElementById('checkmess5').checked) { //Check the checkbox
+            $("#c5").get(0).toBlob(function (blob) {
+                saveAs(blob, "message5.jpg");
+            });
+
+        }
+    }
+</script>
+<!-- Download function, download as a picture -->
+
+
+<div style="display:block">
+    <h5>Selected Boards: @Model.SelectedBoardNames</h5>
+    <form method="post" style="display:inline-block; margin: 10px; border:solid">
+
+        <p>Select Messages for Display.</p>
+        @foreach (var item in Model.EditorMessages)
+        {
+            <input type="checkbox" value="@item.ID" id="@item.ID" name="selectedMessageIds" />
+            <label for="@item.ID">@item.Message</label>
+        }
+
+        <input type="hidden" value="@Model.SelectedBoardIds" asp-for="SelectedBoardIds" />
+        <input type="hidden" value="@Model.SelectedBoardNames" asp-for="SelectedBoardNames" />
+
+        @{
+            string[] selectedBoardIds = Model.SelectedBoardIds.Split(',');
+            string tempvalue = "https://localhost:44321//uploads/" + selectedBoardIds[0] + "/message1.jpg";
+            <input type="hidden" value=@tempvalue asp-for="Display.Screenshot_URL" />
+        }
+
+        <div class="form-group">
+            <button type="submit" class="btn-link" asp-page-handler="Update">Update and Return to Table</button>
+            <p><a asp-page="/VMS/Table">Return to Table</a></p>
+        </div>
+    </form>
+
+
+    <!--Configuration of CCTV-->
+    <div style="display:inline-block; margin: 10px; font-size: 150%">
+        <button onclick="openForm()">Open CCTV</button>
+    </div>
+    <div class="form-popup-cctv" id="myForm">
+        <form action="/action_page.php">
+            <h1>CCTV Config</h1>
+
+            <!--<label for="username"><b>Username</b></label>
+            <input id="user_cctv" type="text" placeholder="Enter Username" name="user" required>-->
+            <!--<label for="psw"><b>Password</b></label>
+            <input id="psw_cctv" type="password" placeholder="Enter Password" name="psw" required>-->
+
+            <label for="cctvip"><b>IP:Port</b></label>
+            <input id="ipport" type="text" placeholder="10.8.6.91:7777" name="cctvip" required>
+
+            <button type="button" class="btn" onclick="opencctv()">Open</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+        <script type="text/javascript">
+            function openForm() {
+                document.getElementById("myForm").style.display = "block";
+            }
+
+            function closeForm() {
+                document.getElementById("myForm").style.display = "none";
+            }
+            function opencctv() {
+                var ip_address = document.getElementById("ipport").value;
+                window.open(ip_address)
+
+            }
+        </script>
+    </div>
+    <!--Configuration of CCTV-->
+</div>
+
+@*<form method="post">
+    <button type="submit" class="btn-link" asp-page-handler="TestAddVSN">Create VSN from C4</button>
+    <button type="submit" class="btn-link" asp-page-handler="TestDeleteVSN">Delete VSN from C4</button>
+</form>*@

@@ -1,0 +1,53 @@
+﻿@page
+@model Lingkail.VMS.Pages.Manage.UsersModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="background-color: black;">
+        <div class="container">
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    @*<li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/NewRole">Create role</a>
+                    </li>*@
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/Users">List all users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/Roles">List all roles</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<h1>All Users</h1>
+@*<a asp-page="/Manage/NewRole" class="btn btn-primary m-1">Add new users</a>*@
+<div class="form-group">
+    @foreach (var user_ in Model.Users)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                User Id: @user_.Id
+                <div class="card-body">
+                    <h5 class="card-title">@user_.Email</h5>
+                    @*<h5 class="card-title">@user_.user_name</h5>*@
+                </div>
+                <div class="card-footer">
+                    <a asp-page="/Manage/EditUsers"
+                       asp-route-ID="@user_.Id"
+                       class="btn btn-primary m-1">Edit</a>
+                    <a asp-page="/Manage/ResetPassword"
+                       asp-route-ID="@user_.Id"
+                       class="btn btn-primary m-1">Reset Password</a>
+                    <a asp-page="/Manage/DeleteUsers"
+                       asp-route-ID="@user_.Id"
+                       class="btn btn-danger m-1">Delete</a>
+                </div>
+            </div>
+        </div>
+     }
+</div>

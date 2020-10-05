@@ -1,0 +1,52 @@
+﻿@page
+@model Lingkail.VMS.Pages.Manage.RolesModel
+@{
+    ViewData["Title"] = "Roles";
+}
+
+
+<header>
+    
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    @*<li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/NewRole">Create role</a>
+                    </li>*@
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/Users">List all users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Manage/Roles">List all roles</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<h1>Roles</h1>
+
+<a asp-page="/Manage/NewRole" class="btn btn-primary m-1">Create Roles</a>
+<div class="form-group">
+    @foreach (var role in Model.Roles)
+    {
+        <div class="card mb-3">
+            <div class="card-header">
+                Role Id: @role.Id
+                <div class="card-body">
+                    <h5 class="card-title">@role.Name</h5>
+                </div>
+                <div class="card-footer">
+                    <a asp-page="/Manage/EditRoles"
+                       asp-route-ID="@role.Id"
+                       class="btn btn-primary m-1">Edit</a>
+                    <a asp-page="/Manage/DeleteRoles"
+                       asp-route-ID="@role.Id"
+                       class="btn btn-danger m-1">Delete</a>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>

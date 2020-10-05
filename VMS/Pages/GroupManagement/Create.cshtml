@@ -1,0 +1,140 @@
+﻿@page
+@model Lingkail.VMS.Pages.GroupManagement.CreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<style>
+
+    h1 {
+        /*margin-left: 10px;*/
+        margin-bottom: 25px;
+        color: snow;
+    }
+
+    #main {
+        width: 50%;
+        float: left;
+        overflow: auto;
+        /*  overflow-x: scroll;*/
+        height: 400px;
+    }
+
+    #main2 {
+        width: 50%;
+        float: right;
+        overflow: auto;
+        /* overflow-x: scroll;*/
+        height: 400px;
+    }
+
+    #table1 {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: left;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    #table2 {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: left;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+
+
+    thead {
+        background: #645f73;
+        color: black;
+        font-size: 15px;
+        text-align: left;
+        font-weight: 500;
+    }
+
+
+
+    tbody tr:nth-child(even) {
+        background: #5f7fb3;
+        height: 30px;
+        color: black;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: #80accf;
+        height: 30px;
+        color: black;
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+
+<h1>Create</h1>
+
+
+<div>
+    <form method="post">
+
+        @*<div style="border: solid 1px; display: block; overflow-x: scroll; height:400px; margin-left: 10px;">*@
+        <div id="main">
+            <table id="table1">
+                <thead>
+                    <tr>
+                        <td>Checkbox</td>
+                        <td>Board</td>
+                        <td>Location</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int cnt = 1;
+                        @foreach (var board in Model.BoardList)
+                        {
+                            <tr>
+                                <td><input type="checkbox" style="width: 20px; height: 20px" value="@board.ID" name="selectedBoards" ) /></td>
+                                <td>@Html.DisplayFor(modelItem => board.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => board.Location.Address)</td>
+
+                            </tr>
+                            cnt++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*<div style="border: solid 1px; display: block; overflow-x: scroll; height:200px; margin-left: 10px;">*@
+        <div id="main2">
+            <table id="table2">
+                <thead>
+                    <tr>
+                        <td>Checkbox</td>
+                        <td>Camera</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int cnt2 = 1;
+                        @foreach (var camera in Model.CameraList)
+                        {
+                            <tr>
+                                <td><input type="checkbox" style="width: 20px; height: 20px" value="@camera.ID" name="selectedCameras" ) /></td>
+                                <td>@Html.DisplayFor(modelItem => camera.Name)</td>
+
+                            </tr>
+                            cnt2++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <label style="color: white;" asp-for="GroupPreset.Name"></label>
+        <input type="text" asp-for="GroupPreset.Name" />
+
+
+        <input type="submit" value="Create" class="btn btn-primary" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+
+</div>

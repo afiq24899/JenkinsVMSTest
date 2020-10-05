@@ -1,0 +1,440 @@
+﻿@page
+@model Lingkail.VMS.Pages.EditorV2.IFrameElement.CustomModel
+@{
+    ViewData["Title"] = "Custom";
+}
+
+<script src="~/js/canvas/fabric.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<style>
+    .row {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+        .row::after {
+            display: table;
+            clear: both;
+            content: "";
+        }
+
+    .col-1 {
+        width: 8.33%;
+    }
+
+    .col-2 {
+        width: 16.66%;
+    }
+
+    .col-3 {
+        width: 25%;
+    }
+
+    .col-4 {
+        width: 33.33%;
+    }
+
+    .col-5 {
+        width: 41.66%;
+    }
+
+    .col-6 {
+        width: 50%;
+    }
+
+    .col-7 {
+        width: 58.33%;
+    }
+
+    .col-8 {
+        width: 66.66%;
+    }
+
+    .col-9 {
+        width: 75%;
+    }
+
+    .col-10 {
+        width: 83.33%;
+    }
+
+    .col-11 {
+        width: 91.66%;
+    }
+
+    .col-12 {
+        width: 100%;
+    }
+</style>
+
+<style>
+    #canvas {
+        background-color: #4d4d4d;
+        border: solid 1px;
+        width: 768px;
+        height: 128px;
+        display: block;
+    }
+
+    .blockTitle {
+        background-color: lightgray;
+        color: white;
+        border: solid 1px;
+    }
+
+    .canvasdiv, .inputdiv, .dragimgdiv, .incidentdiv {
+        /*                background-color: aquamarine;*/
+    }
+
+    div.maincontainer {
+    }
+
+        div.maincontainer div.canvasdiv {
+        }
+
+        div.maincontainer div.inputdiv {
+            text-align: center;
+        }
+
+            div.maincontainer div.inputdiv div {
+                padding: 5px;
+            }
+
+                div.maincontainer div.inputdiv div.color-font-style > div {
+                    display: inline-block;
+                    padding: 5px;
+                }
+
+                div.maincontainer div.inputdiv div.addText button.addTextButton {
+                    border: solid greenyellow;
+                    padding: 5px 100px;
+                    font-size: xx-large;
+                    background-color: black;
+                    color: white;
+                }
+
+        div.maincontainer div.incidentdiv {
+            align-items: center;
+            text-align: center;
+        }
+
+            div.maincontainer div.incidentdiv div.incomingEvent {
+                height: 300px;
+                overflow-y: auto;
+            }
+
+                div.maincontainer div.incidentdiv div.incomingEvent div.Image-Retrieved img {
+                    width: 200px;
+                    height: 200px
+                }
+
+                div.maincontainer div.incidentdiv div.incomingEvent div.Event-Retrieved button {
+                    border: solid greenyellow;
+                    padding: 5px 100px;
+                    font-size: xx-large;
+                    background-color: black;
+                    color: white;
+                    margin-bottom:10px;
+                }
+
+        div.maincontainer div.dragimgdiv {
+            align-items: center;
+            text-align: center;
+        }
+
+            div.maincontainer div.dragimgdiv div.Traffic-Icon {
+                height: 300px;
+                overflow-y: auto;
+            }
+</style>
+<style>
+    @@media screen and (max-width: 710px) {
+        div.maincontainer div.inputdiv {
+            width: auto;
+            margin: auto;
+            text-align: center;
+        }
+
+            div.maincontainer div.inputdiv div {
+                padding: 2px;
+            }
+
+                div.maincontainer div.inputdiv div.addText button.addTextButton {
+                    padding: 1px 20px;
+                    font-size: small;
+                }
+
+                div.maincontainer div.inputdiv div.color-font-style > div {
+                    padding: 0;
+                }
+
+                div.maincontainer div.inputdiv div.addText, div.clear-submit {
+                    display: inline-block;
+                }
+
+        div.maincontainer div.canvasdiv {
+            width: auto;
+        }
+
+        div.maincontainer div.incidentdiv {
+            width: auto;
+        }
+
+            div.maincontainer div.incidentdiv div.Image-Retrieved img {
+                width: 100px;
+                height: 100px
+            }
+
+        div.maincontainer div.dragimgdiv {
+            width: auto;
+        }
+    }
+</style>
+
+<div class="maincontainer" action="test">
+    <div class="row">
+        <div class="inputdiv col-5">
+            <div class="color-font-style">
+                <!--Color Panel-->
+                <div>
+                    <label for="color">Color:</label>
+                    <input type="color" id="color" value="#ffffff" style="width: 100px" />
+                </div>
+                <!--Color Panel-->
+                <!--Font Family-->
+                <div>
+                    <label for="font_family">Font:</label>
+                    <select id="font_family">
+                        <option value="Helvetica" selected="selected">Helvetica</option>
+                        <option value="sans-serif">Sans Serif</option>
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="georgia">Georgia</option>
+                        <option value="courier">Courier</option>
+                        <option value="comic sans ms">Comic Sans MS</option>
+                        <option value="impact">Impact</option>
+                        <option value="monaco">Monaco</option>
+                        <option value="optima">Optima</option>
+                        <option value="hoefler text">Hoefler Text</option>
+                        <option value="plaster">Plaster</option>
+                    </select>
+                </div>
+                <!--Font Family-->
+                <!--Font Style-->
+                <div>
+                    <label for="input_style">Font Style:</label>
+                    <select id="input_style">
+                        <option value="normal" selected="selected">Normal</option>
+                        <option value="italic">Italic</option>
+                        <option value="bold">Bold</option>
+                    </select>
+                </div>
+                <!--Font Style-->
+            </div>
+            <div class="addText">
+                <button class="addTextButton" type="button" onclick="add_text()">Add Text</button>
+            </div>
+            <div class="clear-submit">
+                <form>
+                    <input type="hidden" name="id" value="@Model.Board.ID" />
+                    <button onclick="clearcanvas()">Clear Canvas</button>
+                    <button onclick="copycanvas()">Submit</button>
+                    @*<input type="button" onclick="copycanvas();" value="Submit" />*@
+                </form>
+            </div>
+        </div>
+        <div class="canvasdiv col-7">
+            <div id="" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <canvas id="canvas" width="768" height="128"></canvas>
+            </div>
+        </div>
+    </div>
+    <hr style="border:solid antiquewhite;" />
+    <div class="row" style="align-items:normal;">
+        <div class="incidentdiv col-6">
+            <h1 class="blockTitle"> Event Received </h1>
+            <div class="incomingEvent">
+                <div class="Event-Retrieved">
+                    <div class="Event">
+                        <h5> Incident: [ @Html.DisplayFor(model => model.Board.Display.AlibabaCreationDate) ] </h5>
+                    </div>
+                    <div>
+                        <button id="@Model.Incidents.Where(p => p.ID ==1).Select(p => p.ID).FirstOrDefault()" type="button" onclick="text_onclick()" class="button_text" alt="@Model.Incidents.Where(p => p.ID ==1).Select(p => p.ID).FirstOrDefault()">
+                            @Html.DisplayFor(model => model.Board.Display.AlibabaText)
+                        </button>
+                    </div>
+                </div>
+                <div class="Image-Retrieved">
+                    <img id="image16" draggable="true" ondragstart="drag(event)" src="~/trafficsignimage/Accident_sign.png" style="border: 2px solid white;" />
+                    <img id="image17" draggable="true" ondragstart="drag(event)" src="@Model.Board.Display.AlibabaAccidentImage" style="border: 2px solid white;" />
+                    @*<img id="image18" draggable="true" ondragstart="drag(event)" src="" style="border: 2px solid white;" />*@
+                </div>
+            </div>
+            @*button for clearing alert*@
+            <form method="post">
+                <div>
+                    <input asp-for="Board.ID" hidden />
+                    <button type="submit" asp-page-handler="clearalert">Clear Alert </button>
+                </div>
+            </form>
+        </div>
+        <div class="dragimgdiv col-6">
+            <h1 class="blockTitle"> Traffic Sign Icon </h1>
+            <div class="Traffic-Icon">
+                <img id="image1" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/1.jpg" style="border: 2px solid white;" />
+                <img id="image2" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/2.jpg" style="border: 2px solid white;" />
+                <img id="image3" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/3.jpg" style="border: 2px solid white;" />
+                <img id="image4" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/4.jpg" style="border: 2px solid white;" />
+                <img id="image5" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/5.jpg" style="border: 2px solid white;" />
+                <img id="image6" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/6.jpg" style="border: 2px solid white;" />
+                <img id="image7" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/7.jpg" style="border: 2px solid white;" />
+                <img id="image8" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/8.jpg" style="border: 2px solid white;" />
+                <img id="image9" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/9.jpg" style="border: 2px solid white;" />
+                <img id="image10" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/10.jpg" style="border: 2px solid white;" />
+                <img id="image11" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/11.jpg" style="border: 2px solid white;" />
+                <img id="image12" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/12.jpg" style="border: 2px solid white;" />
+                <img id="image13" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/13.jpg" style="border: 2px solid white;" />
+                <img id="image14" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/14.jpg" style="border: 2px solid white;" />
+                <img id="image15" draggable="true" ondragstart="drag(event)" width=100 height=100 src="~/trafficsignimage/15.jpg" style="border: 2px solid white;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Add fabric text and allow drag and drop pictures-->
+<script type="text/javascript">
+    var canvas = new fabric.Canvas('canvas');
+    //var text = new fabric.IText('Key In Text Here', { left: 250, top: 40, fill: 'white' });    // Display 'Key In Text Here' on canvas (not necessary)
+
+
+    //canvas.add(text).setActiveObject(text);
+    //canvas.add(copy).setActiveObject(copy);     // adding text onclick
+
+    canvas.setBackgroundColor('#000000');
+
+    addHandler('font_family', function (obj) {
+        setStyle(obj, 'fontFamily', this.value);
+    }, 'onchange');
+
+    addHandler('input_style', function (obj) {
+        setStyle(obj, 'fontStyle', this.value);
+    }, 'onchange');
+
+    addHandler('color', function (obj) {
+        setStyle(obj, 'fill', this.value);
+    }, 'onchange');
+
+    function add_text() {
+        canvas.add(new fabric.IText('Key In Text Here', { left: 250, top: 40, fill: 'white' }))
+    }
+
+    function text_onclick() {
+        if (event.target.id == 1) {
+        canvas.add(new fabric.IText('@Model.Board.Display.AlibabaText', { left: 250, top: 40, fill: 'white' }));
+        }
+    }
+
+
+    function setStyle(object, styleName, value) {
+        if (object.setSelectionStyles && object.isEditing) {
+            var style = {};
+            style[styleName] = value;
+            object.setSelectionStyles(style).setCoords();
+        }
+        else {
+            object[styleName] = value;
+        }
+        canvas.renderAll();
+    };
+
+    function getStyle(object, styleName) {
+        return (object.getSelectionStyles && object.isEditing)
+            ? object.getSelectionStyles()[styleName]
+            : object[styleName];
+    }
+
+    function addHandler(id, fn, eventName) {
+        document.getElementById(id)[eventName || 'onclick'] = function () {
+            var el = this;
+            if (obj = canvas.getActiveObject()) {
+                fn.call(el, obj);
+                canvas.renderAll();
+            }
+        };
+    }
+
+    function addImage(image) {
+        //var canvas = new fabric.Canvas('canvas');
+        fabric.Image.fromURL(image, function (myImg) {
+            var img1 = myImg.set({
+                left: 0,
+                top: 0,
+                scaleX: 100 / myImg.width,
+                scaleY: 100 / myImg.height
+            });
+            canvas.add(img1);
+            canvas.renderAll();
+        });
+
+    }
+    function drag(ev) {
+        ev.dataTransfer.setData("key", ev.target.id);
+        console.log("Start dragging");
+    }
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+        console.log("its dragover.....");
+    }
+
+    function drop(ev) {
+        var data = ev.dataTransfer.getData("key");
+        ev.preventDefault();
+        console.log("Its dropped");
+        var myElement = document.getElementById(data);
+        var src_image = myElement.src;
+        console.log(src_image);
+        addImage(src_image);
+    }
+
+</script>
+
+<script>
+    //Function to clear canvas
+    function clearcanvas() {
+        var canvas = document.getElementById('canvas'),
+            ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    //Function to copy canvas - from child iframe to parent page
+    function copycanvas() {
+        var radios = parent.document.getElementsByName('selectedMessage'); //Check which message/radio is selected [from parent page]
+        for (var i = 0, length = radios.length; i < length; i++) {
+            if (radios[i].checked) { //if checked, draw image
+
+                var radioid = radios[i].id.toString();
+                var lastchar = radioid.charAt(radioid.length - 1); //get the number of the radio id only
+
+                var parentcanvas = parent.document.getElementById('c' + lastchar);
+                parentctx = parentcanvas.getContext("2d");
+                parentcanvas.width = 768;
+                parentcanvas.height = 128;
+                parentctx.clearRect(0, 0, parentcanvas.width, parentcanvas.height)
+                //Get the 'clean/empty' canvas respective to the selected message/radio [from parent page]
+
+                parent.document.getElementById("code_" + lastchar).value = 4; //code = 4 => custom template
+                parent.document.getElementById("codePlus_" + lastchar).value = "IMAGE," + "message" + lastchar + ".jpg";
+
+                var canvasimg = document.getElementById('canvas');
+                parentctx.drawImage(canvasimg, 0, 0, parentcanvas.width, parentcanvas.height); //draw
+            }
+        }
+    }
+
+</script>

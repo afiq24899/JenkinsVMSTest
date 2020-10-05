@@ -1,0 +1,69 @@
+﻿@page
+@model Lingkail.VMS.Pages.EditorV2.IFrameElement.RealTimeModel
+@{
+    ViewData["Title"] = "RealTime";
+}
+
+
+<style>
+    li {
+        list-style: none;
+    }
+</style>
+
+
+<h3>Upload Status</h3>
+@*<button onclick="testInvoke()">test</button>*@
+
+<div id="progress_Status"></div>
+<div><progress id="progress_Bar" value="0" max="100"> % </progress></div>
+
+<ul id="myList">
+    <li></li>
+</ul>
+
+@section Hub_Scripts
+{
+    @*changed by Cheah Wei to use LibMan to manage libraries*@
+    @*https://docs.microsoft.com/en-us/aspnet/core/client-side/libman/libman-vs?view=aspnetcore-2.2*@
+    @*<script src="~/js/signalr/dist/browser/signalr.js"></script>*@
+    <script src="~/lib/microsoft-signalr/signalr.js"></script>
+    <script>
+    @*function testInvoke() {
+        //Call hub methods from JS client
+        connection.invoke("GenaralBroadcast", "SOME TEXT")
+            .catch(err => console.error(err));
+    }*@
+
+
+    //Open connection to a signalR Hub
+        var thisHubEndpoint = "broadcastHub";
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/" + thisHubEndpoint).build(); //URL defined in startup
+
+    connection.start().then(function () {
+        console.log("Connection to (" + thisHubEndpoint + ") - OK");
+
+    }).catch(function (err) {
+        console.log("Connection to (" + thisHubEndpoint + ") - NOT OK");
+    });
+
+    //Call client methods from hub
+        connection.on("BroadcastMessage", function (message) {
+            var node = document.createElement("LI");
+            var textnode = document.createTextNode(message);
+            node.appendChild(textnode);
+            document.getElementById("myList").appendChild(node);
+
+        });
+
+        connection.on("BroadcastProgress", function (progress_max100, progress_statement) {
+            document.getElementById("progress_Bar").value = progress_max100;
+            document.getElementById("progress_Status").innerHTML = progress_statement;
+        });
+
+
+    </script>
+}
+
+

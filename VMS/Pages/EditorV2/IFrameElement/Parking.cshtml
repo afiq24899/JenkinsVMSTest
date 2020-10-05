@@ -1,0 +1,389 @@
+﻿@page
+@model Lingkail.VMS.Pages.EditorV2.IFrameElement.ParkingModel
+@{
+    ViewData["Title"] = "Parking";
+}
+
+<!--<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/segment7" type="text/css"/>-->
+<!--CSS-->
+<style>
+    /*#### GENERAL ####*/
+    .row {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        border: solid 1px #e6e6e6;
+    }
+
+        .row::after {
+            display: table;
+            clear: both;
+            content: "";
+        }
+        
+        .col-1{width: 8.33%;}
+        .col-2{width: 16.66%;}
+        .col-3{width: 25%;}
+        .col-4{width: 33.33%;}
+        .col-5{width: 41.66%;}
+        .col-6{width: 50%;}
+        .col-7{width: 58.33%;}
+        .col-8{width: 66.66%;}
+        .col-9{width: 75%;}
+        .col-10{width: 83.33%;}
+        .col-11{width: 91.66%;}
+        .col-12{width: 100%;}
+
+    [class*="col-"] {
+    }
+    /*#### GENERAL ####*/
+
+    .main {
+        /*display: inline-block;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);*/
+    }
+
+    form button, input[type="button"] {
+        font-size: 150%;
+        position: relative;
+        margin: 20px;
+        bottom:230px;
+    }
+
+    .onecanvas {
+        display: inline-grid;
+        grid-template-rows: repeat(2,64px);
+        grid-template-columns: repeat(4,192px);
+        padding: 0 0 0 0;
+        margin: 20px;
+    }
+
+        .onecanvas .canvas, .counter {
+            background-color: #4d4d4d;
+            border: solid 1px;
+            width: 192px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .onecanvas .counter #count1, #count2, #count3, #count4 {
+            /*font-family: 'Segment7Standard';*/
+            font-size: 300%;
+            color: #00FF00;
+        }
+
+        .onecanvas canvas:hover {
+            background-color: indianred;
+            border: solid red 1px;
+            cursor: pointer;
+        }
+
+        .onecanvas .leftpair1, .leftpair2, .rightpair1, .rightpair2 {
+            display: inline-grid; /*Placed in rows by default*/
+        }
+
+    .logos {
+        text-align: center;
+        background-color: #b3e0ff;
+        margin: 20px;
+        padding: 30px 0;
+    }
+
+        .logos p {
+            font-size: 200%;
+            margin: 10px;
+        }
+</style>
+
+<!--HTML-->
+<div class="main">
+    <div class="row">
+        
+<!--Start:Canvas Section--> 
+<div class="col-7">
+    <div class="onecanvas">
+        <!--Section-->
+        <div class="leftpair1"> 
+            <canvas id="canvas1"
+                    class="canvas"></canvas>
+            <canvas id="canvas2" 
+                    class="canvas"></canvas>
+        </div>
+        <!--Section-->    
+        <div class="leftpair2">
+            <div id="counter1"
+                 class="counter">
+                <p id="count1" 
+                   value="">COUNT</p>
+            </div>
+            <div id="counter2"
+                 class="counter">
+                <p id="count2" 
+                   value="">COUNT</p>        
+            </div>
+        </div>
+        <!--Section-->    
+        <div class="rightpair1">
+            <canvas id="canvas3" 
+                    class="canvas"></canvas>
+            <canvas id="canvas4" 
+                    class="canvas"></canvas>
+        </div>
+        <!--Section-->    
+        <div class="rightpair2">
+            <div id="counter3"
+                 class="counter">
+                <p id="count3" 
+                   value="">COUNT</p>          
+            </div>
+            <div id="counter4"
+                 class="counter">
+                <p id="count4" 
+                   value="">COUNT</p>          
+            </div>
+        </div>
+    </div>
+    <form>
+        <button onclick="clearcanvas()">Clear Canvas</button> 
+        <input type="button" onclick="copycanvas();" value="Submit" />
+    </form>
+</div>
+<!--End:Canvas Section--> 
+    
+<!--Start:Logo Section--> 
+<div class="col-5">
+    <div class="logos">
+        <p>Select One</p>
+        @foreach (var item in Model.ParkingInfos)
+        {
+
+            string imgFileName = @item.ImageFileName + ".png";
+
+            <img id="@item.MallID"
+                 src="~/ParkingLogo/@imgFileName"
+                 alt="@item.MallID">
+        }
+    </div>
+</div>
+<!--End:Logo Section--> 
+    </div>
+</div> 
+
+<!--JavaScript-->
+<script>
+        document.getElementById("canvas1").addEventListener("click", selectedCanvas);
+        document.getElementById("canvas2").addEventListener("click", selectedCanvas);
+        document.getElementById("canvas3").addEventListener("click", selectedCanvas);
+        document.getElementById("canvas4").addEventListener("click", selectedCanvas);
+
+        var clickEvent = new Array(); //string array to store image and respective canvas - for every click events on canvas1,2,3,4
+
+        //This function is called when a dedicated canvas is triggered (i.e. "clicked")
+        function selectedCanvas() {
+            var canvasid = this.id.toString();
+            //Get the Id of the specific canvas
+            document.onclick =
+                function (event) {
+                    if (event.target.id == 1) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==1).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 2) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==2).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 3) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==3).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 4) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==4).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 5) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==5).Select(p => p.parking).FirstOrDefault()'; 
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 6) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==6).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 7) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==7).Select(p => p.parking).FirstOrDefault()'; 
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 8) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==8).Select(p => p.parking).FirstOrDefault()'; 
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 9) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==9).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 10) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==10).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 11) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==11).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 12) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==12).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 13) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==13).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                    if (event.target.id == 14) {
+                        getImage(event, canvasid);
+                        var value = '@Model.ParkingInfos.Where(p => p.MallID ==14).Select(p => p.parking).FirstOrDefault()';  
+                        getCounter(value, canvasid);
+                    }
+                }
+        }
+
+        //This function maps the "selected" image on the "selected" canvas
+        function getImage(eimage, canvasid) {
+            var imageid = eimage.target.id.toString();
+            var canvas = document.getElementById(canvasid);
+            var ctx = canvas.getContext("2d");
+            var img = document.getElementById(imageid);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                //Store image selected and respective canvas to string array > clickEvent
+                var imageidString = String(imageid);
+                var canvasidString = String(canvasid);
+                clickEvent.push(imageidString);
+                clickEvent.push(canvasidString);
+        }
+
+        //This funtion maps the respective counter for the "selcted" canvas; replaces the count value
+        //Note: canvas1 <-> counter1 <-> count1
+        function getCounter(count, canvasid) {
+            var thisid = Number(canvasid.charAt(canvasid.length - 1))
+
+            var counter = document.getElementById("count" + thisid);
+            counter.innerHTML = count;  //Change displayed value
+            counter.value = count; //Update value attribute
+        }
+
+        //Function to clear canvas
+        function clearcanvas() {
+            for (var i = 1; i < 5; i++) {
+                var canvas = document.getElementById('canvas' + i),
+                    ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                document.getElementById("count" + i).innerHTML = "COUNT";
+            }
+        }
+    
+        //Function to copy canvas - from child iframe to parent page
+        function copycanvas(){
+           var radios = parent.document.getElementsByName('selectedMessage'); //Check which message/radio is selected [from parent page]
+            for (var i = 0, length = radios.length; i < length; i++){
+                if (radios[i].checked) { //if checked, draw image
+                
+                    var radioid = radios[i].id.toString(); 
+                    var lastchar  = radioid.charAt(radioid.length-1); //get the number of the id only
+                    parent.document.getElementById("code_"+lastchar).value =1; //code = 1 => parking template
+               
+                
+                        //-------------------------------------------//                
+                        var typeCodePlus = new Array(); //string array to store image and respective canvas - for most recent click events on canvas1,2,3,4           
+
+                        var indexC1 = clickEvent.lastIndexOf('canvas1');
+                        var indexC2 = clickEvent.lastIndexOf('canvas2');
+                        var indexC3 = clickEvent.lastIndexOf('canvas3');
+                        var indexC4 = clickEvent.lastIndexOf('canvas4');
+
+                
+                        typeCodePlus.push(clickEvent[indexC1]); //canvas
+                            typeCodePlus.push(clickEvent[indexC1-1]); //image
+                        typeCodePlus.push(clickEvent[indexC2]);
+                            typeCodePlus.push(clickEvent[indexC2-1]);
+                        typeCodePlus.push(clickEvent[indexC3]);
+                            typeCodePlus.push(clickEvent[indexC3-1]);
+                        typeCodePlus.push(clickEvent[indexC4]);
+                            typeCodePlus.push(clickEvent[indexC4-1]);
+                
+                        parent.document.getElementById("codePlus_"+lastchar).value = typeCodePlus; 
+                        //-------------------------------------------//              
+                
+                    var parentcanvas = parent.document.getElementById('c' + lastchar);
+                    parentcanvas.width = 768;
+                    parentcanvas.height = 128;
+                    parentctx = parentcanvas.getContext("2d");
+                    parentctx.clearRect(0, 0, parentcanvas.width, parentcanvas.height)
+                    //Get the 'clean/empty' canvas respective to the selected message/radio [from parent page]
+                    parentctx.fillRect(0, 0, parentcanvas.width, parentcanvas.height); //default black colour background
+
+                        var childcanvas1 = document.getElementById('canvas1');
+                        parentctx.drawImage(childcanvas1, 0, 0, 0.25*parentcanvas.width,0.5*parentcanvas.height);  
+                
+                        var childcanvas2 =   document.getElementById('canvas2');
+                        parentctx.drawImage(childcanvas2, 0, 0.5*parentcanvas.height, 0.25*parentcanvas.width,0.5*parentcanvas.height);  
+                
+                        var childcanvas3 =   document.getElementById('canvas3');
+                        parentctx.drawImage(childcanvas3, 0.25*2*parentcanvas.width, 0, 0.25*parentcanvas.width,0.5*parentcanvas.height);  
+                
+                        var childcanvas4 =   document.getElementById('canvas4');
+                        parentctx.drawImage(childcanvas4, 0.25*2*parentcanvas.width, 0.5*parentcanvas.height, 0.25*parentcanvas.width,0.5*parentcanvas.height);  
+                
+                        //---------------------------
+                        var childcount1 = document.getElementById("count1").value;
+                        parentctx.textBaseline = "top";
+                        parentctx.font = "45px Arial";
+                        parentctx.fillStyle = "#00ff00";
+                        parentctx.textAlign = "center";
+                        parentctx.fillText(childcount1, 0.375*parentcanvas.width, 10, 0.25*parentcanvas.width,0.5*parentcanvas.height);
+                
+                        var childcount2 = document.getElementById("count2").value;
+                        parentctx.textBaseline = "top";
+                        parentctx.font = "45px Arial";
+                        parentctx.fillStyle = "#00ff00";
+                        parentctx.textAlign = "center";
+                        parentctx.fillText(childcount2, 0.375*parentcanvas.width, 0.5*parentcanvas.height+10, 0.25*parentcanvas.width,0.5*parentcanvas.height);
+                
+                        var childcount3 = document.getElementById("count3").value;
+                        parentctx.textBaseline = "top";
+                        parentctx.font = "45px Arial";
+                        parentctx.fillStyle = "#00ff00";
+                        parentctx.textAlign = "center";
+                        parentctx.fillText(childcount3, 0.875*parentcanvas.width, 10, 0.25*parentcanvas.width,0.5*parentcanvas.height);
+                
+                        var childcount4 = document.getElementById("count4").value;
+                        parentctx.textBaseline = "top";
+                        parentctx.font = "45px Arial";
+                        parentctx.fillStyle = "#00ff00";
+                        parentctx.textAlign = "center";
+                        parentctx.fillText(childcount4, 0.875*parentcanvas.width, 0.5*parentcanvas.height+10, 0.25*parentcanvas.width,0.5*parentcanvas.height);
+                
+                    break; // only one radio can be logically checked, don't check the rest
+                }
+            }
+        }
+    
+</script>
+

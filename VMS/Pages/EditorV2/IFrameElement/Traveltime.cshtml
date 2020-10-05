@@ -1,0 +1,188 @@
+﻿@page
+@model Lingkail.VMS.Pages.EditorV2.IFrameElement.TraveltimeModel
+@{
+    ViewData["Title"] = "Traveltime";
+}
+
+<!--CSS-->
+<style>
+    .main {
+        text-align: center;
+    }
+
+        .main > img {
+            display: none;
+        }
+
+    .myDiv > select, .myDiv p {
+        font-size: 150%
+    }
+
+    form button, input {
+        font-size: 150%;
+        margin: 5px;
+    }
+
+    #canvas {
+        background-color: #4d4d4d;
+        border: solid 1px;
+        width: 768px;
+        height: 128px;
+        margin: auto;
+        display: block;
+        margin-top: 10px;
+    }
+</style>
+
+<!--HTML-->
+<div class="main">
+    <img id="dummyImg" src="~/SingleEditor/ETA.png"> <!--Car Logo-->
+    <img id="canvasimg"> <!--Save canvas as an image to be transferred to parent canvas-->
+
+    <canvas id="canvas"></canvas>
+
+    <!--Values to be taken from database-->
+@*    <div class="myDiv">
+        <p>Select two destinations.</p>
+        <select id="destination1" onchange="getSelected()">
+            <option value="-">-</option>
+            @for (int i = 0; i < Model.TravelTimeInfos.Count / 2; i++)
+            {
+                var eta = Model.TravelTimeInfos.Where(t => t.id == i + 1).Select(t => t.eta).FirstOrDefault();
+                var dest = Model.TravelTimeInfos.Where(t => t.id == i + 1).Select(t => t.sname).FirstOrDefault();
+                <option value="@eta">@dest</option>
+            }
+        </select>
+
+        <select id="destination2" onchange="getSelected()">
+            <option value="-">-</option>
+            @for (int i = Model.TravelTimeInfos.Count / 2; i < Model.TravelTimeInfos.Count; i++)
+            {
+                var eta = Model.TravelTimeInfos.Where(t => t.id == i + 1).Select(t => t.eta).FirstOrDefault();
+                var dest = Model.TravelTimeInfos.Where(t => t.id == i + 1).Select(t => t.sname).FirstOrDefault();
+                <option value="@eta">@dest</option>
+            }
+        </select>
+        <p>Estimated time of arrival (ETA) from Board @Model.Board.Name .</p>
+    </div>*@
+
+
+
+    <div class="myDiv">
+        <p>Select two destinations.</p>
+        <select id="destination1" onchange="getSelected()">
+            <option value="-">-</option>
+            <option value="-">Times Square</option>
+        </select>
+
+        <select id="destination2" onchange="getSelected()">
+            <option value="-">-</option>
+            <option value="-">Mid Valley</option>
+        </select>
+                <p>Estimated time of arrival (ETA) from Board @Model.Board.Name .</p>
+    </div>
+
+
+
+    <hr>
+    <form>
+        <input type="hidden" name="id" value="@Model.Board.ID" />
+        <button type="submit" onclick="clearcanvas()">Clear Canvas</button>
+        <input type="button" onclick="copycanvas();" value="Submit" />
+    </form>
+</div>
+
+<!--JavaScript-->
+<script>
+    //Function to get the selected option (from dropdown list) and its value
+    function getSelected(){
+        
+        var list1 = document.getElementById("destination1"); //dropdown list1
+        var list2 = document.getElementById("destination2"); //dropdown list2
+
+        var selectedText1 = list1.options[list1.selectedIndex].innerHTML;
+        var selectedValue1 = list1.options[list1.selectedIndex].value;
+        
+        var selectedText2 = list2.options[list2.selectedIndex].innerHTML;
+        var selectedValue2 = list2.options[list2.selectedIndex].value;
+
+       canvasid = document.getElementById("canvas").id;
+        displaySelected(selectedText1,selectedValue1,selectedText2,selectedValue2,canvasid);
+    }
+        
+    //Function to draw/display on the canvas
+    function displaySelected(destination1, eta1, destination2, eta2, canvasid) {
+        var canvas = document.getElementById(canvasid);
+        canvas.width = 768;
+        canvas.height = 128;
+        var ctx = canvas.getContext("2d");
+            /*innerWidth() - include padding, excluding border and margin 
+            outerWidth(): include padding and border, excluding margin*/
+
+        //Draw the car logo on the canvas (fixed) ---------
+            logo = document.getElementById("dummyImg");
+            ctx.drawImage(logo, canvas.width / 20, canvas.height / 50, 90, 120);
+        //-------------------------------------------------
+        
+        //Draw the text
+        ctx.fillStyle = "#00ff00";
+        ctx.font="bold 30px Arial";
+            //Row1
+            ctx.fillText(destination1, canvas.width/4, canvas.height/4*1.5);
+            ctx.fillText("ETA", canvas.width/4*2.5, canvas.height/4*1.5);
+            ctx.fillText(eta1, canvas.width/4*3, canvas.height/4*1.5);
+            ctx.fillText("-", canvas.width/4*3.3, canvas.height/4*1.5)
+            //Row2
+            ctx.fillText(destination2, canvas.width/4, canvas.height/4*3); 
+            ctx.fillText("ETA", canvas.width/4*2.5, canvas.height/4*3);
+            ctx.fillText(eta2, canvas.width/4*3, canvas.height/4*3); 
+            ctx.fillText("-", canvas.width/4*3.3, canvas.height/4*3)
+        
+        var dataURL = canvas.toDataURL(); //get string dataURL of the canvas
+        document.getElementById("canvasimg").src = dataURL;  //set the src of the image
+    }
+    
+    //Function to clear canvas
+    function clearcanvas(){
+        var canvas = document.getElementById('canvas');
+        ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    }
+    
+    //Function to copy canvas - from child iframe to parent page
+    function copycanvas(){
+       var radios = parent.document.getElementsByName('selectedMessage'); //Check which message/radio is selected [from parent page]
+        for (var i = 0, length = radios.length; i < length; i++){
+            if (radios[i].checked) { //if checked, draw image
+                
+                var radioid = radios[i].id.toString(); 
+                var lastchar  = radioid.charAt(radioid.length-1); //get the number of the radio id only
+                parent.document.getElementById("code_"+lastchar).value =3; //code = 2 => travel time template
+                
+                var parentcanvas = parent.document.getElementById('c'+lastchar);
+                parentctx = parentcanvas.getContext("2d");
+                parentcanvas.width = 768;
+                parentcanvas.height = 128;
+                parentctx.clearRect(0, 0, parentcanvas.width, parentcanvas.height)
+                //Get the 'clean/empty' canvas respective to the selected message/radio [from parent page]
+                parentctx.fillRect(0, 0, parentcanvas.width, parentcanvas.height); //default black colour background
+               
+//------------------------------------------------------
+var list1 = document.getElementById("destination1"); //dropdown list1
+var list2 = document.getElementById("destination2"); //dropdown list2
+
+var selectedText1 = list1.options[list1.selectedIndex].innerHTML;
+var selectedText2 = list2.options[list2.selectedIndex].innerHTML;
+
+selectedArray = [selectedText1,selectedText2];
+parent.document.getElementById("codePlus_"+lastchar).value = selectedArray; //options from dropdown selected
+//------------------------------------------------------       
+                
+                var canvasimg = document.getElementById("canvasimg");
+                parentctx.drawImage(canvasimg,0,0,parentcanvas.width,parentcanvas.height);
+                
+                break; // only one radio can be logically checked, don't check the rest
+            }
+        }
+    }
+</script>

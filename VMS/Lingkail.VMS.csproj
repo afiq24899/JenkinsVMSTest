@@ -1,0 +1,124 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>Lingkail.VMS</RootNamespace>
+    <AssemblyName>Lingkail.VMS</AssemblyName>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    
+    <PackageReference Include="ChartJSCore" Version="1.5.8" />
+    
+    <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
+    
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.11" />
+    
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
+    
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.7.0" />
+    
+    <PackageReference Include="IdentityServer4" Version="3.1.4" />
+    
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.1.4" />
+    
+    <PackageReference Include="IdentityServer4.EntityFramework" Version="3.1.4" />
+    
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
+    
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.5" />
+    
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.6" />
+    
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+    
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.5" />
+    
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="OpenCvSharp4" Version="4.4.0.20200725" />
+    <PackageReference Include="OpenCvSharp4.runtime.ubuntu.18.04-x64" Version="4.4.0.20200725" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.4.0.20200725" />
+    <PackageReference Include="RestSharp" Version="106.11.4" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="SkiaSharp.QrCode" Version="0.3.2" />
+    <PackageReference Include="System.Console" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\LKL\**" />
+    <Compile Remove="img\**" />
+    <Compile Remove="Pages\API\**" />
+    <Compile Remove="Pages\GroupManagement\TEMP\**" />
+    <Content Remove="Data\Migrations\LKL\**" />
+    <Content Remove="img\**" />
+    <Content Remove="Pages\API\**" />
+    <Content Remove="Pages\GroupManagement\TEMP\**" />
+    <EmbeddedResource Remove="Data\Migrations\LKL\**" />
+    <EmbeddedResource Remove="img\**" />
+    <EmbeddedResource Remove="Pages\API\**" />
+    <EmbeddedResource Remove="Pages\GroupManagement\TEMP\**" />
+    <None Remove="Data\Migrations\LKL\**" />
+    <None Remove="img\**" />
+    <None Remove="Pages\API\**" />
+    <None Remove="Pages\GroupManagement\TEMP\**" />
+    <TypeScriptCompile Remove="Data\Migrations\LKL\**" />
+    <TypeScriptCompile Remove="Pages\GroupManagement\TEMP\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\CameraController.cs" />
+    <Compile Remove="Data\Migrations\IdentityServer\AuthDb\20200724074417_Initial_name.cs" />
+    <Compile Remove="Data\Migrations\IdentityServer\AuthDb\20200724074417_Initial_name.Designer.cs" />
+    <Compile Remove="Data\Migrations\IdentityServer\PersistedGrantDb\20200614110011_InitialPersistedGrantDbMigration.cs" />
+    <Compile Remove="Data\Migrations\IdentityServer\PersistedGrantDb\20200614110011_InitialPersistedGrantDbMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200730091639_Updates.cs" />
+    <Compile Remove="Migrations\20200730091639_Updates.Designer.cs" />
+    <Compile Remove="Migrations\20200803063804_Update.cs" />
+    <Compile Remove="Migrations\20200803063804_Update.Designer.cs" />
+    <Compile Remove="TokenProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Apilibraries\Lingkail.Apilibraries.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\ColorlightModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\GroupManagement\Delete.cshtml" />
+    <None Include="Pages\GroupManagement\Details.cshtml" />
+    <None Include="Pages\GroupManagement\Index.cshtml" />
+    <None Include="Pages\GroupManagement\_ViewStart.cshtml" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>

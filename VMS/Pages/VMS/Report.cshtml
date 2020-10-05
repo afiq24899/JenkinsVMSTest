@@ -1,0 +1,1194 @@
+﻿@page
+@model ReportModel
+@{
+    ViewBag.Title = "Report";
+}
+
+<style>
+    .myMain {
+        width: 100%;
+        margin: auto;
+        text-align: center;
+    }
+
+        .myMain > span {
+            font-weight: bold;
+            font-size: x-large;
+        }
+
+    td {
+        overflow: hidden;
+        font-size: 15px;
+    }
+
+    table.table, table.table3 {
+        width: 800px;
+        height: 380px;
+        margin: 20px;
+        text-align: center;
+    }
+
+    .tableright {
+        width: 800px;
+        height: 150px;
+        text-align: center;
+        margin: 20px;
+    }
+
+    .table_container {
+        border-style: groove;
+        border: 2px solid;
+        margin-left: 10px;
+        display: inline-block;
+    }
+
+    .table_right_container {
+        border-style: groove;
+        border: 2px solid;
+        margin-left: 10px;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .table th, .table td, .table3 th, .table3 td {
+        padding: 0.75rem;
+        vertical-align: middle;
+    }
+
+    .table2 tr {
+        font-size: 20px;
+        overflow-y: scroll;
+    }
+
+    table.table1 {
+        width: 800px;
+        height: 150px;
+        margin: 20px;
+        text-align: center;
+    }
+
+    .table1 th, .table1 td {
+        border: 2px solid;
+        padding: 0.75rem;
+        vertical-align: middle;
+        font-size: 30px;
+    }
+
+    table.table2 {
+        /*width: 600px;*/
+        height: 380px;
+        margin: 20px;
+        text-align: center;
+        float: left;
+    }
+
+    .table2 th, .table2 td {
+        border: 2px solid;
+        padding: 0.75rem;
+        vertical-align: middle;
+    }
+
+    .tableright th, .tableright td {
+        border: 2px solid;
+        padding: 0.75rem;
+        vertical-align: middle;
+    }
+
+    .ui-datepicker-calendar {
+        display: none;
+    }
+
+    tr.tabletitle {
+        background: #364d6d;
+    }
+
+    tr.tablechild {
+        background: #5c6a88;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #5f7fb3;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: #80accf;
+    }
+
+    .excelbut {
+        display: inline-block;
+        margin: 10px;
+        font-weight: bold;
+    }
+
+    .dropdown {
+        margin-left: 10px;
+        display: inline-block;
+    }
+
+    .printbut {
+        display: inline-block;
+        margin: 10px;
+        font-weight: bold;
+    }
+
+    #updateremark {
+        margin: 10px;
+        width: 190px;
+        height: 50px;
+        border: 0;
+        font-weight: bold;
+        /*        background: none;
+        box-shadow: none;
+        border-radius: 0px;*/
+        /*background-color: lightgray;*/
+    }
+
+    #Rtb2 #Rtb1 {
+        margin-top: 20px;
+    }
+
+    .divtab, .divtab1, .divtab2, .divtab3 {
+        height: 400px;
+        overflow: auto;
+    }
+
+    .reporttitle {
+        color: white;
+    }
+</style>
+
+
+<div class="myMain">
+    <span class="reporttitle">Report</span>
+
+    <div class="reportpage_container">
+        <div class="table_container">
+            <div class="dropdown">
+                <select name="one" class="dropdown-select">
+                    <option value="">Select Year</option>
+                    <option value="0">2020</option>
+                </select>
+            </div>
+
+
+            <div class="dropdown ">
+                <select name="two" class="dropdown-select">
+                    <option value="">Select Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+
+            <div class="excelbut">
+                <button onclick="tablesToExcel('#monthly_table,#weekly_table,#daily_table,#table2_td,#Rtb1,#Rtb2','Report.xls');" id="create-e" class="dt-button buttons-excel buttons-html5" tabindex="0" aria-controls="example" type="button"><span>Export to Excel</span></button>
+            </div>
+
+            <div class="printbut">
+                <button onclick="printData()" id="create-e" class="dt-button buttons-excel buttons-html5" tabindex="0" aria-controls="example" type="button"><span>Print</span></button>
+            </div>
+
+            @*<table class="table" border="1" cellpadding="3" id="monthly_table">*@
+            <div class="divtab">
+                <table class="table" id="monthly_table" data-SheetName="Monthly all boards">
+                    <thead>
+                        <tr class="tablechild">
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">VMS</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Location</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Uptime</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Downtime</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Chart</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTB">
+                    </tbody>
+                </table>
+            </div>
+
+            <input type="week" name="indivi_total_start" id="c" class="datepicker" style="width: 200px;" />
+
+            <div class="divtab3">
+                <table class="table3" id="weekly_table" data-SheetName="Weekly all boards">
+                    <thead>
+                        <tr class="tablechild">
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">VMS</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Location</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Uptime</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Downtime</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Chart</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTB3">
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div>
+                <table class="table1" id="daily_table" data-SheetName="Today up & down">
+                    <thead>
+                        <tr class="tabletitle">
+                            <th colspan="3" scope="col" style="border: 1px solid black; background:#364d6d;">Today Report</th>
+
+                        </tr>
+                        <tr class="tablechild">
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Up</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Down</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Chart</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTB1">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row-fluid">
+                <div class="divtab1">
+                    <table class="table2" id="table2_td" data-SheetName="All board down today">
+                        <thead>
+                            <tr class="tablechild">
+                                <th scope="col" style="border: 1px solid black; background:#5c6a88;">Checkbox</th>
+                                <th scope="col" style="border: 1px solid black; background:#5c6a88;">Name</th>
+                                <th scope="col" style="border: 1px solid black; background:#5c6a88;">Location</th>
+                                <th scope="col" style="border: 1px solid black; background:#5c6a88;">Remark</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTB2">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <button onclick="ConfirmFunction()" id="updateremark">Update Remark</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table_right_container">
+            <div class="divtab2">
+                <table class="tableright" id="Rtb1" data-SheetName="Individual monthly report">
+                    <thead style="">
+                        <tr class="tabletitle">
+                            <th colspan="5" scope="col" style="border: 1px solid black; background:#364d6d;">Individual Monthly Report</th>
+
+                        </tr>
+                        <tr class="tablechild">
+                            <th colspan="3" scope="col" style="border: 1px solid black; background:#5c6a88;">
+                                <input name="indivi_month" id="startDate" class="date-picker" style="width: 300px;" type="month" />
+                            </th>
+                            <th colspan="2" scope="col" style="border: 1px solid black; background:#5c6a88;">
+                                <select name="indivi_board" id="dropdown_indi" class="individual_select" style="width: 200px;">
+                                    <option>Pick a choice!</option>
+                                </select>
+
+                            </th>
+                        </tr>
+                        <tr class="tablechild">
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Number</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Date</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Time Start</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Time End</th>
+                            <th scope="col" style="border: 1px solid black; background:#5c6a88;">Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rightTB">
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <table class="tableright" id="Rtb2" data-SheetName="Total up time and down time">
+                    <thead>
+                        <tr class="tabletitle">
+                            <th colspan="5" scope="col" style="border: 1px solid black; background:#364d6d;">Total Up Time and Down Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="rightTB2">
+                        <tr class="tablechild">
+                            <td style="border: 1px solid black; background:#5c6a88;">Time Start</td>
+                            <td style="border: 1px solid black; background:#5c6a88;">
+                                <input name="indivi_total_s" id="startDate_total" class="date-picker" style="width: 140px;" type="date" />
+                            </td>
+                            <td style="border: 1px solid black; background:#5c6a88;">Total Up Time</td>
+                            <td style="border: 1px solid black; background:#5c6a88;">-</td>
+                            <td style="border: 1px solid black; background:#5c6a88;">-</td>
+
+                        </tr>
+                        <tr class="tablechild">
+                            <td style="border: 1px solid black; background:#5c6a88;">Time End</td>
+                            <td style="border: 1px solid black; background:#5c6a88;">
+                                <input name="indivi_total_e" id="endDate_total" class="date-picker" style="width: 140px;" type="date" />
+                            </td>
+                            <td style="border: 1px solid black; background:#5c6a88;">Total Down Time</td>
+                            <td style="border: 1px solid black; background:#5c6a88;">-</td>
+                            <td style="border: 1px solid black; background:#5c6a88;">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script type="text/javascript">
+    var tablesToExcel = (function ($) {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , html_start = `<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">`
+            , template_ExcelWorksheet = `<x:ExcelWorksheet><x:Name>{SheetName}</x:Name><x:WorksheetSource HRef="sheet{SheetIndex}.htm"/></x:ExcelWorksheet>`
+            , template_ListWorksheet = `<o:File HRef="sheet{SheetIndex}.htm"/>`
+            , template_HTMLWorksheet = `
+------=_NextPart_dummy
+Content-Location: sheet{SheetIndex}.htm
+Content-Type: text/html; charset=windows-1252
+
+` + html_start + `
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <link id="Main-File" rel="Main-File" href="../WorkBook.htm">
+  <link rel="File-List" href="filelist.xml">
+</head>
+<body><table>{SheetContent}</table></body>
+</html>`
+            , template_WorkBook = `MIME-Version: 1.0
+X-Document-Type: Workbook
+Content-Type: multipart/related; boundary="----=_NextPart_dummy"
+
+------=_NextPart_dummy
+Content-Location: WorkBook.htm
+Content-Type: text/html; charset=windows-1252
+
+` + html_start + `
+<head>
+<meta name="Excel Workbook Frameset">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="File-List" href="filelist.xml">
+<!--[if gte mso 9]><xml>
+ <x:ExcelWorkbook>
+  <x:ExcelWorksheets>{ExcelWorksheets}</x:ExcelWorksheets>
+  <x:ActiveSheet>0</x:ActiveSheet>
+ </x:ExcelWorkbook>
+</xml><![endif]-->
+</head>
+<frameset>
+  <frame src="sheet0.htm" name="frSheet">
+  <noframes><body><p>This page uses frames, but your browser does not support them.</p></body></noframes>
+</frameset>
+</html>
+{HTMLWorksheets}
+Content-Location: filelist.xml
+Content-Type: text/xml; charset="utf-8"
+
+<xml xmlns:o="urn:schemas-microsoft-com:office:office">
+  <o:MainFile HRef="../WorkBook.htm"/>
+  {ListWorksheets}
+  <o:File HRef="filelist.xml"/>
+</xml>
+------=_NextPart_dummy--
+`
+            , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (tables, filename) {
+            var context_WorkBook = {
+                ExcelWorksheets: ''
+                , HTMLWorksheets: ''
+                , ListWorksheets: ''
+            };
+            var tables = jQuery(tables);
+            $.each(tables, function (SheetIndex) {
+                var $table = $(this);
+                var SheetName = $table.attr('data-SheetName');
+                if ($.trim(SheetName) === '') {
+                    SheetName = 'Sheet' + SheetIndex;
+                }
+                context_WorkBook.ExcelWorksheets += format(template_ExcelWorksheet, {
+                    SheetIndex: SheetIndex
+                    , SheetName: SheetName
+                });
+                context_WorkBook.HTMLWorksheets += format(template_HTMLWorksheet, {
+                    SheetIndex: SheetIndex
+                    , SheetContent: $table.html()
+                });
+                context_WorkBook.ListWorksheets += format(template_ListWorksheet, {
+                    SheetIndex: SheetIndex
+                });
+            });
+
+            var link = document.createElement("A");
+            link.href = uri + base64(format(template_WorkBook, context_WorkBook));
+            link.download = filename || 'Report.xls';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    })(jQuery);
+</script>
+
+@* Added js libraries to local server *@
+<script type="text/javascript" src="~/js/Chart.bundle.min.js"></script>
+<script type="text/javascript" src="~/js/jquery.min.js"></script>
+<link href="~/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="~/js/xlsx.full.min.js"></script>
+<script src="~/js/canvas/FileSaver.js"></script>
+@* Added js libraries to local server *@
+<script>
+    @*Weekly table*@
+    weekly_data = [];
+    all_input_date = [];
+    var tbody_weekly = document.getElementById('myTB3');
+    tbody_weekly.innerHTML = "<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+    $(document).ready(function () {
+        $("#c").change(function () {
+            var weekly_value = document.getElementById("c").value;
+            var week_num = parseInt(weekly_value.split("-", 2)[1].replace("W", ""));
+            var year_num = parseInt(weekly_value.split("-", 2)[0]);
+
+            var date_start_fullform = getDateOfWeek(week_num, year_num);
+
+            @*Date to count until 7 days*@
+            for (var count_day = 0; count_day < 7; count_day++) {
+                if (count_day > 1) {
+                    date_start_fullform.setDate(date_start_fullform.getDate() + 1);
+                }
+                else {
+                    date_start_fullform.setDate(date_start_fullform.getDate() + count_day);
+                }
+                var date_convert = ("0" + date_start_fullform.getDate()).slice(-2);
+                var month_convert = ("0" + (date_start_fullform.getMonth() + 1)).slice(-2); // Since getMonth() returns month from 0-11 not 1-12
+                var year_convert = date_start_fullform.getFullYear();
+                WeeklyTableData(date_convert + "-" + month_convert + "-" + year_convert);
+            }
+
+            @*The weekly table!!!*@
+            if (weekly_data.length != 0) {
+                chart_weekly = [];
+                var i_weekly = 1;
+                var table_body_weekly = "";
+                for (var x = 0; x < weekly_data.length; x++) {
+                    var name_id_weekly = "myChart_weekly" + i_weekly;
+                    chart_weekly.push([weekly_data[x].up, weekly_data[x].down]);
+                    var tr = "<tr>";
+                    tr += '<td style="border: 1px solid black;">' + weekly_data[x].board + '</td>';
+                    tr += '<td style="border: 1px solid black;">' + weekly_data[x].location + '</td>';
+                    tr += '<td style="border: 1px solid black;">' + time_convert(weekly_data[x].up) + '</td>';
+                    tr += '<td style="border: 1px solid black;">' + time_convert(weekly_data[x].down) + '</td>';
+                    tr += '<td style="border: 1px solid black;">' + '<canvas id="' + name_id_weekly + '"  width="110" height="50" style="width: 110px; height: 30px;"></canvas>' + "</td></tr>";
+                    i_weekly++;
+                    table_body_weekly += tr;
+
+                }
+                tbody_weekly.innerHTML = table_body_weekly;
+
+                @* Start cofiguration of chart for weekly table *@
+                for (var j = 0; j < chart_weekly.length; j++) {
+                    var name = "myChart_weekly" + (j + 1);
+                    new Chart(document.getElementById(name).getContext("2d"), {
+                        type: "horizontalBar",
+                        data: {
+                            labels: ["."],
+                            datasets: [{
+                                label: "Up",
+                                backgroundColor: "green",
+                                //hoverBackgroundColor: "rgba(154,178,96,1)",
+                                data: [chart_weekly[j][0]]
+
+                            }, {
+                                label: "Down",
+                                backgroundColor: "red",
+                                //hoverBackgroundColor: "rgba(197,213,167,1)",
+                                    data: [chart_weekly[j][1]]
+                            }]
+
+
+                        },
+                        options: {
+                            tooltips: {
+                                enabled: false
+                            },
+                            hover: {
+                                animationDuration: 0
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        display: false
+                                    },
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    stacked: true
+                                }],
+                                yAxes: [{
+                                    barThickness: 50,
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        display: false
+                                    },
+                                    stacked: true
+                                }]
+                            },
+                            legend: {
+                                display: false
+                            },
+
+
+                        }
+
+                    });
+                }
+                @* End cofiguration of chart for weeklytable *@
+            }
+
+
+        });
+    });
+    @*End of Weekly table *@
+
+
+    @* update weekly by board's data to Object *@
+    function createnewinfo_weekly(board_new, up_new, down_new, location_new) {
+        var board_tem = {};
+        board_tem.board = board_new;
+        board_tem.up = up_new;
+        board_tem.down = down_new;
+        board_tem.location = location_new;
+        return board_tem;
+    }
+    @* update weekly by board's data to Object *@
+
+    @*Take weekly data from the database*@
+    function WeeklyTableData(date_input) {
+        var year_input = date_input.split("-")[2];
+        var month_input = date_input.split("-")[1];
+        var day_input = date_input.split("-")[0];
+        @foreach (var item in Model.ReportDate)
+         {
+                <text>
+                if ('@item.Year' == year_input) {
+                    if ('@item.Months' == month_input) {
+                        if (('@item.Days') == day_input) {
+                            if (!updatedate(weekly_data, '@item.Boards', @item.UpTotal, @item.DownTotal)){
+                                weekly_data.push(createnewinfo_weekly('@item.Boards', @item.UpTotal, @item.DownTotal, '@item.Location'))
+                            }
+
+                        }
+                    }
+
+                }
+                </text>
+         }
+
+    }
+
+    @*To get week and year format (Www,yyyy)*@
+    function getDateOfWeek(w, y) {
+
+        let date = new Date(y, 0, (1 + (w - 1) * 7));
+        date.setDate(date.getDate() + (1 - date.getDay())); // 0 - Sunday, 1 - Monday etc
+        return date;
+    }
+    @* To get week and year format(Www, yyyy) *@
+
+    @* print button function *@
+    function printData() {
+        var divToPrint = document.getElementById("monthly_table");
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    @* print button function *@
+
+    @* Function count days from start to end*@
+    //Countdaysofboard("06-03-2020",)
+    $('#endDate_total').change(function () {
+        var indivi_enddate = $(this).val();
+        var indivi_startdate = document.getElementById("startDate_total").value;
+        var count_days = Countdaysofboard(indivi_startdate, indivi_enddate);
+        var indivi_board = ($("option:selected", $('select[name=indivi_board]')).text());
+        var sumtimeupdown = Sumtotalupdowntime(indivi_startdate, indivi_enddate, indivi_board);
+        var x = document.getElementById("Rtb2").rows[2].cells;
+        var y = document.getElementById("Rtb2").rows[1].cells;
+        x[4].innerHTML = count_days + " days";
+        x[3].innerHTML = sumtimeupdown[0];
+        y[3].innerHTML = sumtimeupdown[1];
+
+        //x[1].innerHTML = "VMS-ID: " + board_input;
+    });
+
+
+    $(document).ready(function () {
+        $('select[name=indivi_total_s]').on('change', function () {
+            console.log("reach here");
+        });
+    });
+
+
+    function Countdaysofboard(datestart, dateend) {
+        var datestart = new Date(datestart);
+        var dateend = new Date(dateend);
+
+        // To calculate the time difference of two dates
+        var Difference_In_Time = dateend.getTime() - datestart.getTime();
+
+        //// To calculate the no. of days between two dates
+        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+        return(Difference_In_Days);
+
+    }
+
+    function Sumtotalupdowntime(date_start, date_end, board_name) {
+        var date_start = date_start.split('-');
+        var year_s = date_start[0];
+        var month_s = parseInt(date_start[1]);
+        var day_s = parseInt(date_start[2]);
+
+        var date_end = date_end.split('-');
+        var year_e = date_end[0];
+        var month_e = parseInt(date_end[1]);
+        var day_e = parseInt(date_end[2]);
+        var sum_up_time = 0;
+        var sum_down_time = 0;
+        @foreach (var days in Model.ReportDate)
+        {
+            <text>
+                var current_months = parseInt('@days.Months');
+                var current_days = parseInt('@days.Days');
+                if (current_months >= month_s && month_e >= current_months) {
+                    if (current_days >= day_s && day_e >= current_days) {
+                        if ('@days.Boards' == board_name) {
+                            sum_up_time += parseInt('@days.UpTotal');
+                            sum_down_time += parseInt('@days.DownTotal');
+                        }
+
+
+                    }
+
+                }
+
+            </text>
+
+        }
+        sum_up_time = time_convert(sum_up_time);
+        sum_down_time = time_convert(sum_down_time);
+        console.log(sum_up_time);
+        console.log(sum_down_time);
+        return [sum_up_time, sum_down_time];
+    }
+
+    @* Function count days from start to end*@
+
+
+
+
+    @*Function for user choose specific month & year to display *@
+
+    var options_list = [];
+   @foreach(var list_b in Model.ReportDate){
+       <text>
+           if (!options_list.includes('@list_b.Boards')){
+               options_list.push('@list_b.Boards');
+           }
+        </text>
+
+    }
+    window.onload = function () {
+        var select = document.getElementById("dropdown_indi");
+        for (var i_l = 0; i_l < options_list.length; i_l++) {
+            var option = document.createElement('option');
+            option.text = option.value = options_list[i_l];
+            select.add(option, 0);
+        }
+    };
+    function Createbodyrighttable(input_data, month_input, year_input) {
+
+        var rbody1 = document.getElementById('rightTB');
+        table_right_body = "";
+        var body_flag = false;
+        var row_count = 0;
+        for (var i = 0; i < input_data.length; i++) {
+            //if (input_data[i].remark != "-" && input_data[i].remark != "NoData" && input_data[i].remark != "") {
+            body_flag = true;
+            row_count += 1;
+            var tr = "<tr>";
+            var date_full = input_data[i].date;
+            time_start = input_data[i].timestart;
+            time_end = input_data[i].timeend;
+            tr += '<td style="border: 1px solid black;">' + row_count + '</td>';
+            tr += '<td style="border: 1px solid black;">' + date_full + '</td>';
+            tr += '<td style="border: 1px solid black;">' + time_start + '</td>';
+            tr += '<td  style="border: 1px solid black;">' + time_end + '</td>';
+            tr += '<td  style="border: 1px solid black;">' + input_data[i].remark + '</td></tr>';
+            table_right_body += tr;
+            //}
+
+        }
+        console.log(body_flag);
+        if (body_flag) {
+            rbody1.innerHTML = table_right_body;
+        }
+        else {
+            rbody1.innerHTML = "<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+
+        }
+
+
+    }
+
+    $(document).ready(function () {
+        $('select[name=indivi_board]').on('change', function () {
+            var indivi_month = document.getElementById("startDate").value;
+            var indivi_board = ($("option:selected", $('select[name=indivi_board]')).text());
+            if (indivi_month != "") {
+                if (indivi_board != "Pick a choice!") {
+                    var vals = indivi_month.split('-');
+                    var year = vals[0];
+                    var month = vals[1];
+                    var individual_data = getdata(year, month, indivi_board);
+                    Createbodyrighttable(individual_data, month, year);
+                }
+            }
+            else {
+                alert("Please Select month & year please");
+            }
+        });
+    });
+    $('#startDate').change(function () {
+        var indivi_month = $(this).val();
+        var indivi_board = ($("option:selected", $('select[name=indivi_board]')).text());
+        if (indivi_board != "Pick a choice!") {
+            if (indivi_month != "") {
+
+                var vals = indivi_month.split('-');
+                var year = vals[0];
+                var month = vals[1];
+                var individual_data = getdata(year, month, indivi_board);
+                console.log(individual_data);
+                Createbodyrighttable(individual_data);
+            }
+
+        }
+        else {
+            //alert("Please Select specific board please");
+        }
+    });
+
+    var monthtonumber = {
+        "January": 1,
+        "February": 2,
+        "March": 3,
+        "April": 4,
+        "May": 5,
+        "June": 6,
+        "July": 7,
+        "August": 8,
+        "September": 9,
+        "October": 10,
+        "November": 11,
+        "December": 12
+    };
+    var tbody = document.getElementById('myTB');
+    tbody.innerHTML = "<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+    //var tbody = document.getElementById('rightTB3');
+    //tbody.innerHTML = "<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+    $(document).ready(function () {
+        $('select[name=two]').on('change', function () {
+            var selectedYear = ($("option:selected", $('select[name=one]')).text());
+            if (selectedYear != "Select Year") {
+                var selectedMonth = ($("option:selected", this).text());
+                //alert(selectedYear);
+                var table_arr = [];
+                if (selectedMonth != "Select Month") {
+                    //alert(selectedYear);
+                    var data_queue = querydata(selectedYear, monthtonumber[selectedMonth]);
+                    console.log(data_queue);
+
+                    @* Start cofiguration of table *@
+
+                    var i = 1;
+                    var table_body = "";
+                    if (data_queue.length != 0) {
+                        for (var x = 0; x < data_queue.length; x++) {
+                            var name_id = "myChart" + i;
+                            table_arr.push([data_queue[x].up, data_queue[x].down]);
+                            var tr = "<tr>";
+                            tr += '<td style="border: 1px solid black;">' + data_queue[x].board + '</td>';
+                            tr += '<td style="border: 1px solid black;">' + data_queue[x].location + '</td>';
+                            tr += '<td style="border: 1px solid black;">' + time_convert(data_queue[x].up) + '</td>';
+                            tr += '<td style="border: 1px solid black;">' + time_convert(data_queue[x].down) + '</td>';
+                            tr += '<td style="border: 1px solid black;">' + '<canvas id="' + name_id + '"  width="110" height="50" style="width: 110px; height: 30px;"></canvas>' + "</td></tr>";
+                            i++;
+                            table_body += tr;
+
+                        }
+                        tbody.innerHTML = table_body;
+                    }
+                    else {
+                        tbody.innerHTML = "<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>";
+                    }
+                    @* End cofiguration of table *@
+
+                }
+                @* Start cofiguration of char for table *@
+                for (var j = 0; j < table_arr.length; j++) {
+                    var name = "myChart" + (j + 1);
+                    new Chart(document.getElementById(name).getContext("2d"), {
+                        type: "horizontalBar",
+                        data: {
+                            labels: ["."],
+                            datasets: [{
+                                label: "Up",
+                                backgroundColor: "green",
+                                //hoverBackgroundColor: "rgba(154,178,96,1)",
+                                data: [table_arr[j][0]]
+
+                            }, {
+                                label: "Down",
+                                backgroundColor: "red",
+                                //hoverBackgroundColor: "rgba(197,213,167,1)",
+                                data: [table_arr[j][1]]
+                            }]
+
+
+                        },
+                        options: {
+                            tooltips: {
+                                enabled: false
+                            },
+                            hover: {
+                                animationDuration: 0
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        display: false
+                                    },
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    stacked: true
+                                }],
+                                yAxes: [{
+                                    barThickness: 50,
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        display: false
+                                    },
+                                    stacked: true
+                                }]
+                            },
+                            legend: {
+                                display: false
+                            },
+
+
+                        }
+
+                    });
+                }
+                @* End cofiguration of char for table *@
+            }
+            else {
+                alert("Please Select year please");
+            }
+
+        });
+    });
+    @* Function for user choose specific month & year to display *@
+
+
+    @* Sum up down&up time for each board*@
+    function updatedate(data_in, board, up, down) {
+        var found = false;
+        for (var i = 0; i < data_in.length; i++) {
+            if (data_in[i].board == board) {
+                data_in[i].up = data_in[i].up + up;
+                data_in[i].down = data_in[i].down + down;
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+    @* Sum up down & up time for each board *@
+
+    @* Update data by today function *@
+    updatedatebytoday();
+    function updatedatebytoday() {
+        var today_data = [];
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        @foreach(var board_in in Model.ReportDate){
+            <text>
+            if (@board_in.Year == yyyy && @board_in.Months == mm && @board_in.Days == dd) {
+                if (!updatedate(today_data, '@board_in.Boards', @board_in.UpTotal, @board_in.DownTotal)) {
+                    today_data.push(createnewinfo('@board_in.Boards',
+                        @board_in.UpTotal,
+                        @board_in.DownTotal,
+                        '@board_in.Location',
+                        '@board_in.StartDate',
+                        '@board_in.Remark'));
+                }
+            }
+
+            </text>
+         }
+
+        @* Start cofiguration of table1 *@
+        var table_today = "";
+        if (today_data.length != 0) {
+            var up_total = 0;
+            var down_total = 0;
+            var down_today = false;
+            for (var k = 0; k < today_data.length; k++) {
+                up_total += today_data[k].up;
+                down_total += today_data[k].down;
+                if (today_data[k].down != 0) {
+                    down_today = true;
+                }
+            }
+            up_total_conv = time_convert(up_total);
+            down_total_conv = time_convert(down_total);
+            var tbody1 = document.getElementById('myTB1');
+            var tr_1 = "<tr>";
+            tr_1 += '<td style="font-size:40px; border: 1px solid black;">' + @Model.BoardUPTotal + '</td>';
+            tr_1 += '<td style="font-size:40px; border: 1px solid black;">' + @Model.BoardDownTotal + '</td>';
+            tr_1 += '<td style="border: 1px solid black;">' + '<canvas id="chart_total" style="width:250px; height:150px;"></canvas>' + '</td></tr>';
+            table_today += tr_1;
+            tbody1.innerHTML = table_today;
+
+            @* End cofiguration of table1 *@
+            new Chart(document.getElementById("chart_total").getContext("2d"), {
+                type: "doughnut",
+                data: {
+                    datasets: [{
+                        data: [@Model.BoardUPTotal, @Model.BoardDownTotal],
+                        backgroundColor: ["green", "red"],
+                    }],
+
+                    // These labels appear in the legend and in the tooltips when hovering different arcs
+                    labels: [
+                        'Up Time:[@Model.NowUpStringCollection]',
+                        'Down Time:[@Model.NowDownStringCollection]'
+                    ]
+
+                },
+                options: {
+                    legend: {
+                        display: true
+                    },
+                    tooltips: {
+                        enabled: true
+                    }
+                }
+            });
+
+            @* Start cofiguration of table2 *@
+            var remarks = ["No power", "Lost Connection", "Struck by Lightning", "TnB no power", "Board Problem"]; // this variable is temp var
+            var tbody2 = document.getElementById('myTB2');
+            var droplist_count = 1;
+            var body_table2 = "";
+            var checkbox_count = 1;
+            if (down_today) {
+                for (var downdata = 0; downdata < today_data.length; downdata++) {
+                    down_check = today_data[downdata].down;
+                    if (down_check != 0) {
+                        //The time for the code to run if it is 4hours or not
+                        var down_total_hrs = down_total / 60;
+                        if (down_total_hrs > 4) {
+                            if (today_data[downdata].remark == "-" || today_data[downdata].remark == 'NoData') {
+                                var tr_2 = "<tr>";
+                                tr_2 += '<td style="border: 1px solid black;"><input type="checkbox" name="checkbox_' + checkbox_count + '" /></td>';
+                                tr_2 += '<td style="border: 1px solid black;">' + today_data[downdata].board + '</td>';
+                                tr_2 += '<td style="border: 1px solid black;">' + today_data[downdata].location + '</td>';
+                                //tr_2 += '<td><input type="text" id="fname" name="fname" value="-"></td></tr>';
+                                tr_2 += '<td style="border: 1px solid black;"><select id="dropdown' + droplist_count + '" class="dropdown - select" value="-"><option selected="selected">-</option></select></td></tr>';
+                                droplist_count += 1;
+                                checkbox_count += 1;
+                                body_table2 += tr_2;
+                            }
+
+                            else {
+                                var tr_2 = "<tr>";
+                                tr_2 += '<td style="border: 1px solid black;"><input type="checkbox" name="checkbox_' + checkbox_count + '" /></td>';
+                                tr_2 += '<td style="border: 1px solid black;">' + today_data[downdata].board + '</td>';
+                                tr_2 += '<td style="border: 1px solid black;">' + today_data[downdata].location + '</td>';
+                                //tr_2 += '<td>' + today_data[downdata].remark + '</td></tr>';
+                                tr_2 += '<td style="border: 1px solid black;"><select id="dropdown' + droplist_count + '" class="dropdown - select"><option selected="selected">' + today_data[downdata].remark + '</option></select></td></tr>';
+                                droplist_count += 1;
+                                checkbox_count += 1;
+                                body_table2 += tr_2;
+                            }
+                        }
+                    }
+
+                    tbody2.innerHTML = body_table2;
+                    for (var l = 0; l < droplist_count - 1; l++) {
+                        var drop_down = document.getElementById("dropdown" + (l + 1));
+                        for (var m = 0; m < remarks.length; m++) {
+                            var option = document.createElement("option");
+                            option.text = remarks[m];
+                            drop_down.add(option);
+                        }
+                    }
+                }
+            }
+            else {
+                tbody2.innerHTML = "<tr><td>-</td><td>-</td><td>-</td></tr>";
+            }
+
+            @* End cofiguration of table2 *@
+        }
+        else {
+            tbody1.innerHTML = "<tr><td>-</td><td>-</td><td>-</td></tr>";
+            tbody2.innerHTML = "<tr><td>-</td><td>-</td><td>-</td></tr>";
+        }
+    }
+
+    @* Update data by today function*@
+
+    @* Convert up&down time from min to Hr & Min *@
+    function time_convert(num) {
+        d = Math.floor(num / 1440); // 60*24
+        h = Math.floor((num - (d * 1440)) / 60);
+        m = Math.round(num % 60);
+
+        if (d > 0) {
+            return (d + " days " + h + " hours " + m + " minutes");
+        } else {
+            return (h + " hours " + m + " minutes");
+        }
+    }
+    @* Convert up & down time from min to Hr & Min *@
+
+    @* Push new board's info to Object *@
+    function createnewinfo(board_new, up_new, down_new, location, startdate, remark_new) {
+        var board_tem = {};
+        board_tem.board = board_new;
+        board_tem.up = up_new;
+        board_tem.down = down_new;
+        board_tem.location = location;
+        board_tem.startdate = startdate;
+        board_tem.remark = remark_new;
+        return board_tem;
+    }
+    @* Push new board's info to Object *@
+
+    @* Push new board's info to Object with full data *@
+    function createnewinfofull(name_new, date_new, timestart_new, timeend_new, remark_new) {
+        var board_tem = {};
+        board_tem.name = name_new;
+        board_tem.date = date_new;
+        board_tem.timestart = timestart_new;
+        board_tem.timeend = timeend_new;
+        board_tem.remark = remark_new;
+        return board_tem;
+    }
+    @* Push new board's info to Object with full data *@
+
+    @* Query monthly data function*@
+    function querydata(year_in, month_in) {
+        var all_data = [];
+        @foreach(var board_in in Model.ReportDate){
+            <text>
+            if (@board_in.Year == year_in && @board_in.Months == month_in) {
+                if (!updatedate(all_data, '@board_in.Boards', @board_in.UpTotal, @board_in.DownTotal)) {
+                    all_data.push(createnewinfo('@board_in.Boards',
+                        @board_in.UpTotal,
+                        @board_in.DownTotal,
+                        '@board_in.Location',
+                        '@board_in.StartDate',
+                        '@board_in.Remark'));
+                }
+            }
+
+            </text>
+         }
+        return all_data;
+    }
+    @* Query monthly data function *@
+
+    @* Query monthly data function for individual board*@
+    function getdata(year_input, month_input, board_input) {
+        var indiv_data = [];
+        @foreach(var item in Model.UpDown){
+            <text>
+            var date_uptime = '@item.Date';
+            date_uptime = date_uptime.split('-');
+            var year_in = date_uptime[2];
+            var month_in = date_uptime[1];
+            if (year_in == year_input && month_in == month_input && '@item.Name' == board_input) {
+                indiv_data.push(createnewinfofull('@item.Name',
+                       '@item.Date',
+                        '@item.TimeStart',
+                        '@item.TimeEnd',
+                        '@item.Remark'));
+
+            }
+
+            </text>
+         }
+        return indiv_data;
+    }
+    @* Query monthly data function for individual board*@
+
+    @* Confirmation function*@
+    function ConfirmFunction() {
+        var UserAnswer = confirm("Please confirm this action");
+        if (UserAnswer == true) {
+            SelectedRemark();
+        } else {
+        }
+
+    }
+    @* Confirmation function *@
+
+    @* Function pass remark value to database using API *@
+    function SendremarkValueAPI(remark_data, boardname) {
+        $.ajax({
+            url: "/api/upload/remarkupdate",
+            type: "POST",
+            data: JSON.stringify({
+                remark_board: remark_data,
+                BoardName: boardname
+            }),
+            contentType: 'application/json',
+            success: function (response) {
+            },
+            error: function (response) {
+            }
+        });
+    }
+    @* Function pass remark value to database using API *@
+
+    @* Function check checkboxes is selected or not *@
+    function SelectedRemark() {
+        // Enumerate over each checked checkbox
+        $('input:checked').each(function () {
+            var board_ = $(this).closest('tr').find('td:nth-child(2)').text();
+            var remark_ = $(this).closest('tr').find('td:nth-child(4) select').val();
+            SendremarkValueAPI(remark_, board_);
+
+        });
+    }
+    @* Function check checkboxes is selected or not *@
+
+</script>

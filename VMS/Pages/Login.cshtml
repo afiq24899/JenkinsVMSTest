@@ -1,0 +1,88 @@
+@page
+@model Lingkail.VMS.Auth.Web.Pages.LoginModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = "VMS Login";
+}
+
+<link href="~/css/Login.css" rel="stylesheet" />
+<head>
+    <style>
+        html {
+            position: static;
+            height: 100%;
+            margin: 0;
+            /* The image used */
+            background-image: url("../vms-Icon/Background.jpg");
+            /*Center and scale the image nicely*/
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+       
+
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div style="margin-left: 220px; margin-top: 10px; margin-right: 220px; margin-bottom: 10px">
+            <img width=100 height=100 src="~/senalogo.png" alt="logo" />
+        </div>
+        <div style="margin-left: 180px; width: 200px;">
+            <h1> @ViewData["Title"]</h1>
+        </div>
+        <div style="margin-left: 160px;">
+            <form method="post" style="font-size:110%">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email"  class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="padding-top:10px;">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="padding-top:5px;">
+                    <div class="largerCheckbox">
+                        <label asp-for="Input.RememberMe">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" style=" margin-left:180px; width:60px;">
+                    <button type="submit" class="btn btn-primary" style="width:auto">Login</button>
+                </div>
+                <div class="form-group" style=" text-align:left; width:200px;">
+                    <p style="padding-top: 10px; margin-top:0px;">
+                        <a  id="forgot-password" asp-page="./ForgotPassword">@Localizer["ForgotPassword"]</a>
+                    </p>
+                    <p>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">New user? Register.</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

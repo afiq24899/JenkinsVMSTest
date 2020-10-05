@@ -1,0 +1,155 @@
+﻿@page
+@model Lingkail.VMS.Pages.GroupManagement.DetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<style>
+
+    h1 {
+        margin-left: 10px;
+        margin-bottom: 25px;
+        color: snow;
+    }
+
+    #table1 {
+        /*border: solid black 1px;*/
+        width: 50%;
+        float: left;
+        overflow: auto;
+        height: 400px;
+    }
+
+    #table2 {
+        /*border: solid black 1px;*/
+        width: 50%;
+        float: right;
+        overflow: auto;
+        height: 400px;
+    }
+
+    #mainTable {
+        border-collapse: collapse;
+        width: 85%;
+        text-align: center;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    #CameraTable {
+        border-collapse: collapse;
+        width: 85%;
+        text-align: center;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    tr {
+        height: 50%;
+    }
+
+    tr, td {
+        border: solid black 1px;
+    }
+
+    thead {
+        background: #645f73;
+        color: Black;
+        line-height: 65px;
+        font-size: 25px;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #5f7fb3;
+        height: 50px;
+        color: black;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: #80accf;
+        height: 50px;
+        color: black;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    #below {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    #currentId {
+        margin-top: 50px;
+        display: block;
+        color: white;
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+</style>
+
+<h1>Details</h1>
+<div id="currentId">
+         <span>@Html.DisplayFor(modelItem => Model.GroupPreset.Name)</span>
+         <span>@Html.DisplayFor(modelItem => Model.GroupPreset.DateTimeCreated)</span>
+</div>
+<div id="table1">
+    <table id="mainTable">
+
+        <thead>
+            <tr>
+                <td>NO.</td>
+                <td>@Html.DisplayNameFor(model => model.GroupMembers[0].Name)</td>
+                <td>@Html.DisplayNameFor(model => model.GroupMembers[0].Zone.Name)</td>
+                <td>@Html.DisplayNameFor(model => model.GroupMembers[0].Location.Address)</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{int cnt = 1;
+                @foreach (var member in Model.GroupMembers)
+                {
+                    <tr>
+                        <td>@cnt</td>
+                        <td>@member.Name</td>
+                        <td>@member.Zone.Name</td>
+                        <td style="text-align:left;">@member.Location.Address</td>
+                    </tr>
+                    cnt++;
+                }
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<div id="table2">
+    <table id="CameraTable">
+        <thead>
+            <tr>
+                <td>NO.</td>
+                <td>@Html.DisplayNameFor(model => model.Cameras[0].Name)</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int cnt2 = 1;
+                @foreach (var camera in Model.Cameras)
+                {
+                    <tr>
+                        <td>@cnt2</td>
+                        <td style="text-align:left;">@Html.DisplayFor(modelItem => camera.Name)</td> 
+                    </tr>
+                    cnt2++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="below">
+    <a asp-page="./Edit" asp-route-presetid="@Model.GroupPreset.ID" class="btn btn-warning">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

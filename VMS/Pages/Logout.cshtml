@@ -1,0 +1,35 @@
+@page
+@model Lingkail.VMS.Auth.Web.Pages.LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<link href="~/css/Logout.css" rel="stylesheet" />
+<head>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            /* The image used */
+            background-image: url("../vms-Icon/Background.jpg");
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div style="margin-left:210px;">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <p><font size="5" style="margin-left: 30px;">You have successfully logged out of the application.</font></p>
+        <div style="margin-left:160px">
+            <p><font size="5"><a asp-page="/Login">Return to Login Page</a></font></p>
+        </div>
+    </div>
+</body>

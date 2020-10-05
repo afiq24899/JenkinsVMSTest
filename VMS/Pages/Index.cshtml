@@ -1,0 +1,1335 @@
+﻿@page
+@model IndexModel
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Identity;
+@using System.IO;
+@inject SignInManager<Lingkail.VMS.Auth.Web.Data.VmsUser> _signInManager;
+@inject UserManager<Lingkail.VMS.Auth.Web.Data.VmsUser> _userManager
+@{
+    ViewData["Title"] = "Map";
+    ViewData["boardName"] = "board initial";
+}
+
+<html>
+<head>
+    <meta http-equiv="refresh" content="120" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    @*<<<<<<< HEAD*@
+    <title>VMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @*=======*@
+    <title>Map</title>
+    @*>>>>>>> 023efc3a4ecc0cc7e53b21494e28c8d342f37f90*@
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+                * element that contains the map. */
+
+        #osm-map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0px;
+            width: 90%;
+            height: 100%;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 10%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: black;
+            overflow-x: hidden;
+            padding-top: 50px;
+            text-align: center
+        }
+
+            .sidenav a, .sidenav div {
+                padding: 6px 8px 6px 16px;
+                text-decoration: none;
+                font-size: 24px;
+                color: #818181;
+                display: block;
+            }
+
+                .sidenav a:hover, .sidenav div:hover {
+                    color: #f1f1f1;
+                }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            font-family: "Lato", sans-serif;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+        }
+
+        h1 {
+            background-color: black;
+            color: white;
+        }
+
+        h2 {
+            background-color: black;
+            color: cyan;
+        }
+
+        h3 {
+            color: white;
+            font-size: 30px;
+        }
+
+        p {
+            background-color: black;
+            color: white;
+        }
+
+        p1 {
+            font-size: 50px;
+        }
+
+        .modal-header {
+            /*border: 5px outset darkblue;*/
+            background-color: darkblue;
+            color: white;
+        }
+
+        .modal-body {
+            /*border: 5px outset lightblue;*/
+            background-color: darkblue;
+            opacity: 0.8;
+            color: white;
+        }
+
+        .modal-footer {
+            background-color: darkblue;
+            color: white;
+        }
+
+        .custom .leaflet-popup-tip,
+        .custom .leaflet-popup-content-wrapper {
+            background: darkblue;
+            opacity: 0.8;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body class="sena-class">
+    @*<h2 style="background-color: Yellow;color: Blue; text-align: center; font-style: oblique">VMS System</h2>*@
+    <fieldset>
+        @*<legend style="font-family: Arial Black; color: blue; font-size: large;">Kuala Lumpur</legend>*@
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="~/lib/leaflet/leaflet.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+        <script src="~/lib/leaflet/leaflet.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!--Main Tangram Library-->
+        <script src="~/lib/tangram/dist/tangram.debug.js"></script>
+        <!-- bog-standard leaflet URL hash -->
+        <script src="~/lib/tangram-vms/leaflet-hash.js"></script>
+        <!--script for drawing tangram map-->
+        <script src="~/lib/tangram-vms/switcher.js"></script>
+        @*<script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css" />*@
+
+
+    <div class="sidenav">
+        <img src="/senalogo.png" width="100" height="100" />
+        <br /><br />
+        <a class="navbar-brand" href="/VMS/Table">All</a>
+        <a class="navbar-brand" href="/Index">Map</a>
+        <a class="navbar-brand" href="/GroupManagement">Group</a>
+        <a class="navbar-brand" href="/VMS/History">History</a>
+        <a class="navbar-brand" href="/VMS/Report">Report</a>
+        <a class="navbar-brand" href="/Account">Setting</a>
+        <a class="navbar-brand" href="/ConfigurationPage">Configuration</a>
+
+
+
+        @if (_signInManager.IsSignedIn(User))
+        {
+            @if (User.IsInRole("admin"))
+            {
+                @*<a class="navbar-brand" href="/Manage">Manage</a>*@
+                @*<div class="mynav_dropdown">
+
+                    <button class="mynav_dropbtn">
+
+                        ..
+
+                        <i class="fa fa-caret-down"></i>
+
+                    </button>
+
+                    <div class="mynav_dropdown-content">
+
+                        <a asp-area="" asp-controller="Home" asp-action="About">About</a>
+
+                        <a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+
+                    </div>
+
+                </div>*@
+
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded%="false">
+                        Manage
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a asp-page="/Manage/Users" class="dropdown-item">Users</a>
+                        <a asp-page="/Manage/Roles" class="dropdown-item">Roles</a>
+                    </div>
+                </div>
+            }
+            <form asp-page="/Logout" method="post">
+                <button type="submit" class="btn btn-secondary"
+                        style="width:auto;
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        font-size:10pt">
+                    Logout @User.Identity.Name
+                </button>
+            </form>
+        }
+
+    </div>
+        <div id="graphdiv" style="width:200px; height:100px;"></div>
+        <div id="osm-map"></div>
+
+
+
+        <script>
+            @*var strWebRoot = "@Model._webHostEnvironment.WebRootPath";
+            var strTronPath = strWebRoot.concat("\tangram-vms\tron-style.zip");*@
+
+            var styles = {
+                "daycycle": "~lib/tangram-vms/daynight.yaml",
+                "walkabout": "https://www.nextzen.org/carto/walkabout-style/8/walkabout-style.zip",
+                "crosshatch": "~lib/tangram-vms/crosshatch.yaml",
+                //"tron": "~lib/tangram-vms/tron-style/tron-syle.yaml",
+                "tron": "https://www.nextzen.org/carto/tron-style/6/tron-style.zip",
+                "terrain": "~lib/tangram-vms/imhof2.yaml"
+            };
+
+            var locations = {
+                "daycycle": [3.1205, 101.6986777, 13],
+                "walkabout": [3.1205, 101.6986777, 14],
+                "crosshatch": [3.1205, 101.6986777, 13],
+                "tron": [3.1205, 101.6986777, 12],
+                "terrain": [3.1205, 101.6986777, 12]
+            };
+
+
+            var currentStyle = "tron";
+
+            //var qs = window.location.search;
+            //if (qs) {
+            //    qs = qs.slice(1);
+            //    if (qs[qs.length - 1] === '/') {
+            //        qs = qs.slice(0, qs.length - 1);
+            //    }
+            //    if (styles[qs]) {
+            //        currentStyle = qs;
+            //    }
+            //}
+
+            var lmap = L.map('osm-map',
+                { 'keyboardZoomOffset': .05 }
+            );
+
+            var layer = Tangram.leafletLayer({
+                scene: styles[currentStyle],
+                preUpdate: preUpdate,
+                postUpdate: postUpdate,
+                attribution: '<a href="https://mapzen.com/tangram">Tangram</a> | &copy; OSM contributors | <a href="http://www.nextzen.org/">Nextzen</a>'
+            });
+
+            var scene = layer.scene;
+
+            layer.on('init', function () {
+                // everything's good, carry on
+                window.addEventListener('resize', resizeMap);
+                resizeMap();
+                scene.requestRedraw();
+                scene.immediateRedraw();
+            });
+
+            layer.on('error', function (error) {
+                // something went wrong
+                var errorEL = document.createElement('div');
+                errorEL.setAttribute("class", "error-msg");
+                // WebGL not supported (or at least didn't initialize properly!)
+                if (layer.scene && !layer.scene.gl) {
+                    var noticeTxt = document.createTextNode("Tangram says WebGL didn't initialize properly! Your browser may not support it.");
+                    errorEL.appendChild(noticeTxt);
+                }
+                // Something else went wrong, generic error message
+                else {
+                    var noticeTxt = document.createTextNode("Tangram says something went wrong! Our apologies.");
+                    errorEL.appendChild(noticeTxt);
+                }
+                document.body.appendChild(errorEL);
+            });
+
+            layer.addTo(lmap);
+
+
+
+            function setLocation(style) {
+                lmap.setView(locations[style].slice(0, 2), locations[style][2]);
+            }
+
+            setLocation(currentStyle);
+            var hash = new L.Hash(lmap);
+
+            // Resize map to window
+            function resizeMap() {
+                //document.getElementById('osm-map').style.width = window.innerWidth + 'px';
+                //document.getElementById('osm-map').style.height = window.innerHeight + 'px';
+                lmap.invalidateSize(false);
+            }
+
+            function switchStyles(style) {
+                if (!styles[style]) return false;
+                function loadStyle(style) {
+                    layer.scene.load(styles[style]).then(() => {
+                        if (layer.scene.config_source !== styles[style]) {
+                            scene.updateConfig().then(() => {
+                                loadStyle(style);
+                                return false;
+                            });
+                        }
+                        setLocation(style);
+                    });
+                };
+                loadStyle(style);
+                currentStyle = style;
+            }
+
+            //var api_key = 'NaqqS33fTUmyQcvbuIUCKA'; // original from example https://tangrams.github.io/carousel/?tron#18/40.70553/-74.01398
+            var api_key = '1ZwA2to3RvaAzqcA1Rj6-A';//CW's VMS
+
+            // ensure there's an api key
+            scene.subscribe({
+                load(event) {
+                    // Modify the scene config object here. This mutates the original scene
+                    // config object directly and will not be returned. Tangram does not expect
+                    // the object to be passed back, and will render with the mutated object.
+                    injectAPIKey(event.config, api_key);
+                    if (currentStyle == "daycycle") {
+                        if (daycycleTimer == null) {
+                            daycycleTimer = setInterval(daycycle, 100);
+                        }
+                    }
+                    scene.requestRedraw();
+                    scene.immediateRedraw();
+                }
+
+            });
+
+            var daycycleTimer = null;
+
+            function preUpdate(will_render) {
+                if (!will_render) {
+                    return;
+                }
+
+                if (currentStyle == "daycycle") {
+                    if (daycycleTimer == null) {
+                        daycycleTimer = setInterval(daycycle, 100);
+                    }
+                } else {
+                    clearInterval(daycycleTimer);
+                    daycycleTimer = null;
+                }
+            }
+
+            function postUpdate() {
+            }
+
+            function daycycle() {
+                if (currentStyle !== "daycycle") return;
+                d = new Date();
+                t = d.getTime() / 10000;
+
+                x = Math.sin(t);
+                y = Math.sin(t + (3.14159 / 2)); // 1/4 offset
+                z = Math.sin(t + (3.14159)); // 1/2 offset
+
+                scene.view.camera.axis = { x: x, y: y };
+
+                // offset blue and red for sunset and moonlight effect
+                B = x + Math.abs(Math.sin(t + (3.14159 * .5))) / 4;
+                R = y + Math.abs(Math.sin(t * 2)) / 4;
+
+                scene.lights.sun.diffuse = [R, y, B];
+                scene.lights.sun.direction = [x, 1, -.5];
+
+                px = Math.min(x, 0); // positive x
+                py = Math.min(y, 0); // positive y
+                // light up the roads at night
+                scene.styles["roads"].material.emission.amount = [-py, -py, -py, 1];
+                // turn water black at night
+                scene.styles["water"].material.ambient.amount = [py + 1, py + 1, py + 1, 1];
+                scene.styles["water"].material.diffuse.amount = [py + 1, py + 1, py + 1, 1];
+
+                // turn up buildings' ambient response at night
+                ba = -py * .75 + .75;
+                scene.styles["buildings"].material.ambient.amount = [ba, ba, ba, 1];
+
+                scene.requestRedraw();
+            }
+
+            function getStyleArray() {
+                var stylesArr = [];
+                for (name in styles) {
+                    stylesArr.push(name);
+                }
+                return stylesArr;
+            }
+
+            function getCurrentStyle() {
+                return currentStyle;
+            }
+
+
+            // iFrame integration
+            window.addEventListener("DOMContentLoaded", function () {
+
+                if (window.self !== window.top) {
+                    //disable scroll zoom if it is iframed
+                    map.scrollWheelZoom.disable();
+                    //sending message that child frame is ready to parent window
+                    window.parent.postMessage("loaded", "*");
+                    window.addEventListener("message", function (e) {
+                        // Ignore the message if origin is self (this fixes a Safari bug where iframed documents posts messages at itself)
+                        if (e.origin === window.location.origin) return;
+                        switchStyles(e.data);
+                    }, false);
+                }
+            }, false);
+
+            // API key enforcement
+
+            // regex to detect a nextzen.org url
+            var URL_PATTERN = /((https?:)?\/\/(vector|tile).nextzen.org([a-z]|[A-Z]|[0-9]|\/|\{|\}|\.|\||:)+(topojson|geojson|mvt|png|tif|gz))/;
+
+
+            function isValidMapzenApiKey(string) {
+                return (typeof string === 'string' && string.match(/[-a-z]+-[0-9a-zA-Z_-]{7}/));
+            }
+
+            function injectAPIKey(config, apiKey) {
+
+                Object.keys(config.sources).forEach((key) => {
+
+                    // Add a default API key as a url_params setting.
+                    // Preserve existing url_params if present.
+                    var params = Object.assign({}, config.sources[key].url_params, {
+                        api_key: apiKey
+                    });
+
+                    // turn off overlays for walkabout
+                    var params2 = Object.assign({}, config.global, {
+                        sdk_bike_overlay: false,
+                        sdk_path_overlay: false
+                    });
+
+                    // Mutate the original on purpose.
+                    config.sources[key].url_params = params;
+                    config.global = params2;
+
+                });
+            }
+
+            //graph code
+            //gSimple = new Dygraph(
+            //    // containing div
+            //    document.getElementById("graphdiv"),
+            //    // CSV or path to a CSV file.
+            //    //"Date,Depth\n" +
+            //    "2014-06-12,-10.57\n" + "2014-06-13,-10.74\n" + "2014-06-14,-11.57\n" + "2014-06-15,-11.74\n" + "2014-06-24,-16.86\n",
+            //    {
+            //        //valueRange: [-180,-179],
+            //        showRangeSelector: false,
+            //        period: "p6d", // past 1000 days
+            //        date_window: 2,
+            //        labels: ['Date', 'Value'],
+            //        title: selectedMarker
+            //    }
+            //);
+
+            // Create Leaflet map on map element.
+            //var lmap = L.map("osm-map");
+
+            // Add OSM tile leayer to the Leaflet map.
+            //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            //L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+            //    attribution: '&copy; < a href="http://osm.org/copyright" > OpenStreetMap</a> contributors'
+            //}).addTo(lmap);
+            //    // Target's GPS coordinates.
+            //    var target = L.latLng('3.170816062', '101.6986777');
+            //    var times_square = L.latLng('3.142324', '101.710667');
+            //    var midvalley = L.latLng('3.118625', '101.677617');
+            // Set map's center to target with zoom 14.
+            //lmap.setView(target, 14);
+
+            lmap.options.minZoom = 12;//limiting the minimum zoom level
+
+            //******************setting the max bound
+            var southWest = L.latLng('3.010459, 101.611571'),
+                northEast = L.latLng('3.301339, 101.815717');
+            var bounds = L.latLngBounds(southWest, northEast);
+            lmap.setMaxBounds(bounds);
+            lmap.maxBoundsViscosity = 1.0;
+
+
+            /*definition of icons as markers*/
+            var markerIcon = L.icon({
+                iconUrl: 'vms-Icon/ok.png',
+                iconSize: [35, 45], // size of the icon
+                iconAnchor: [19, 19], // point of the icon which will correspond to marker's location
+                popupAnchor: [0, -5] // point from which the popup should open relative to the iconAnchor
+            });
+
+            var naIcon = L.icon({
+                iconUrl: 'vms-Icon/notok.png',
+                iconSize: [35, 45], // size of the icon
+                iconAnchor: [19, 19], // point of the icon which will correspond to marker's location
+                popupAnchor: [0, -5] // point from which the popup should open relative to the iconAnchor
+            });
+
+            /*place markers on map*/
+            var jsonMarkers = [];
+            var element = {};
+            @for (var i = 0; i < Model.Boards.Count; i++) {
+                @:element = {};
+                @:element.LNG = @Model.Boards[@i].Location.Longitude;
+                @:element.LAT =  @Model.Boards[@i].Location.Latitude;
+                @:element.NAME = "@Model.Boards[@i].Name";
+                @:element.ADDRESS = "@Model.Boards[@i].Location.Address";
+                @:element.OPERSTATUS=@Model.Boards[@i].Display.OperationalStatus;
+
+
+                //selectively choose only a few VMS board to be displayed (up and down status). Those not yet setup will be skipped
+                @if (@Model.Boards[@i].Display.OperationalStatus == 1 || @Model.Boards[@i].Display.OperationalStatus == 2)
+                {
+                    @:jsonMarkers.push(element);
+                }
+
+                 @*@if (@Model.Boards[@i].Name == "V001" || @Model.Boards[@i].Name == "V002" || @Model.Boards[@i].Name == "V003")
+                 {
+                    @:jsonMarkers.push(element);
+                }*@
+            }
+
+            var jsonMarkerPopups = [];
+            var elementPopups = {};
+
+            @for (var i = 0; i < Model.HistoryLatest.Count; i++) {
+                @:elementPopups = {};
+                //@:elementPopups.sourcePath = "@Model.HistoryLatest[@i].Object";//this causes error due to unicode \\
+                //@:elementPopups.sourcePath = "not available";
+                @:elementPopups.boardId =  "@Model.HistoryLatest[@i].H_Name";
+                @:elementPopups.histTime = "@Model.HistoryLatest[@i].H_NowDateTime";
+                @:jsonMarkerPopups.push(elementPopups);
+            }
+                @*elementPopups = {};
+                elementPopups.sourcePath = "@Model.HistoryLatest[0].Object";;
+                elementPopups.boardId =  "@Model.HistoryLatest[0].H_Name";
+                elementPopups.histTime = "@Model.HistoryLatest[0].H_NowDateTime";
+                jsonMarkerPopups.push(elementPopups);*@
+
+            var markersLayer = L.layerGroup();
+
+
+            var addMarkers = function (point) {
+                var connectionStatus = point.OPERSTATUS; //1=>connected,2=down,3=not available
+                myStatus = {};
+                switch (point.OPERSTATUS) {
+                    case 1:
+                        myStatus = '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal3">Connection Up</button ></div>';
+                        break;
+                    case 2:
+                        myStatus = '<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal3">Connection Down</button ></div>';
+                        break;
+                    case 3:
+                        myStatus = '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal3">NA</button ></div>';
+                        break;
+                    default:
+                        myStatus = '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal3">Status</button ></div>';
+                        break;
+                }
+                //CW: should try to update the innerHTML as per point.NAME or use bootstrap update https://getbootstrap.com/docs/4.0/components/modal/
+                var mylabel = {};
+                switch (point.NAME) {
+                    case "V001":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V001">History</button>'
+                        break;
+                    case "V018":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V018">History</button>'
+                        break;
+                    case "V048":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V048">History</button>'
+                        break;
+                    case "V077":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V077">History</button>'
+                        break;
+                    case "V078":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V078">History</button>'
+                        break;
+                    case "V079":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V079">History</button>'
+                        break;
+                    case "V083":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V083">History</button>'
+                        break;
+                    case "V090":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V090">History</button>'
+                        break;
+                    case "V112":
+                        mylabel = '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal_V112">History</button>'
+                        break;
+                    default:
+                        mylabel ='<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal_V078">History</button>'
+                        break;
+                }
+
+                //popup content
+                var content = "<div class='infoDiv'><h3><img src='" + "/senalogo.png" + "' width='24' />" +
+                    point.NAME + "</h3><p>" + point.ADDRESS + "</p>" +
+                    mylabel +
+                    myStatus;
+                    //'<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal1">History</button>'+
+                    //'<button type="button" class="btn btn-success" data-toggle="modal" data-target=#"'+ createmyElements(point.NAME) +'">Details</button>'+
+                    //'<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal2">Details - T2</button>' +
+                    //'<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal3">Running</button ></div>';
+                //popup options
+                var customOptions =
+                {
+                    'maxWidth': '500',
+                    'className': 'custom'
+                }
+
+                //http://leafletjs.com/reference.html#events
+
+
+                if (connectionStatus == 1) {
+
+                    var oneMarker = L.marker([point.LAT, point.LNG], { icon: markerIcon, id: point.NAME, address: point.ADDRESS });
+
+                        //.bindPopup(content);
+                        //.addTo(lmap)
+                    //oneMarker.properies.name="kitty"//cause it to hang
+                    oneMarker.bindPopup(content,customOptions); //create the initial popup
+                    oneMarker.addTo(markersLayer);
+                        //.bindPopup(content, customOptions)//red colour background for popup
+                    //oneMarker.on('click', onMarkerClick);
+
+                }
+                //disconnected
+                else if (connectionStatus == 2) {
+                    L.marker([point.LAT, point.LNG], { icon: naIcon }, { title: "VMS" })
+                        .bindPopup(content, customOptions)
+                        .addTo(lmap);
+                        //.addTo(markersLayer);
+
+                }
+                    //other issues, don't do anything
+                else {
+                    //L.marker([point.LAT, point.LNG], { icon: naIcon }, { title: "VMS" })
+                        //.bindPopup(content)
+                        //.addTo(lmap);
+                        //.addTo(markersLayer);
+
+                }
+                markersLayer.addTo(lmap);
+                //markersLayer.on("click", onMarkerClick);
+            };
+
+            //during mouse click on marker, update its content by binding
+            function onMarkerClick(e) {
+                //alert(this.options.id + " at " + this.options.address);
+                selectedMarker = this.options.id;//store to javascript variable
+                //setSelectedMarker(this.options.id);
+                //
+                //popup content
+
+                var MarkerContent = "<div class='infoDiv'><h3><img src='" + "/senalogo.png" + "' width='24' />" +
+                    this.options.id + "</h3><p>" + this.options.address +
+                    "</p><h>Status: </h><button type='button' class='btn btn-success' data-toggle='modal' aria-controls='#" +
+                    createmyElements(this.options.id) + "'>History</button>" +
+                    "<button type='button' class='btn btn-success' data-toggle='modal' data-target='#myModal3'>Connection</button ></div> ";
+                //this.bindPopup(MarkerContent);
+                this.getPopup().setContent(MarkerContent);//update the popup that is bind to the marker
+                this.getPopup().update();//is this update available as function?
+            }
+
+            function onMarkerClick2(e) {
+                var popup = e.target.getPopup();
+                var chart_div = document.getElementById("graphdiv");
+                //alert(popup)
+                popup.setContent(chart_div);
+            }
+
+
+            function createmyElements(id1) {
+                var new_sub_entry = "<div class='block'>"
+                    //+ "Entry " + id1 + "<br><input type='text' name='myInputs'><br>"
+                    //+ "<div class='buttons'>"
+                    //+ "<input class='add_sub_button' type='button' value='add nested'>"
+                    //+ "<input class='add_button' type='button' value='Add another text input' >"
+                    //+ "</div>"
+                    + "</div><br />"
+                    //+ "</div>"
+                    +"<div class='modal-body'>";
+
+                //loop and create HTML of list of images for history
+
+                //end loop for create HTML of list of images for history
+                new_sub_entry += createListHistoryImages3(id1);
+                new_sub_entry +=
+                    "</div>";
+                return new_sub_entry;
+            }
+
+            //function setSelectedMarker(boardName) {
+            //    $.ajax({
+            //        url: "/api/upload/sethistoryimagelist",
+            //        type: "POST",
+            //        data: JSON.stringify({
+            //            //Order: command,
+            //            BoardName: boardName
+            //        }),
+            //        contentType: 'application/json',
+            //        success: function (response) {
+            //            //alert(response);
+            //        },
+            //        error: function (response) {
+            //            console.log(response);
+            //            //alert("ERROR, Image is not saved");
+            //            /*-try {
+            //                toastr.error(
+            //                    response.responseJSON.message,
+            //                    'Error!',
+            //                );
+            //            } catch (e) {
+            //                toastr.error(
+            //                    response.status + ' - ' + response.statusText,
+            //                    'Error!',
+            //                );
+            //            }*/
+            //        }
+            //    });
+            //}
+
+            //function createListHistoryImages2(boardName) {
+            //    $.ajax({
+            //        url: "/api/upload/gethistoryimagelist",
+            //        type: "GET",
+            //        data: JSON.stringify({
+            //            //Order: command,
+            //            BoardName: boardName
+            //        }),
+            //        contentType: 'application/json',
+            //        success: function (response) {
+            //            //alert("Image is saved");
+            //            alert(response);
+            //        },
+            //        error: function (response) {
+            //            console.log(response);
+            //            //alert("ERROR, Image is not saved");
+            //            /*-try {
+            //                toastr.error(
+            //                    response.responseJSON.message,
+            //                    'Error!',
+            //                );
+            //            } catch (e) {
+            //                toastr.error(
+            //                    response.status + ' - ' + response.statusText,
+            //                    'Error!',
+            //                );
+            //            }*/
+            //        }
+            //    });
+            //}
+
+            function createListHistoryImages3(name) {
+
+
+                var history_images_list = '<div class="modal fade" id="myModal1" role="dialog">';
+
+                history_images_list += '<div class="modal-dialog modal-sm">';
+                history_images_list += '<div class="modal-content">';
+                history_images_list += '<div class="modal-header">';
+                history_images_list += '<h4 class="modal-title">List of History</h4>';
+                history_images_list += '</div>';
+                for (var i = 0; i < jsonMarkerPopups.length;i++)
+                    {
+                        history_images_list += "<p>loop jsonMarkerPopups[i].boardID vs " + name + "</p>";
+
+                        //if (jsonMarkerPopups[i].directoryExist==false)) {
+                        //    history_images_list += "<b>MISSING FOLDER FROM THIS PATH.</b>";
+                        //}
+                        if (name == jsonMarkerPopups[i].boardID)//change here according to board ID
+                        {
+
+                            //var sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            history_images_list += "<b>jsonMarkerPopups[i].boardID | Time - jsonMarkerPopups[i].H_NowDateTime</b>";
+
+
+                            @*for(var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+
+                                 @:history_images_list +='<img id="" src="~/uploads/History/@sourceFolderName/@fileName" alt="" width="270" height="60" />';
+
+                                //@:history_images_list += '<img src="https://my.joblum.com/uploads/12/11191.jpg">';//to debug whether image display is working
+                                //@:history_images_list += '<img src="E:\\cwprojects\\sena\\Source\\Repos\\vmstest\\VMS\\wwwroot\\uploads\\History\\V077_13072020-0559\\message1.jpg">';
+                                //@:history_images_list += "<img src=@fileName>";
+                                @:history_images_list += "<p>~/uploads/History/@sourceFolderName/@fileName</p>";
+                                //@:history_images_list+="<img src=\"~/uploads/History/@sourceFolderName/@fileName\" alt=\"\" width=\"270\" height=\"60\" >";
+                                //@:history_images_list+="<img id=\"\"src=\"~/uploads/History/@sourceFolderName/@fileName\" alt=\"\" width=\"270\" height=\"60\" />";
+                            }*@
+                        }
+                    }
+
+
+                history_images_list += '</div>';
+                history_images_list += '<div class="modal-footer"><button type="button" class="btn btn-info" data-dismiss="modal">Close</button></div>';
+                history_images_list += '</div>';
+                history_images_list += '</div>';
+                history_images_list += '</div>';
+                return history_images_list;
+            }
+
+
+            function createListHistoryImages(name) {
+
+                var history_images_list = '<div class="modal fade" id="myModal1" role="dialog">';
+
+                history_images_list += '<div class="modal-dialog modal-sm">';
+                    history_images_list += '<div class="modal-content">';
+                        history_images_list += '<div class="modal-header">';
+                        history_images_list += '<h4 class="modal-title">List of History</h4>';
+                history_images_list += '</div>';
+
+                //CW: should load the entire Model.Histories into a javascript array first, then only decode from there
+
+
+                    @foreach(var hist in @Model.Histories)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+                        //@:history_images_list += "<p>loop @boardId vs @Model.SelectedMarkerName vs" + name + "</p>";
+                        @:history_images_list += "<p>loop @boardId vs " + name + "</p>";
+
+                        if (!System.IO.Directory.Exists(sourcePath)) {
+                            @:history_images_list += "<b>MISSING FOLDER FROM THIS PATH.</b>";
+                        }
+                        else if (boardId == "V077")//change here according to board ID
+                        {
+
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            @:history_images_list += "<b>@boardId | Time - @histTime</b>";
+
+                            @foreach(var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+
+                                 @:history_images_list +='<img id="" src="~/uploads/History/@sourceFolderName/@fileName" alt="" width="270" height="60" />';
+
+                                //@:history_images_list += '<img src="https://my.joblum.com/uploads/12/11191.jpg">';//to debug whether image display is working
+                                //@:history_images_list += '<img src="E:\\cwprojects\\sena\\Source\\Repos\\vmstest\\VMS\\wwwroot\\uploads\\History\\V077_13072020-0559\\message1.jpg">';
+                                //@:history_images_list += "<img src=@fileName>";
+                                @:history_images_list += "<p>~/uploads/History/@sourceFolderName/@fileName</p>";
+                                //@:history_images_list+="<img src=\"~/uploads/History/@sourceFolderName/@fileName\" alt=\"\" width=\"270\" height=\"60\" >";
+                                //@:history_images_list+="<img id=\"\"src=\"~/uploads/History/@sourceFolderName/@fileName\" alt=\"\" width=\"270\" height=\"60\" />";
+                            }
+                        }
+                    }
+                    history_images_list += '</div>';
+
+                history_images_list += '<div class="modal-footer"><button type="button" class="btn btn-info" data-dismiss="modal">Close</button></div>';
+                history_images_list += '</div>';
+                history_images_list += '</div>';
+                history_images_list += '</div>';
+                return history_images_list;
+            }
+
+            jsonMarkers.forEach(addMarkers);
+
+        </script>
+
+    </fieldset>
+
+    <!-- Modal VMS  -->
+    <div class="modal fade" id="myModal_V001" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V001")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b> VMS ID - @boardId | Time - @histTime </b>
+                            //<b>@boardId | Time - @histTime | @Model.ReturnLatestHistoryPath(@boardId)</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                                //<p>~/uploads/History/@sourceFolderName/@fileName</p>
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal VMS  -->
+    <div class="modal fade" id="myModal_V018" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V018")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b> VMS ID - @boardId | Time - @histTime </b>
+                            //<b>@boardId | Time - @histTime | @Model.ReturnLatestHistoryPath(@boardId)</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                                //<p>~/uploads/History/@sourceFolderName/@fileName</p>
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal VMS  -->
+    <div class="modal fade" id="myModal_V048" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V048")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b> VMS ID - @boardId | Time - @histTime </b>
+                            //<b>@boardId | Time - @histTime | @Model.ReturnLatestHistoryPath(@boardId)</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                                //<p>~/uploads/History/@sourceFolderName/@fileName</p>
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal VMS  -->
+    <div class="modal fade" id="myModal_V077" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V077")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b>@boardId | Time - @histTime</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                                //<p>~/uploads/History/@sourceFolderName/@fileName</p>
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal078 -->
+    <div class="modal fade" id="myModal_V078" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V078")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b>@boardId | Time - @histTime</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal V079 -->
+    <div class="modal fade" id="myModal_V079" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V079")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b> VMS ID - @boardId | Time - @histTime </b>
+                            //<b>@boardId | Time - @histTime | @Model.ReturnLatestHistoryPath(@boardId)</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                                //<p>~/uploads/History/@sourceFolderName/@fileName</p>
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal VMS  -->
+    <div class="modal fade" id="myModal_V083" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V083")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b>@boardId | Time - @histTime</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal VMS  -->
+    <div class="modal fade" id="myModal_V090" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V090")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b>@boardId | Time - @histTime</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal VMS  -->
+    <div class="modal fade" id="myModal_V112" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @foreach (var hist in @Model.HistoryLatest)
+                    {
+                        string sourcePath = hist.Object; //if can replaced this with jsonmarkers of history.object
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b> </b> }
+                        else if (boardId == "V112")//change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b>@boardId | Time - @histTime</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ModalT3 -->
+    <div class="modal fade" id="myModal3" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Status</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Status refreshes every 2 minutes</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ModalT2 -->
+    <div class="modal fade" id="myModal2" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">List of History</h4>
+                </div>
+                <div class="modal-body">
+                    @*<a href="#" data-toggle="popover" title="Data" >Show last history</a>*@
+
+                    @foreach (var hist in @Model.Histories)
+                    {
+                        string sourcePath = hist.Object;
+                        string sourceFolderName = sourcePath.Split('\\').Last();
+
+                        string boardId = hist.H_Name;
+                        DateTime histTime = hist.H_NowDateTime;
+
+                        if (!System.IO.Directory.Exists(sourcePath))
+                        {<b>MISSING FOLDER FROM THIS PATH.</b> }
+                        else if (boardId == "T2") //change here according to board ID
+                        {
+                            string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                            <b>@boardId | Time - @histTime</b>
+
+                            @foreach (var file in sourceFileCollection)
+                            {
+                                string fileName = System.IO.Path.GetFileName(file);
+                                <img id=""
+                                     src="~/uploads/History/@sourceFolderName/@fileName"
+                                     alt="" width="270" height="60" />
+                            }
+                        }
+                        //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                    }
+                    @*<img class="card-img-top"  width="360" height="60">*@
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

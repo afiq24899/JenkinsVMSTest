@@ -1,0 +1,190 @@
+﻿@page
+@model Lingkail.VMS.Pages.ConfigurationPage.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .myTable, .myMain {
+        width: 100%;
+        margin: auto;
+        text-align: center;
+    }
+
+        .myTable tbody {
+            font-weight: bold;
+        }
+
+        .myTable thead {
+            margin-bottom: 1px;
+            border: 3px solid;
+        }
+
+            .myTable thead tr:first-child {
+                background: #5c6a88;
+            }
+
+        .myTable tr:nth-child(even) {
+            background: #5f7fb3;
+        }
+
+        .myTable tr:nth-child(odd) {
+            background: #80accf;
+        }
+
+        .myTable td {
+            border: 1.5px solid;
+        }
+
+        .myTable div.smallIcon {
+            margin: 0;
+            padding: 2px;
+        }
+
+            .myTable div.smallIcon img {
+                width: 24.5px;
+                height: 24.5px;
+                object-fit: contain;
+            }
+
+        .myMain > span {
+            font-weight: bold;
+            font-size: x-large;
+            color: white;
+        }
+
+    .addboard {
+        margin: 5px;
+        color: white;
+    }
+
+        .addboard > input[type=button] {
+            margin-left: 15px;
+        }
+
+    .header1 {
+        color: white;
+    }
+
+</style>
+
+<body>
+    <div class="header1">
+        <h1 >Configuration Page</h1>
+    </div>
+
+    <form method="post">
+        <div class="addboard">
+            <button style="float:right" type="submit" class="btn-link"><a asp-page="/ConfigurationPage/Create" asp-page-handler="">ADD NEW BOARD</a></button>
+        </div>
+
+        <table class="myTable" id="myTable">
+            <thead>
+                <tr>
+                    <th>
+                        <span>Board ID</span>
+                    </th>
+                    <th>
+                        <span>Board Name</span>
+                    </th>
+                    <th>
+                        <span>Zone</span>
+                    </th>
+                    <th>
+                        <span>Address</span>
+                    </th>
+                    <th>
+                        <span>Longitude</span>
+                    </th>
+                    <th>
+                        <span>Latitude</span>
+                    </th>
+                    <th>
+                        <span>IP Address</span>
+                    </th>
+                    <th>
+                        <span>Operational Status</span>
+                    </th>
+                    <th>
+                        <span>CCTV RTSP Link</span>
+                    </th>
+                    <th>
+                        <span>PTZ Link</span>
+                    </th>
+                    <th>
+                        <span>Update</span>
+                    </th>
+                    <th>
+                        <span>Delete</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var board in Model.Boards)
+                {
+                <tr>
+                    <td>
+                        <div align="center">
+                            <label for="@board.ID">@Html.DisplayFor(modelItem => board.ID)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="center">
+                            <label for="@board.ID">@Html.DisplayFor(modelItem => board.Name)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="center">
+                            <label for="@board.ID">@Html.DisplayFor(modelItem => board.ZoneID)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Location.Address)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Location.Longitude)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Location.Latitude)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Display.C4_IP)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Display.OperationalStatus)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Display.CCTV)</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <label style="margin-left:10px;">@Html.DisplayFor(modelItem => board.Display.PTZ)</label>
+                        </div>
+                    </td>
+
+                    @*update board*@
+                    <td><div align="center"><button><a asp-page="/ConfigurationPage/Edit" asp-route-id="@board.ID">UPDATE BOARD</a></button></div></td>
+
+
+                    @*delete board*@
+                    <td><div align="center"><button><a asp-page="/ConfigurationPage/Delete" asp-route-id="@board.ID">DELETE</a></button></div></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+
+</body>
+
+

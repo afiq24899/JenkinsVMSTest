@@ -1,0 +1,135 @@
+﻿@page
+@model Lingkail.VMS.Pages.GroupManagement.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+
+
+    h1 {
+        margin-left: 10px;
+        margin-bottom: 25px;
+        color: snow;
+    }
+
+    #table1 {
+        /*width: 50%; */
+        border-collapse: collapse;
+        width: 100%;
+        text-align: left;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    #table2 {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: left;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    #main {
+        width: 50%;
+        float: left;
+        overflow: auto;
+        /*  overflow-x: scroll;*/
+        height: 400px;
+    }
+
+    #main2 {
+        width: 50%;
+        float: right;
+        overflow: auto;
+        /* overflow-x: scroll;*/
+        height: 400px;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #5f7fb3;
+        color: black;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: #80accf;
+        color: black;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+
+    thead {
+        background: #645f73;
+        color: black;
+        font-size: 15px;
+        font-weight: 500;
+        text-align: left;
+        font-weight: 500;
+    }
+</style>
+
+<h1>Edit</h1>
+
+<h3>Are you sure you want to change this?</h3>
+<div>
+    <form method="post">
+
+
+        @*<div style="border: solid 1px; display: block; overflow-x: scroll; height:400px">*@
+        <div id="main">
+            <table id="table1">
+                <thead>
+                    <tr>
+                        <td>Checkbox</td>
+                        <td>Board</td>
+                        <td>Location</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int cnt = 1;
+                        foreach (var board in Model.AssignedBoardList)
+                        {
+                            <tr>
+                                <td><input type="checkbox" style="width: 20px; height: 20px;" value="@board.ID" name="selectedBoards" @(Html.Raw(board.Assigned ? "checked" : "")) /></td>
+                                <td>@Html.DisplayFor(modelItem => board.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => board.Address)</td>
+                            </tr>
+                            cnt++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        @*<div style="border: solid 1px; display: block; overflow-x: scroll; height:200px">*@
+        <div id="main2">
+            <table id="table2">
+                <thead>
+                    <tr>
+                        <td>Checkbox</td>
+                        <td>Camera</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var camera in Model.AssignedCameraList)
+                    {
+                        <tr>
+                            <td><input type="checkbox" style="width: 20px; height: 20px;" value="@camera.ID" name="selectedCameras" @(Html.Raw(camera.Assigned ? "checked" : "")) /></td>
+                            <td>@Html.DisplayFor(modelItem => camera.Name)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <input type="hidden" asp-for="GroupPreset.ID" />
+
+        <label style="color: white;" asp-for="GroupPreset.Name"></label>
+        <input type="text" asp-for="GroupPreset.Name" />
+
+        <input type="submit" value="Save" class="btn btn-primary" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,159 @@
+﻿@page
+@model HistoryModel
+@{
+    ViewBag.Title = "History";
+}
+
+<style>
+    .myTable, .myMain {
+        width: 100%;
+        margin: auto;
+        text-align: center;
+    }
+        .myTable thead {
+            margin-bottom: 1px;
+            border: 3px solid;
+        }
+        .myTable thead tr:first-child {background: #5c6a88;}
+        .myTable tr:nth-child(even) {background: #5f7fb3;}
+        .myTable tr:nth-child(odd) {background: #80accf;}
+        .myTable td {
+            border: 1px solid #ddd;
+        }
+            .myTable tbody tr td {
+                text-align: left;
+            }
+        .myMain > span {
+            font-weight: bold;
+            font-size: x-large;
+        }
+    /*--------------------------*/
+    .popupContainer {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+        .popupContainer [class^="popupElement"] {
+            display: none;
+            grid-row-gap: 5px;
+            border: solid 5px #8b8b8b;
+            padding: 10px;
+            background-color: #ebebeb;
+            color: dodgerblue;
+            position: absolute;
+            z-index: 1;
+            top: 50%;
+            right: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .popupContainer .show {
+            display: inline-grid;
+        }
+    .titlehistory {
+        color: white;
+    }
+</style>
+
+<div class="myMain">
+    <span class="titlehistory">History</span>
+    <table class="myTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Histories[0].ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Histories[0].H_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Histories[0].H_Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Histories[0].H_NowDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Histories[0].H_User)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Histories[0].Object)
+                </th>
+                <th>
+                    <span>View</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var history in Model.Histories)
+            {
+                <tr>
+                    <td>
+                        <b>@Html.DisplayFor(modelItem => history.ID)</b>
+                    </td>
+                    <td>
+                        <b>@Html.DisplayFor(modelItem => history.H_Name)</b>
+                    </td>
+                    <td class="text-break">
+                        <b>@Html.DisplayFor(modelItem => history.H_Address)</b>
+                    </td>
+                    <td>
+                        <b>@Html.DisplayFor(modelItem => history.H_NowDateTime)</b>
+                    </td>
+                    <td>
+                        <b>@Html.DisplayFor(modelItem => history.H_User)</b>
+                    </td>
+                    <td class="text-break">
+                        <b>@Html.DisplayFor(modelItem => history.Object)</b>
+                    </td>
+                    <td>
+                        <div class="popupContainer">
+                            @{string popupButton = "popupButton-" + history.ID;}
+                            <button id="@popupButton" type="button" onclick="popup(this.id)">ALL</button>
+
+                            @{string popupElement = "popupElement" + history.ID;}
+                        <div id="@popupElement" class="@popupElement">
+                            @{
+                                string sourcePath = history.Object;
+                                //string sourceFolderName = sourcePath.Split('\\').Last();
+                                //var sourceFolderName = System.IO.Directory.GetParent(sourcePath);
+                                string sourceFolderName = new System.IO.DirectoryInfo(sourcePath).Name;
+
+                                if (!System.IO.Directory.Exists(sourcePath))
+                                { <b>MISSING FOLDER FROM THIS PATH.</b> }
+                                else
+                                {
+                                    string[] sourceFileCollection = System.IO.Directory.GetFiles(sourcePath);
+
+                                    <b>VMS - @sourceFolderName</b>
+
+                                    @foreach (var file in sourceFileCollection)
+                                    {
+                                        string fileName = System.IO.Path.GetFileName(file);
+                                        <img id=""
+                                             src="~/uploads/History/@sourceFolderName/@fileName"
+                                             alt="" width="360" height="60" />
+                                    }
+                                }
+                                //System.Diagnostics.Debug.WriteLine(sourceFolderName);
+                            }
+
+                        </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // When the user clicks on div, open the popup
+    function popup(id) {
+        var intid = Number(id.split("-")[1]);
+        var popup = document.getElementById("popupElement" + intid);
+        popup.classList.toggle("show");
+    }
+</script>
