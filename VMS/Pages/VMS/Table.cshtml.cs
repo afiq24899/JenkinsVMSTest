@@ -91,7 +91,7 @@ namespace Lingkail.VMS.Pages.VMS
 
                 //When an IQueryable is created or modified, no query is sent to the database. 
                 //The IQueryable code results in a single query that's not executed until the LAST statement.
-            }
+            
 
         }
     }
